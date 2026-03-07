@@ -1,0 +1,58 @@
+{
+    "comments": {
+        "blockComment": ["comment {", "}"]
+    },
+    "brackets": [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"],
+        ["$(", ")"]
+    ],
+    "autoClosingPairs": [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"],
+        ["\"", "\""],
+        ["'", "'"],
+        ["$(", ")"],
+        ["<\"", "\">"]
+    ],
+    "surroundingPairs": [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"],
+        ["\"", "\""],
+        ["'", "'"],
+        ["$(", ")"],
+        ["<\"", "\">"]
+    ],
+    "wordPattern": "(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\\\"\\,\\.\\<\\>\\/\\?\\s]+)",
+    "indentationRules": {
+        "increaseIndentPattern": "^(.*\\{[^}\"'`]*|.*\\([^)\"'`]*)$",
+        "decreaseIndentPattern": "^(.*\\*\\/)?\\s*[\\}\\]].*$"
+    },
+    "folding": {
+        "markers": {
+            "start": "^\\s*comment\\s*\\{",
+            "end": "^\\s*\\}\\s*$"
+        }
+    },
+    "onEnterRules": [
+        {
+            "beforeText": "^\\s*comment\\s*\\{.*$",
+            "action": { "indent": "indent" }
+        },
+        {
+            "beforeText": "\\{\\s*$",
+            "action": { "indent": "indent" }
+        },
+        {
+            "beforeText": "^\\s*\\}",
+            "action": { "indent": "outdent" }
+        },
+        {
+            "beforeText": "^\\s*(subroutine|function|node|block|on\\s+\\w+).*\\{\\s*$",
+            "action": { "indent": "indent" }
+        }
+    ]
+}

@@ -1,0 +1,477 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Altitude Script",
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#sql-statements"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#pathStrings"
+        },
+        {
+            "include": "#stringsWithFiB"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#keywordsControl"
+        },
+        {
+            "include": "#operators"
+        },
+        {
+            "include": "#functions"
+        },
+        {
+            "include": "#variables"
+        },
+        {
+            "include": "#constants"
+        },
+        {
+            "include": "#booleans"
+        },
+        {
+            "include": "#numbers"
+        },
+        {
+            "include": "#ui-controls"
+        },
+        {
+            "include": "#ui-properties"
+        },
+        {
+            "include": "#ui-values"
+        },
+        {
+            "include": "#identifiers"
+        }
+    ],
+    "repository": {
+        "ui-controls": {
+            "patterns": [
+                {
+                    "name": "entity.name.tag.ui.asl",
+                    "match": "\\b(flow view|container|push button|text button|check box|radio button|input|combo box|list|menu|static text|static box|email editor|chat control|web browser|group|generic declarations and function keys|table)\\b"
+                }
+            ]
+        },
+        "ui-properties": {
+             "patterns": [
+                {
+                    "name": "support.type.property.ui.asl",
+                    "match": "\\b(size|at|position|anchor|hidden if|disabled if|read only if|tab order|password|uppercase|multiline|wordwrap|item|tag|level|automatically fill values|drop on demand|allow other values|enhanced style|background( color)?|border|initial block|media name|initial email id|unavailable if|input field height|year completion|format|items|cursor|values column|labels column|sort|default button|flat|tooltip|image|checked if|unchecked if|font|align|columns|column|header)\\b"
+                }
+             ]
+        },
+        "ui-values": {
+            "patterns": [
+                {
+                    "name": "constant.language.ui.asl",
+                    "match": "\\b(left|top|right|bottom|center|transparent|color|edge|raised|sunken|etched|closest|current|past|future|tile|keep aspect ratio|keep size|commit|rollback|overlay)\\b"
+                }
+            ]
+        },
+        "sql-statements": {
+            "patterns": [
+                {
+                    "name": "meta.sql-declaration.asl",
+                    "begin": "\\b(sql\\s+for)\\s+(['\"])",
+                    "beginCaptures": {
+                        "1": { "name": "keyword.control.sql.asl" },
+                        "2": { "name": "punctuation.definition.string.begin.asl" }
+                    },
+                    "end": "\\2",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.definition.string.end.asl" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#sql-content"
+                        }
+                    ]
+                }
+            ]
+        },
+        "sql-content": {
+            "patterns": [
+                {
+                    "name": "keyword.other.sql",
+                    "match": "(?i)\\b(SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|ALTER|DROP|INDEX|VIEW|PROCEDURE|FUNCTION|TRIGGER|DATABASE|SCHEMA|EXEC|EXECUTE)\\b"
+                },
+                {
+                    "name": "keyword.other.sql",
+                    "match": "(?i)\\b(INNER|LEFT|RIGHT|FULL|OUTER|JOIN|ON|AS|GROUP|BY|ORDER|HAVING|DISTINCT|TOP|LIMIT|OFFSET|UNION|ALL|EXISTS|IN|LIKE|BETWEEN|IS|NULL|NOT|AND|OR)\\b"
+                },
+                {
+                    "name": "keyword.other.sql",
+                    "match": "(?i)\\b(COUNT|SUM|AVG|MIN|MAX|CAST|CONVERT|CASE|WHEN|THEN|ELSE|END|IF|WHILE|FOR|BEGIN|DECLARE)\\b"
+                },
+                {
+                    "name": "storage.type.sql",
+                    "match": "(?i)\\b(VARCHAR|NVARCHAR|CHAR|NCHAR|TEXT|NTEXT|INT|INTEGER|BIGINT|SMALLINT|TINYINT|DECIMAL|NUMERIC|FLOAT|REAL|MONEY|SMALLMONEY|BIT|DATETIME|DATETIME2|DATE|TIME|TIMESTAMP|UNIQUEIDENTIFIER|XML|BINARY|VARBINARY|IMAGE)\\b"
+                },
+                {
+                    "name": "constant.numeric.sql",
+                    "match": "\\b\\d+(\\.\\d+)?\\b"
+                },
+                {
+                    "name": "string.quoted.single.sql",
+                    "begin": "'",
+                    "end": "'",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape.sql",
+                            "match": "''"
+                        }
+                    ]
+                },
+                {
+                    "name": "meta.embedded.expression.asl",
+                    "begin": "\\$\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#variables"
+                        },
+                        {
+                            "include": "#functions"
+                        }
+                    ]
+                },
+                {
+                    "name": "comment.line.double-dash.sql",
+                    "match": "--.*(?=['\"\\n])"
+                },
+                {
+                    "name": "comment.block.sql",
+                    "begin": "/\\*",
+                    "end": "\\*/"
+                },
+                {
+                    "name": "punctuation.separator.sql",
+                    "match": "[,;()]"
+                },
+                {
+                    "name": "keyword.operator.comparison.sql",
+                    "match": "(=|<>|!=|<=|>=|<|>)"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.other.asl",
+                    "match": "\\b(version|file version|modules|import|into namespace|dependencies|image|dll|native|managed|web service|wsdl|openapi|in file|in url|declarations|constants|types|variables|parameters|global|globals|node|block|master|default master|without master|private|exit through|abort script|discard script|end script|restart script|commit|ref|using namespaces|with|into|to|from|variable|record|match by name|absolute|relative|dim|add)\\b"
+                },
+                {
+                    "name": "keyword.other.record.asl",
+                    "match": "\\b(campaign record|contact record|workflow record|transferred record|outcome record|contact profile extensions)\\b"
+                },
+                {
+                    "name": "keyword.other.event.asl",
+                    "match": "\\b(on start|on end|on load|on unload|on first enter|on enter|on exit|on click|on lose focus|on list selection|on change|on error|on event|on progress)\\b"
+                }
+            ]
+        },
+        "keywordsControl": {
+            "patterns": [
+                {
+                    "name": "keyword.control.conditional.asl",
+                    "match": "\\b(if|else|elseif|case|when|then|default)\\b"
+                },
+                {
+                    "name": "keyword.control.loop.asl",
+                    "match": "\\b(while|repeat|for|do|break|continue)\\b"
+                },
+                {
+                    "name": "keyword.control.flow.asl",
+                    "match": "\\b(try|catch|finally|throw|goto node|call node|back node|return|exit through|abort script|discard script|end script|restart script|dim|add)\\b"
+                },
+                {
+                    "name": "keyword.control.sql.asl",
+                    "match": "\\b(sql for|sql select|sql execute|system select|cursor|cursors|open cursor|close cursor|fetch cursor|with|into|variable|record|match by name|absolute|relative)\\b"
+                },
+                {
+                    "name": "storage.type.asl",
+                    "match": "(:\\s*(text|number|boolean|date|time|datetime|bytestream|record|array of|enumeration|sql cursor|system cursor|cursor|void))\\b"
+                }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.assignment.asl",
+                    "match": "(:=|=|\\+=|-=|\\*=|/=|%=)"
+                },
+                {
+                    "name": "keyword.operator.comparison.asl",
+                    "match": "(==|!=|<>|<=|>=|<|>)"
+                },
+                {
+                    "name": "keyword.operator.logical.asl",
+                    "match": "\\b(and|or|not)\\b"
+                },
+                {
+                    "name": "keyword.operator.arithmetic.asl",
+                    "match": "(\\+|-|\\*|/|%|\\^)"
+                },
+                {
+                    "name": "keyword.operator.reference.asl",
+                    "match": "\\b(ref|into variable|to|from|with)\\b"
+                }
+            ]
+        },
+        "functions": {
+            "patterns": [
+                {
+                    "name": "entity.name.function.asl",
+                    "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*(?=\\s*\\()"
+                },
+                {
+                    "name": "support.function.builtin.asl",
+                    "match": "\\b(number_ceiling|number_floor|number_hex|number_mod|number_round|text_to_upper|text_to_lower|text_length|text_append|format|bytestream_to_text|now|today|file_create|file_write_line|file_copy|file_browser|soft_phone_volume|rgb_color|current_email_id|clear error|message|open message box|open cursor|close cursor|fetch cursor|sql execute|system select|open window|close window|dial phone|answer phone|hang up phone|hold phone|retrieve phone|transfer call|conference phone|load contact|update contact|set business status|add to outcomes|length|substring|trim|upper|lower|replace|round|abs|min|max|day|month|year|hour|write|write log|size|unload contact|create contact|answer|hangup|transfer|conference|kill timer|set timer|handle pending events)\\b"
+                }
+            ]
+        },
+        "variables": {
+            "patterns": [
+                {
+                    "name": "variable.language.system.asl",
+                    "match": "@(script_start_reason|script_info(\\.(node|windowId|fileName|majorVersion))?|script_session_info(\\.(agent|campaign|contact|sessionUrl))?|login_info|phone_info(\\.(ani|dnis))?|email_info|instant_messaging_info|interaction_info|workflow_info|schedule_info|error|error_info(\\.(sqlError|noRowsReturned))?)\\b"
+                },
+                {
+                    "name": "variable.other.asl",
+                    "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+                }
+            ]
+        },
+        "constants": {
+            "patterns": [
+                {
+                    "name": "constant.other.asl",
+                    "match": "\\b[A-Z_][A-Z0-9_]*\\b"
+                },
+                {
+                    "name": "constant.language.null.asl",
+                    "match": "\\b(null|nil|empty)\\b"
+                }
+            ]
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.decimal.asl",
+                    "match": "\\b\\d+(\\.\\d+)?([eE][+-]?\\d+)?\\b"
+                },
+                {
+                    "name": "constant.numeric.hexadecimal.asl",
+                    "match": "\\b0[xX][0-9a-fA-F]+\\b"
+                }
+            ]
+        },
+        "strings": {
+            "name": "string.quoted.double.asl",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "include": "#sql-in-string"
+                },
+                {
+                    "name": "constant.character.escape.asl",
+                    "match": "\\\\[nrt\\\\\"']"
+                }
+            ]
+        },
+        "pathStrings": {
+            "name": "string.quoted.other.path.asl",
+            "begin": "<\"",
+            "end": "\">",
+            "patterns": [
+                {
+                    "name": "string.content.asl",
+                    "match": "."
+                }
+            ]
+        },
+        "stringsWithFiB": {
+            "name": "string.quoted.single.asl",
+            "begin": "'",
+            "end": "'",
+            "patterns": [
+                {
+                    "include": "#sql-in-string"
+                },
+                {
+                    "name": "meta.embedded.expression.asl",
+                    "begin": "\\$\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#keywords"
+                        },
+                        {
+                            "include": "#operators"
+                        },
+                        {
+                            "include": "#functions"
+                        },
+                        {
+                            "include": "#variables"
+                        },
+                        {
+                            "include": "#numbers"
+                        }
+                    ]
+                },
+                {
+                    "name": "constant.character.escape.asl",
+                    "match": "\\\\[nrt\\\\\"']"
+                }
+            ]
+        },
+        "sql-in-string": {
+            "patterns": [
+                {
+                    "name": "meta.embedded.sql.asl",
+                    "begin": "(?i)\\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|EXEC|EXECUTE)\\b",
+                    "end": "(?=[\\'\\\"\\$])|$",
+                    "patterns": [
+                        {
+                            "name": "keyword.other.sql",
+                            "match": "(?i)\\b(SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|ALTER|DROP|INDEX|VIEW|PROCEDURE|FUNCTION|TRIGGER|DATABASE|SCHEMA)\\b"
+                        },
+                        {
+                            "name": "keyword.other.sql",
+                            "match": "(?i)\\b(INNER|LEFT|RIGHT|FULL|OUTER|JOIN|ON|AS|GROUP|BY|ORDER|HAVING|DISTINCT|TOP|LIMIT|OFFSET|UNION|ALL|EXISTS|IN|LIKE|BETWEEN|IS|NULL|NOT|AND|OR)\\b"
+                        },
+                        {
+                            "name": "keyword.other.sql",
+                            "match": "(?i)\\b(COUNT|SUM|AVG|MIN|MAX|CAST|CONVERT|CASE|WHEN|THEN|ELSE|END|IF|WHILE|FOR|BEGIN|DECLARE|SET)\\b"
+                        },
+                        {
+                            "name": "storage.type.sql",
+                            "match": "(?i)\\b(VARCHAR|NVARCHAR|CHAR|NCHAR|TEXT|NTEXT|INT|INTEGER|BIGINT|SMALLINT|TINYINT|DECIMAL|NUMERIC|FLOAT|REAL|MONEY|SMALLMONEY|BIT|DATETIME|DATETIME2|DATE|TIME|TIMESTAMP|UNIQUEIDENTIFIER|XML|BINARY|VARBINARY|IMAGE)\\b"
+                        },
+                        {
+                            "name": "constant.numeric.sql",
+                            "match": "\\b\\d+(\\.\\d+)?\\b"
+                        },
+                        {
+                            "name": "string.quoted.single.sql",
+                            "begin": "'",
+                            "end": "'",
+                            "patterns": [
+                                {
+                                    "name": "constant.character.escape.sql",
+                                    "match": "''"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "meta.embedded.expression.asl",
+                            "begin": "\\$\\(",
+                            "end": "\\)",
+                            "patterns": [
+                                {
+                                    "include": "#variables"
+                                },
+                                {
+                                    "include": "#functions"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "comment.line.double-dash.sql",
+                            "match": "--.*$"
+                        },
+                        {
+                            "name": "comment.block.sql",
+                            "begin": "/\\*",
+                            "end": "\\*/"
+                        }
+                    ]
+                }
+            ]
+        },
+        "booleans": {
+            "patterns": [
+                {
+                    "name": "constant.language.boolean.asl",
+                    "match": "\\b(true|false)\\b"
+                }
+            ]
+        },
+        "comments": {
+            "name": "comment.block.asl",
+            "begin": "comment\\s*\\{",
+            "end": "\\}",
+            "beginCaptures": {
+                "0": { "name": "punctuation.definition.comment.begin.asl" }
+            },
+            "endCaptures": {
+                "0": { "name": "punctuation.definition.comment.end.asl" }
+            },
+            "patterns": [
+                {
+                    "name": "comment.block.nested.asl",
+                    "begin": "comment\\s*\\{",
+                    "end": "\\}",
+                    "patterns": [
+                        {
+                            "include": "#comments"
+                        }
+                    ]
+                },
+                {
+                    "name": "comment.content.balanced-braces.asl",
+                    "begin": "\\{",
+                    "end": "\\}",
+                    "patterns": [
+                        {
+                            "include": "#comment-content"
+                        }
+                    ]
+                },
+                {
+                    "include": "#comment-content"
+                }
+            ]
+        },
+        "comment-content": {
+            "patterns": [
+                {
+                    "name": "comment.content.balanced-braces.asl",
+                    "begin": "\\{",
+                    "end": "\\}",
+                    "patterns": [
+                        {
+                            "include": "#comment-content"
+                        }
+                    ]
+                },
+                {
+                    "name": "comment.content.asl",
+                    "match": "[^{}]+"
+                }
+            ]
+        },
+        "identifiers": {
+            "patterns": [
+                {
+                    "name": "entity.name.type.asl",
+                    "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+                }
+            ]
+        }
+    },
+    "scopeName": "source.altitude"
+}
