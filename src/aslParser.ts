@@ -223,7 +223,7 @@ function parseDeclarations(
     controlUsages: AslControlUsage[],
     setPendingSymbolFrame: (frame: PendingSymbolFrame | undefined) => void
 ): void {
-    const nodeMatch = trimmed.match(/^node\s+["']([^"']+)["']\s*\{/i);
+    const nodeMatch = trimmed.match(/^(?:private\s+)?node\s+["']([^"']+)["']\s*\{/i);
     if (nodeMatch) {
         pushSymbol(createBlockSymbol(document, lineNumber, nodeMatch[1], "node"));
         return;
@@ -438,7 +438,7 @@ function createSemanticFrame(
         return undefined;
     }
 
-    const nodeMatch = trimmed.match(/^node\s+["']([^"']+)["']\s*\{/i);
+    const nodeMatch = trimmed.match(/^(?:private\s+)?node\s+["']([^"']+)["']\s*\{/i);
     if (nodeMatch) {
         return { kind: "node", name: nodeMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "node") };
     }

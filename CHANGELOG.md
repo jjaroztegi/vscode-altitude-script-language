@@ -16,8 +16,3 @@ All notable changes to this extension are documented here.
 - Settings for formatter indentation and diagnostics toggles.
 - Embedded SQL highlighting support.
 - ASL snippets for controls and common UI patterns.
-
-### Improved
-- Expanded syntax highlighting coverage for ASL keywords, UI elements, graphical properties, path strings, interpolation, system variables, and built-ins.
-- Auto-indentation for event handlers, nodes, and subroutines.
-- Language configuration for path strings and auto-closing pairs.
