@@ -70,7 +70,16 @@ interface MutableFrame {
 export interface AslSymbolReference {
     text: string;
     parts: string[];
+    activePartIndex: number;
     range: vscode.Range;
+    fullText: string;
+    fullRange: vscode.Range;
+}
+
+interface PendingSymbolFrame {
+    kind: string;
+    name: string;
+    symbol: AslSymbol;
 }
 
 const RECORD_SECTION_VARIABLES = new Map<string, string>([
@@ -113,6 +122,7 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
     const lineContexts: AslContextFrame[][] = [];
     const controlUsages: AslControlUsage[] = [];
     const frames: MutableFrame[] = [];
+    let pendingSymbolFrame: PendingSymbolFrame | undefined;
 
     const pushSymbol = (symbol: AslSymbol): void => {
         const parent = [...frames].reverse().find((frame) => frame.symbol)?.symbol;
@@ -138,7 +148,9 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
 
         const inComment = frames.some((frame) => frame.kind === "comment");
         if (!inComment && trimmed.length > 0) {
-            parseDeclarations(document, lineNumber, trimmed, frames, pushSymbol, references, issues, controlUsages);
+            parseDeclarations(document, lineNumber, trimmed, frames, pushSymbol, references, issues, controlUsages, (frame) => {
+                pendingSymbolFrame = frame;
+            });
             parseReferences(document, lineNumber, text, references);
             parseControlProperties(document, lineNumber, trimmed, frames, issues);
         }
@@ -146,7 +158,11 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
         const structural = maskCommentContent(maskQuotedContent(text), inComment);
         const opens = countCharacters(structural, "{");
         const closes = countCharacters(structural, "}");
-        const semanticFrame = !inComment ? createSemanticFrame(lineNumber, trimmed, symbols, controlUsages) : undefined;
+        const semanticFrame = !inComment ? createSemanticFrame(lineNumber, trimmed, symbols, controlUsages, pendingSymbolFrame) : undefined;
+
+        if (semanticFrame && pendingSymbolFrame?.symbol === semanticFrame.symbol) {
+            pendingSymbolFrame = undefined;
+        }
 
         let remainingOpens = opens;
         if (semanticFrame) {
@@ -204,7 +220,8 @@ function parseDeclarations(
     pushSymbol: (symbol: AslSymbol) => void,
     references: AslReference[],
     issues: AslIssue[],
-    controlUsages: AslControlUsage[]
+    controlUsages: AslControlUsage[],
+    setPendingSymbolFrame: (frame: PendingSymbolFrame | undefined) => void
 ): void {
     const nodeMatch = trimmed.match(/^node\s+["']([^"']+)["']\s*\{/i);
     if (nodeMatch) {
@@ -227,6 +244,24 @@ function parseDeclarations(
     const eventMatch = trimmed.match(/^(on\s+.+?)\s*\{/i);
     if (eventMatch) {
         pushSymbol(createBlockSymbol(document, lineNumber, eventMatch[1], "event"));
+        return;
+    }
+
+    const subroutineMatch = trimmed.match(/^subroutine\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+    if (subroutineMatch) {
+        const routine = parseRoutineDeclaration(document, lineNumber, "subroutine");
+        const symbol = createBlockSymbol(document, lineNumber, routine.name, "subroutine", routine.detail);
+        pushSymbol(symbol);
+        setPendingSymbolFrame(trimmed.includes("{") ? undefined : { kind: "subroutine", name: routine.name, symbol });
+        return;
+    }
+
+    const functionMatch = trimmed.match(/^function\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+    if (functionMatch) {
+        const routine = parseRoutineDeclaration(document, lineNumber, "function");
+        const symbol = createBlockSymbol(document, lineNumber, routine.name, "function", routine.detail);
+        pushSymbol(symbol);
+        setPendingSymbolFrame(trimmed.includes("{") ? undefined : { kind: "function", name: routine.name, symbol });
         return;
     }
 
@@ -396,7 +431,8 @@ function createSemanticFrame(
     lineNumber: number,
     trimmed: string,
     symbols: AslSymbol[],
-    controlUsages: AslControlUsage[]
+    controlUsages: AslControlUsage[],
+    pendingSymbolFrame?: PendingSymbolFrame
 ): MutableFrame | undefined {
     if (!trimmed.includes("{")) {
         return undefined;
@@ -420,6 +456,20 @@ function createSemanticFrame(
     const eventMatch = trimmed.match(/^(on\s+.+?)\s*\{/i);
     if (eventMatch) {
         return { kind: "event", name: eventMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "event") };
+    }
+
+    const subroutineMatch = trimmed.match(/^subroutine\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+    if (subroutineMatch) {
+        return { kind: "subroutine", name: subroutineMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "subroutine") };
+    }
+
+    const functionMatch = trimmed.match(/^function\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+    if (functionMatch) {
+        return { kind: "function", name: functionMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "function") };
+    }
+
+    if (/^\{\s*$/.test(trimmed) && pendingSymbolFrame) {
+        return { kind: pendingSymbolFrame.kind, name: pendingSymbolFrame.name, symbol: pendingSymbolFrame.symbol };
     }
 
     const typeLikeMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(record|enumeration)\s*\{/i);
@@ -761,38 +811,48 @@ function escapeRegExp(value: string): string {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-export function findSymbolReferenceAtPosition(document: vscode.TextDocument, position: vscode.Position): AslSymbolReference | undefined {
-    const line = document.lineAt(position.line).text;
-    for (const match of line.matchAll(/@?[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*/g)) {
-        const start = match.index ?? 0;
-        const text = match[0];
-        const end = start + text.length;
-        if (position.character < start || position.character > end) {
-            continue;
+function parseRoutineDeclaration(document: vscode.TextDocument, lineNumber: number, kind: "subroutine" | "function"): { name: string; detail: string } {
+    const header = collectRoutineHeader(document, lineNumber);
+    const collapsed = header.replace(/\s+/g, " ").trim();
+    const pattern = kind === "subroutine"
+        ? /^subroutine\s+([A-Za-z_][A-Za-z0-9_]*)(?:\s*\((.*?)\))?/i
+        : /^function\s+([A-Za-z_][A-Za-z0-9_]*)(?:\s*\((.*?)\))?(?:\s*:\s*(.+?))?(?:\s*\{)?$/i;
+    const match = collapsed.match(pattern);
+    const name = match?.[1] ?? `${kind}_${lineNumber + 1}`;
+    const parameters = normalizeRoutineParameters(match?.[2] ?? "");
+
+    if (kind === "subroutine") {
+        return { name, detail: `(${parameters})` };
+    }
+
+    const returnType = (match?.[3] ?? "").replace(/\s*\{$/, "").trim();
+    return { name, detail: `(${parameters})${returnType ? `: ${returnType}` : ""}` };
+}
+
+function collectRoutineHeader(document: vscode.TextDocument, startLine: number): string {
+    const lines: string[] = [];
+    for (let line = startLine; line < Math.min(document.lineCount, startLine + 12); line += 1) {
+        lines.push(document.lineAt(line).text.trim());
+        if (document.lineAt(line).text.includes("{")) {
+            break;
         }
-
-        return {
-            text,
-            parts: text.split("."),
-            range: new vscode.Range(position.line, start, position.line, end)
-        };
     }
 
-    const quoted = Array.from(line.matchAll(/["']([^"']+)["']/g)).find((match) => {
-        const start = match.index ?? 0;
-        const end = start + match[0].length;
-        return position.character >= start && position.character <= end;
-    });
-    if (!quoted) {
-        return undefined;
-    }
+    return lines.join(" ");
+}
 
-    const quotedStart = (quoted.index ?? 0) + 1;
-    return {
-        text: quoted[1],
-        parts: [quoted[1]],
-        range: new vscode.Range(position.line, quotedStart, position.line, quotedStart + quoted[1].length)
-    };
+function normalizeRoutineParameters(value: string): string {
+    return value
+        .split(",")
+        .map((part) => part.replace(/\s+/g, " ").trim())
+        .filter((part) => part.length > 0)
+        .join(", ");
+}
+
+export function findSymbolReferenceAtPosition(document: vscode.TextDocument, position: vscode.Position): AslSymbolReference | undefined {
+    return collectLineSymbolReferences(document.lineAt(position.line).text, position.line).find((reference) =>
+        position.character >= reference.range.start.character && position.character <= reference.range.end.character
+    );
 }
 
 export function findSymbolAtPosition(document: vscode.TextDocument, position: vscode.Position): string | undefined {
@@ -800,7 +860,23 @@ export function findSymbolAtPosition(document: vscode.TextDocument, position: vs
 }
 
 export function resolveReferenceSymbols(analysis: AslAnalysis, reference: AslSymbolReference): AslSymbol[] {
-    return resolveReferenceSymbolsFromParts(analysis, reference.parts);
+    const targetParts = reference.parts.slice(0, reference.activePartIndex + 1);
+    const preferNonTypeBase = reference.parts.length > 1 && reference.activePartIndex === 0;
+    return resolveReferenceSymbolsFromParts(analysis, targetParts, preferNonTypeBase);
+}
+
+export function collectDocumentSymbolReferences(document: vscode.TextDocument, analysis: AslAnalysis): AslSymbolReference[] {
+    const references: AslSymbolReference[] = [];
+    for (let lineNumber = 0; lineNumber < document.lineCount; lineNumber += 1) {
+        const inComment = (analysis.lineContexts[lineNumber] ?? []).some((context) => context.kind === "comment");
+        if (inComment) {
+            continue;
+        }
+
+        references.push(...collectLineSymbolReferences(document.lineAt(lineNumber).text, lineNumber));
+    }
+
+    return references;
 }
 
 export function getMemberSymbols(analysis: AslAnalysis, expression: string): AslSymbol[] {
@@ -813,12 +889,23 @@ export function getMemberSymbols(analysis: AslAnalysis, expression: string): Asl
     return deduplicateSymbols(bases.flatMap((symbol) => getAvailableMemberSymbols(analysis, symbol)));
 }
 
-function resolveReferenceSymbolsFromParts(analysis: Pick<AslAnalysis, "symbolIndex" | "symbols">, parts: string[]): AslSymbol[] {
+function resolveReferenceSymbolsFromParts(
+    analysis: Pick<AslAnalysis, "symbolIndex" | "symbols">,
+    parts: string[],
+    preferNonTypeBase = false
+): AslSymbol[] {
     if (parts.length === 0) {
         return [];
     }
 
     let current = resolveBaseSymbols(analysis, parts[0]);
+    if (parts.length > 1 || preferNonTypeBase) {
+        const nonTypeBases = current.filter((symbol) => symbol.kind !== "type");
+        if (nonTypeBases.length > 0) {
+            current = nonTypeBases;
+        }
+    }
+
     for (const part of parts.slice(1)) {
         current = resolveMemberSymbols(analysis, current, part);
         if (current.length === 0) {
@@ -888,6 +975,44 @@ function deduplicateSymbols(symbols: AslSymbol[]): AslSymbol[] {
         seen.add(key);
         return true;
     });
+}
+
+function collectLineSymbolReferences(text: string, lineNumber: number): AslSymbolReference[] {
+    const references: AslSymbolReference[] = [];
+    const masked = maskCommentContent(maskQuotedContent(text), false);
+
+    for (const match of masked.matchAll(/@?[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*/g)) {
+        const start = match.index ?? 0;
+        const fullText = text.slice(start, start + match[0].length);
+        const parts = fullText.split(".");
+        let segmentStart = start;
+        for (let index = 0; index < parts.length; index += 1) {
+            const part = parts[index];
+            references.push({
+                text: part,
+                parts,
+                activePartIndex: index,
+                range: new vscode.Range(lineNumber, segmentStart, lineNumber, segmentStart + part.length),
+                fullText,
+                fullRange: new vscode.Range(lineNumber, start, lineNumber, start + fullText.length)
+            });
+            segmentStart += part.length + 1;
+        }
+    }
+
+    for (const match of text.matchAll(/\b(?:goto node|call node|master)\s+["']([^"']+)["']/gi)) {
+        const quoteStart = (match.index ?? 0) + match[0].indexOf(match[1]);
+        references.push({
+            text: match[1],
+            parts: [match[1]],
+            activePartIndex: 0,
+            range: new vscode.Range(lineNumber, quoteStart, lineNumber, quoteStart + match[1].length),
+            fullText: match[1],
+            fullRange: new vscode.Range(lineNumber, quoteStart, lineNumber, quoteStart + match[1].length)
+        });
+    }
+
+    return references;
 }
 
 export function getContextsForLine(analysis: AslAnalysis, line: number): AslContextFrame[] {
