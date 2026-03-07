@@ -193,11 +193,11 @@
                 },
                 {
                     "name": "keyword.control.flow.asl",
-                    "match": "\\b(try|catch|finally|throw|goto node|call node|back node|return|exit through|abort script|discard script|end script|restart script|dim|add)\\b"
+                    "match": "\\b(try|catch|finally|throw|goto node|call node|back node|return|exit through|abort script|discard script|end script|restart script|dim|add|get current|update current|reschedule loaded contact)\\b"
                 },
                 {
                     "name": "keyword.control.sql.asl",
-                    "match": "\\b(sql for|sql select|sql execute|system select|cursor|cursors|open cursor|close cursor|fetch cursor|with|into|variable|record|match by name|absolute|relative)\\b"
+                    "match": "\\b(sql for|sql select|sql execute|system select|cursor|cursors|open cursor|close cursor|fetch cursor|with|into|variable|record|match by name|absolute|relative|set timer|set timer event|kill timer event|handle pending events)\\b"
                 },
                 {
                     "name": "storage.type.asl",
@@ -246,6 +246,10 @@
                 {
                     "name": "variable.language.system.asl",
                     "match": "@(script_start_reason|script_info(\\.(node|windowId|fileName|majorVersion))?|script_session_info(\\.(agent|campaign|contact|sessionUrl))?|login_info|phone_info(\\.(ani|dnis))?|email_info|instant_messaging_info|interaction_info|workflow_info|schedule_info|error|error_info(\\.(sqlError|noRowsReturned))?)\\b"
+                },
+                {
+                    "name": "variable.language.business.asl",
+                    "match": "\\b(campaign|contact|workflow|transferred|outcomes|contact_profile)(?=\\b|\\.)"
                 },
                 {
                     "name": "variable.other.asl",

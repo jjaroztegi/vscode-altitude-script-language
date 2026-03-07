@@ -78,7 +78,9 @@ const RECORD_SECTION_VARIABLES = new Map<string, string>([
     ["contact", "contact record"],
     ["workflow", "workflow record"],
     ["transferred", "transferred record"],
-    ["outcome", "outcome record"]
+    ["outcome", "outcome record"],
+    ["outcomes", "outcome record"],
+    ["contact_profile", "contact profile extensions"]
 ]);
 
 const RECORD_SECTION_NAMES = new Set(RECORD_SECTION_VARIABLES.values());
@@ -230,7 +232,7 @@ function parseDeclarations(
 
     const recordOwner = getRecordOwner(frames);
     if (recordOwner) {
-        const fieldMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*([^,]+?)\s*,?$/);
+        const fieldMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+?)(?:\s*,)?$/);
         if (fieldMatch) {
             pushSymbol(createLineSymbol(document, lineNumber, fieldMatch[1], "field", fieldMatch[2].trim()));
             return;
