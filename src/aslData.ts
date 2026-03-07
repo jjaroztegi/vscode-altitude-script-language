@@ -3,6 +3,8 @@ export type AslSymbolKindName =
     | "node"
     | "block"
     | "event"
+    | "subroutine"
+    | "function"
     | "type"
     | "field"
     | "variable"
