@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
 import {
+    ACTION_KEYWORDS,
+    BUSINESS_DATA_VARIABLES,
     BUILTIN_FUNCTIONS,
     CONTROL_DEFINITIONS,
     FLOW_KEYWORDS,
@@ -82,7 +84,7 @@ export function activate(context: vscode.ExtensionContext): void {
     );
 
     context.subscriptions.push(
-        vscode.languages.registerCompletionItemProvider({ language: LANGUAGE_ID }, new AslCompletionProvider(analysisService), " ", ":", "\"", "'"),
+        vscode.languages.registerCompletionItemProvider({ language: LANGUAGE_ID }, new AslCompletionProvider(analysisService), " ", ":", ".", "\"", "'"),
         vscode.languages.registerHoverProvider({ language: LANGUAGE_ID }, new AslHoverProvider(analysisService)),
         vscode.languages.registerDefinitionProvider({ language: LANGUAGE_ID }, new AslDefinitionProvider(analysisService)),
         vscode.languages.registerDocumentSymbolProvider({ language: LANGUAGE_ID }, new AslDocumentSymbolProvider(analysisService)),
@@ -113,8 +115,16 @@ class AslCompletionProvider implements vscode.CompletionItemProvider {
             return getSymbolsByKind(analysis, ["node"]).map((symbol) => createSymbolCompletion(symbol, vscode.CompletionItemKind.Reference));
         }
 
+        if (/\b(?:open cursor|close cursor|fetch cursor)\s+[A-Za-z_0-9]*$/i.test(linePrefix)) {
+            return getSymbolsByKind(analysis, ["cursor"]).map((symbol) => createSymbolCompletion(symbol, vscode.CompletionItemKind.Variable));
+        }
+
         if (/\bfor\s+[A-Za-z_0-9]*$/i.test(linePrefix) || /\bcursor\s+[A-Za-z_0-9]*$/i.test(linePrefix)) {
             return getSymbolsByKind(analysis, ["variable", "parameter", "constant", "cursor"]).map((symbol) => createSymbolCompletion(symbol, vscode.CompletionItemKind.Variable));
+        }
+
+        if (/\b(?:into\s+variable|kill timer event|into)\s+[A-Za-z_0-9.]*$/i.test(linePrefix)) {
+            return getSymbolsByKind(analysis, ["variable", "parameter", "constant"]).map((symbol) => createSymbolCompletion(symbol, vscode.CompletionItemKind.Variable));
         }
 
         if (/^\s*on\s+[A-Za-z\s]*$/i.test(linePrefix)) {
@@ -132,6 +142,7 @@ class AslCompletionProvider implements vscode.CompletionItemProvider {
             completions.push(...SCRIPT_EVENTS.map((entry) => createKeywordCompletion(entry.name, vscode.CompletionItemKind.Event, entry.description)));
             completions.push(...FLOW_KEYWORDS.map((entry) => createKeywordCompletion(entry.name, vscode.CompletionItemKind.Keyword, entry.description)));
             completions.push(...LANGUAGE_KEYWORDS.map((entry) => createKeywordCompletion(entry.name, vscode.CompletionItemKind.Keyword, entry.description)));
+            completions.push(...ACTION_KEYWORDS.map((entry) => createKeywordCompletion(entry.name, vscode.CompletionItemKind.Keyword, entry.description, entry.insertText)));
         }
 
         const section = getNearestSection(analysis, position.line);
@@ -145,6 +156,7 @@ class AslCompletionProvider implements vscode.CompletionItemProvider {
         }
 
         completions.push(...BUILTIN_FUNCTIONS.map((entry) => createKeywordCompletion(entry.name, vscode.CompletionItemKind.Function, entry.description)));
+        completions.push(...BUSINESS_DATA_VARIABLES.map((entry) => createKeywordCompletion(entry.name, vscode.CompletionItemKind.Variable, entry.description)));
         completions.push(...SYSTEM_VARIABLES.map((entry) => createKeywordCompletion(entry.name, vscode.CompletionItemKind.Variable, entry.description)));
         completions.push(...getSymbolsByKind(analysis, ["variable", "parameter", "constant", "cursor", "type", "namespace", "node"]).map((symbol) => createSymbolCompletion(symbol, vscode.CompletionItemKind.Variable)));
 

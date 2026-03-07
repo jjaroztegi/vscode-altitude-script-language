@@ -86,6 +86,84 @@ export const LANGUAGE_KEYWORDS: AslHelpEntry[] = [
     { name: "add", description: "Adds an item to a collection or UI structure." }
 ];
 
+export const ACTION_KEYWORDS: AslHelpEntry[] = [
+    {
+        name: "open cursor",
+        description: "Opens a cursor declared in the current scope.",
+        insertText: "open cursor ${1:cursorName}"
+    },
+    {
+        name: "close cursor",
+        description: "Closes a cursor and releases its resources.",
+        insertText: "close cursor ${1:cursorName}"
+    },
+    {
+        name: "fetch cursor",
+        description: "Retrieves a row from a cursor, optionally using absolute or relative positioning and into targets.",
+        insertText: "fetch cursor ${1:cursorName} ${2|absolute,relative|} ${3:1} into variable ${4:targetVar}"
+    },
+    {
+        name: "sql select",
+        description: "Executes a select statement that returns a single row into variables or records.",
+        insertText: "sql select ${1:'SELECT ...'} into\n\tvariable ${2:targetVar}"
+    },
+    {
+        name: "sql execute",
+        description: "Executes a non-select SQL statement, optionally storing lastserial into a variable.",
+        insertText: "sql execute ${1:sqlText}"
+    },
+    {
+        name: "system select",
+        description: "Queries a system cursor into variables or records.",
+        insertText: "system select from ${1:SystemCursor::name} into\n\tvariable ${2:targetVar}"
+    },
+    {
+        name: "set timer",
+        description: "Schedules a user-defined event after a timeout.",
+        insertText: "set timer to ${1:1} trigger event ${2:EventName}() into ${3:timerId}"
+    },
+    {
+        name: "set timer event",
+        description: "Common event-oriented timer form used in nodes to trigger a user-defined event after a timeout.",
+        insertText: "set timer event ${1:EventName}() to ${2:1} into ${3:timerId}"
+    },
+    {
+        name: "kill timer event",
+        description: "Cancels a timer event by id or event name.",
+        insertText: "kill timer event ${1:timerId}"
+    },
+    {
+        name: "handle pending events",
+        description: "Processes queued asynchronous events.",
+        insertText: "handle pending events"
+    },
+    {
+        name: "get current",
+        description: "Obtains the current business-data attributes of a schema into an array of attributes.",
+        insertText: "get current ${1:contact} into array ${2:attributes}"
+    },
+    {
+        name: "update current",
+        description: "Updates business-data attributes of a schema using an attribute array.",
+        insertText: "update current ${1:contact} data with array ${2:attributes}"
+    },
+    {
+        name: "reschedule loaded contact",
+        description: "Reschedules the loaded contact with a new date, time, and phone target.",
+        insertText: "reschedule loaded contact at ${1:dateValue}, ${2:timeValue} reschedule phone ${3:phoneValue}"
+    },
+    {
+        name: "dim",
+        description: "Resizes an array or collection to a specific length.",
+        insertText: "dim ${1:arrayName} to ${2:0}"
+    },
+    {
+        name: "add",
+        description: "Appends or inserts an item into a target collection.",
+        insertText: "add ${1:value} to ${2:collection} at ${3:1}"
+    }
+];
+
 export const TYPE_NAMES = [
     "text",
     "number",
@@ -116,6 +194,15 @@ export const SYSTEM_VARIABLES: AslHelpEntry[] = [
     { name: "@schedule_info", description: "Schedule metadata available to the script." },
     { name: "@error", description: "Boolean error flag set by the previous operation." },
     { name: "@error_info", description: "Detailed error information, including SQL errors and no-row states." }
+];
+
+export const BUSINESS_DATA_VARIABLES: AslHelpEntry[] = [
+    { name: "campaign", description: "Predefined script variable of type CampaignRecord, backed by the campaign record declaration." },
+    { name: "contact", description: "Predefined script variable of type ContactRecord, backed by the contact record declaration." },
+    { name: "workflow", description: "Predefined script variable of type WorkflowRecord, backed by the workflow record declaration." },
+    { name: "transferred", description: "Predefined script variable of type TransferredRecord, backed by the transferred record declaration." },
+    { name: "outcomes", description: "Predefined script variable containing an array of OutcomeRecord values, backed by the outcome record declaration." },
+    { name: "contact_profile", description: "Predefined script variable of type ContactProfileRecord, backed by contact profile extensions declarations." }
 ];
 
 export const BUILTIN_FUNCTIONS: AslHelpEntry[] = [
@@ -318,6 +405,8 @@ export function findHelpEntry(name: string): AslHelpEntry | undefined {
         ...SCRIPT_EVENTS,
         ...FLOW_KEYWORDS,
         ...LANGUAGE_KEYWORDS,
+        ...ACTION_KEYWORDS,
+        ...BUSINESS_DATA_VARIABLES,
         ...SYSTEM_VARIABLES,
         ...BUILTIN_FUNCTIONS,
         ...CONTROL_DEFINITIONS
