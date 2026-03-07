@@ -1,0 +1,87 @@
+{
+    "Node": {
+        "prefix": "node",
+        "body": [
+            "node \"${1:NAME}\" {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Create a new node"
+    },
+    "Push Button": {
+        "prefix": "push button",
+        "body": [
+            "push button \"${1:btnName}\" {",
+            "\tsize ${2:100},${3:30} at ${4:0},${5:0}",
+            "\tlabel '${6:Label}' {",
+            "\t\tfont {",
+            "\t\t\tname \"Segoe UI\"",
+            "\t\t\tsize 10",
+            "\t\t}",
+            "\t}",
+            "\ton click commit {",
+            "\t\t$0",
+            "\t}",
+            "}"
+        ],
+        "description": "Push button element"
+    },
+    "Static Text": {
+        "prefix": "static text",
+        "body": [
+            "static text {",
+            "\tsize ${1:200},${2:20} at ${3:0},${4:0}",
+            "\tbackground transparent",
+            "\tlabel '${5:Text}' {",
+            "\t\tfont {",
+            "\t\t\tname \"Segoe UI\"",
+            "\t\t\tsize 10",
+            "\t\t}",
+            "\t}",
+            "\t$0",
+            "}"
+        ],
+        "description": "Static text label"
+    },
+    "Input": {
+        "prefix": "input",
+        "body": [
+            "input \"${1:inputName}\" for ${2:VAR} {",
+            "\tsize ${3:200},${4:24} at ${5:0},${6:0}",
+            "\tfont {",
+            "\t\tname \"Segoe UI\"",
+            "\t\t\tsize 10",
+            "\t}",
+            "\t$0",
+            "}"
+        ],
+        "description": "Input field for a variable"
+    },
+    "Dashboard Pattern": {
+        "prefix": "pattern-dashboard",
+        "body": [
+            "node \"MASTER\" {",
+            "\tstatic box {",
+            "\t\tsize 1840,72 at 40,24",
+            "\t\tbackground color rgb 32,36,40",
+            "\t\tborder etched",
+            "\t}",
+            "",
+            "\tstatic text {",
+            "\t\tsize 500,28 at 72,44",
+            "\t\tbackground transparent",
+            "\t\tlabel 'Operational Dashboard' {",
+            "\t\t\tfont {",
+            "\t\t\t\tname \"Georgia\"",
+            "\t\t\t\tsize 18",
+            "\t\t\t\tbold",
+            "\t\t\t\tcolor \"White\"",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+            "\t$0",
+            "}"
+        ],
+        "description": "Operational Dashboard Layout Pattern"
+    }
+}

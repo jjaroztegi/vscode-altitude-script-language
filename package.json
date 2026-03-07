@@ -1,0 +1,101 @@
+{
+    "name": "vscode-altitude-script-language",
+    "displayName": "Altitude Script Language",
+    "description": "VS Code language support for Altitude Script Language (ASL) with highlighting, IntelliSense, diagnostics, navigation, formatting, snippets, and embedded SQL.",
+    "version": "0.1.0",
+    "publisher": "jjaroztegi",
+    "main": "./out/extension.js",
+    "galleryBanner": {
+        "color": "#1b1f23",
+        "theme": "dark"
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "package": "vsce package",
+        "publish:vscode": "vsce publish"
+    },
+    "devDependencies": {
+        "@types/node": "^24.12.0",
+        "@types/vscode": "^1.109.0",
+        "@vscode/vsce": "^3.7.1",
+        "typescript": "^5.9.3"
+    },
+    "engines": {
+        "vscode": "^1.109.0",
+        "node": ">=22.0.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": [
+        "vscode",
+        "altitude",
+        "asl",
+        "scripting",
+        "contact center",
+        "contact-center",
+        "sql",
+        "language support",
+        "syntax highlighting",
+        "intellisense",
+        "formatter",
+        "diagnostics"
+    ],
+    "icon": "images/logo_128.png",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jjaroztegi/vscode-altitude-script-language.git"
+    },
+    "homepage": "https://github.com/jjaroztegi/vscode-altitude-script-language",
+    "bugs": {
+        "url": "https://github.com/jjaroztegi/vscode-altitude-script-language/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "activationEvents": [
+        "onLanguage:asl"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "asl",
+            "aliases": ["Altitude Script", "asl"],
+            "extensions": [".ags",".irs",".gem",".agm",".irm",".bak"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "asl",
+            "scopeName": "source.altitude",
+            "path": "./syntaxes/asl.tmLanguage.json"
+        }],
+        "snippets": [{
+            "language": "asl",
+            "path": "./snippets/asl.json"
+        }],
+        "configuration": {
+            "title": "Altitude Script Language",
+            "properties": {
+                "altitudeScriptLanguage.format.indentSize": {
+                    "type": "integer",
+                    "default": 4,
+                    "minimum": 1,
+                    "maximum": 8,
+                    "description": "Indent size used by the ASL document formatter when the file does not already establish a consistent indentation style."
+                },
+                "altitudeScriptLanguage.diagnostics.undefinedReferences": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Report unresolved node, variable, and cursor references in ASL documents."
+                },
+                "altitudeScriptLanguage.diagnostics.controlProperties": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Validate ASL control properties against the documented Altitude control schemas."
+                }
+            }
+        }
+    }
+}
