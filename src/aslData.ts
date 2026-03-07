@@ -44,6 +44,7 @@ export const TOP_LEVEL_BLOCKS: AslHelpEntry[] = [
     { name: "contact profile extensions", description: "Declare contact profile extension fields.", insertText: "contact profile extensions {\n\t$0\n}" },
     { name: "outcome record", description: "Declare the outcome record shape.", insertText: "outcome record {\n\t$0\n}" },
     { name: "node", description: "Create a script node.", insertText: "node \"${1:NAME}\" {\n\t$0\n}" },
+    { name: "private node", description: "Create a node scoped for private use within the script.", insertText: "private node \"${1:NAME}\" {\n\t$0\n}" },
     { name: "block", description: "Create a reusable block.", insertText: "block \"${1:NAME}\" {\n\t$0\n}" }
 ];
 
@@ -342,7 +343,7 @@ export const CONTROL_DEFINITIONS: AslControlDefinition[] = [
     {
         name: "chat control",
         description: "Embeds an agent chat surface in the node UI.",
-        properties: [...commonControlProperties, "background", "read only if"],
+        properties: [...commonControlProperties, "background", "background color", "read only if"],
         events: ["on event"]
     },
     {
