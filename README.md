@@ -1,26 +1,28 @@
-# Altitude Script Language
+# Altitude Script Language Support
 
 Language support for Altitude Script Language (ASL) in Visual Studio Code.
 
+
+This extension is focused on practical ASL authoring: readable highlighting, parser-backed diagnostics, and editor navigation that works on real Altitude scripts.
+
 ## Features
 
-- Syntax highlighting for ASL keywords, controls, events, built-ins, system variables, path strings, and interpolation.
-- IntelliSense for sections, controls, properties, events, nodes, variables, cursors, and built-in functions.
-- Diagnostics for unresolved references, duplicate declarations, brace issues, and invalid control properties.
-- Hover, Go to Definition, and Outline support for faster navigation.
-- Document formatting with configurable indentation fallback.
-- Embedded SQL highlighting inside ASL SQL statements.
-- Snippets for common controls and screen patterns.
+- Syntax highlighting for ASL keywords, controls, events, built-ins, record fields, path literals, interpolation, and embedded SQL.
+- IntelliSense for sections, controls, properties, events, nodes, variables, cursors, routines, built-ins, and common ASL actions.
+- Diagnostics for unresolved references, duplicate declarations, brace issues, and unsupported control properties.
+- Navigation support including hover, go to definition, find references, rename, document outline, and workspace symbols.
+- Formatting support with configurable indentation fallback.
+- Snippets for common controls and UI patterns.
 
-## File Support
+## Supported Files
 
-Supported file extensions: `.ags`, `.irs`, `.gem`, `.agm`, `.irm`, `.bak`.
+The extension activates for `.ags`, `.irs`, `.gem`, `.agm`, `.irm`, and `.bak` files.
 
 ## Settings
 
-- `altitudeScriptLanguage.format.indentSize`
-- `altitudeScriptLanguage.diagnostics.undefinedReferences`
-- `altitudeScriptLanguage.diagnostics.controlProperties`
+- `altitudeScriptLanguage.format.indentSize`: Fallback indentation width for the formatter.
+- `altitudeScriptLanguage.diagnostics.undefinedReferences`: Enable unresolved node, variable, and cursor diagnostics.
+- `altitudeScriptLanguage.diagnostics.controlProperties`: Validate control properties against documented ASL control schemas.
 
 ## Development
 
@@ -31,7 +33,7 @@ npm install
 npm run compile
 ```
 
-Use `F5` in VS Code to launch an Extension Development Host.
+Launch an Extension Development Host with `F5`.
 
 To build a VSIX:
 
@@ -39,6 +41,10 @@ To build a VSIX:
 npm run package
 ```
 
+## Support
+
+Issues and feature requests: https://github.com/jjaroztegi/vscode-altitude-script-language/issues
+
 ## License
 
-MIT
+See [LICENSE](LICENSE).
