@@ -1,10 +1,19 @@
 import * as vscode from "vscode";
 import {
+    ACTION_KEYWORDS,
     ALL_EVENT_NAMES,
     ALL_PROPERTY_NAMES,
+    BUILTIN_FUNCTIONS,
+    BUSINESS_DATA_VARIABLES,
     CONTROL_DEFINITIONS,
     CONTROL_NAMES_BY_LENGTH,
+    FLOW_KEYWORDS,
+    LANGUAGE_KEYWORDS,
     SECTION_NAMES,
+    SCRIPT_EVENTS,
+    SYSTEM_VARIABLES,
+    TOP_LEVEL_BLOCKS,
+    TYPE_NAMES,
     AslControlDefinition,
     AslSymbolKindName,
     findControlDefinition,
@@ -24,7 +33,7 @@ export interface AslSymbol {
 
 export interface AslReference {
     name: string;
-    kind: "node" | "variable" | "cursor" | "namespace" | "type";
+    kind: "node" | "variable" | "cursor" | "namespace" | "type" | "symbol";
     range: vscode.Range;
 }
 
@@ -93,6 +102,10 @@ const RECORD_SECTION_VARIABLES = new Map<string, string>([
 ]);
 
 const RECORD_SECTION_NAMES = new Set(RECORD_SECTION_VARIABLES.values());
+
+const DOCUMENTED_SECTION_PATTERN = /^(modules|dependencies|constants|types|variables|parameters|cursors|using namespaces|campaign record|contact record|workflow record|transferred record|outcome record|contact profile extensions)\b/i;
+
+const RESERVED_REFERENCE_TOKENS = buildReservedReferenceTokens();
 
 export class AslAnalysisService {
     private readonly cache = new Map<string, { version: number; analysis: AslAnalysis }>();
@@ -196,6 +209,9 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
         }
     }
 
+    const genericReferences = collectGenericSymbolReferences(document, lineContexts, symbols, references);
+    references.push(...genericReferences);
+
     for (const frame of frames) {
         if (frame.symbol) {
             issues.push({
@@ -235,7 +251,7 @@ function parseDeclarations(
         return;
     }
 
-    const sectionMatch = trimmed.match(/^(modules|dependencies|declarations|constants|types|variables|parameters|globals?|cursors|using namespaces|campaign record|contact record|workflow record|transferred record|outcome record|contact profile extensions|flow view)\b/i);
+    const sectionMatch = trimmed.match(DOCUMENTED_SECTION_PATTERN);
     if (sectionMatch && trimmed.includes("{")) {
         pushSymbol(createBlockSymbol(document, lineNumber, sectionMatch[1], "section"));
         return;
@@ -448,7 +464,7 @@ function createSemanticFrame(
         return { kind: "block", name: blockMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "block") };
     }
 
-    const sectionMatch = trimmed.match(/^(modules|dependencies|declarations|constants|types|variables|parameters|globals?|cursors|using namespaces|campaign record|contact record|workflow record|transferred record|outcome record|contact profile extensions|flow view)\b/i);
+    const sectionMatch = trimmed.match(DOCUMENTED_SECTION_PATTERN);
     if (sectionMatch) {
         return { kind: "section", name: sectionMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "section") };
     }
@@ -609,12 +625,15 @@ function validateDuplicates(symbolIndex: Map<string, AslSymbol[]>, issues: AslIs
 
 function validateReferences(symbolIndex: Map<string, AslSymbol[]>, references: AslReference[], issues: AslIssue[]): void {
     for (const reference of references) {
-        const matches = reference.kind === "variable"
+        const matches = reference.kind === "variable" || reference.kind === "symbol"
             ? resolveReferenceSymbolsFromParts({ symbolIndex } as AslAnalysis, reference.name.split("."))
             : symbolIndex.get(normalizeAslName(reference.name)) ?? [];
         const resolved = matches.some((symbol) => {
             if (reference.kind === "variable") {
                 return symbol.kind === "variable" || symbol.kind === "parameter" || symbol.kind === "constant" || symbol.kind === "field";
+            }
+            if (reference.kind === "symbol") {
+                return symbol.kind !== "section" && symbol.kind !== "event";
             }
             if (reference.kind === "cursor") {
                 return symbol.kind === "cursor" || symbol.kind === "variable";
@@ -624,12 +643,130 @@ function validateReferences(symbolIndex: Map<string, AslSymbol[]>, references: A
 
         if (!resolved) {
             issues.push({
-                message: `Unresolved ${reference.kind} reference '${reference.name}'.`,
+                message: reference.kind === "symbol"
+                    ? `Unresolved symbol reference '${reference.name}'.`
+                    : `Unresolved ${reference.kind} reference '${reference.name}'.`,
                 severity: vscode.DiagnosticSeverity.Warning,
                 range: reference.range
             });
         }
     }
+}
+
+function collectGenericSymbolReferences(
+    document: vscode.TextDocument,
+    lineContexts: AslContextFrame[][],
+    symbols: AslSymbol[],
+    existingReferences: AslReference[]
+): AslReference[] {
+    const declarationRanges = new Set(symbols.map((symbol) => createRangeKey(symbol.selectionRange)));
+    const existingRangeKeys = new Set(existingReferences.map((reference) => createReferenceKey(reference.name, reference.range)));
+    const references: AslReference[] = [];
+
+    for (let lineNumber = 0; lineNumber < document.lineCount; lineNumber += 1) {
+        if ((lineContexts[lineNumber] ?? []).some((context) => context.kind === "comment")) {
+            continue;
+        }
+
+        const text = document.lineAt(lineNumber).text;
+        for (const reference of collectLineSymbolReferences(text, lineNumber)) {
+            if (reference.activePartIndex !== reference.parts.length - 1) {
+                continue;
+            }
+
+            if (declarationRanges.has(createRangeKey(reference.range))) {
+                continue;
+            }
+
+            if (!shouldTrackGenericReference(reference)) {
+                continue;
+            }
+
+            const key = createReferenceKey(reference.fullText, reference.fullRange);
+            if (existingRangeKeys.has(key)) {
+                continue;
+            }
+
+            existingRangeKeys.add(key);
+            references.push({
+                name: reference.fullText,
+                kind: "symbol",
+                range: reference.fullRange
+            });
+        }
+    }
+
+    return references;
+}
+
+function shouldTrackGenericReference(reference: AslSymbolReference): boolean {
+    if (reference.fullText.startsWith("@")) {
+        return false;
+    }
+
+    return reference.parts.every((part) => !RESERVED_REFERENCE_TOKENS.has(normalizeAslName(part)));
+}
+
+function buildReservedReferenceTokens(): Set<string> {
+    const tokens = new Set<string>([
+        "true",
+        "false",
+        "null",
+        "if",
+        "else",
+        "elseif",
+        "while",
+        "do",
+        "break",
+        "continue",
+        "commit",
+        "rollback",
+        "then",
+        "case",
+        "default"
+    ]);
+
+    const entries = [
+        ...TOP_LEVEL_BLOCKS,
+        ...SCRIPT_EVENTS,
+        ...FLOW_KEYWORDS,
+        ...LANGUAGE_KEYWORDS,
+        ...ACTION_KEYWORDS,
+        ...BUSINESS_DATA_VARIABLES,
+        ...SYSTEM_VARIABLES,
+        ...BUILTIN_FUNCTIONS,
+        ...CONTROL_DEFINITIONS,
+        ...TYPE_NAMES.map((name) => ({ name }))
+    ];
+
+    for (const entry of entries) {
+        for (const token of tokenizeReferenceName(entry.name)) {
+            tokens.add(token);
+        }
+    }
+
+    for (const name of [...ALL_PROPERTY_NAMES, ...ALL_EVENT_NAMES, ...SECTION_NAMES]) {
+        for (const token of tokenizeReferenceName(name)) {
+            tokens.add(token);
+        }
+    }
+
+    return tokens;
+}
+
+function tokenizeReferenceName(value: string): string[] {
+    return value
+        .split(/[^A-Za-z0-9_@]+/)
+        .map((token) => normalizeAslName(token))
+        .filter((token) => token.length > 0);
+}
+
+function createReferenceKey(name: string, range: vscode.Range): string {
+    return `${normalizeAslName(name)}:${createRangeKey(range)}`;
+}
+
+function createRangeKey(range: vscode.Range): string {
+    return `${range.start.line}:${range.start.character}:${range.end.line}:${range.end.character}`;
 }
 
 function validateControlUsage(usage: AslControlUsage, issues: AslIssue[]): void {

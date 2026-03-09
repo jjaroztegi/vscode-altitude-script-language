@@ -378,12 +378,6 @@ export const CONTROL_DEFINITIONS: AslControlDefinition[] = [
         requiresTarget: "cursor",
         properties: [...commonControlProperties, "background color", "font", "header background color", "header font", "columns", "column", "size", "hidden", "align", "format", "sortable", "tag", "header align"],
         events: ["on click", "on change", "on double click"]
-    },
-    {
-        name: "flow view",
-        description: "Enables graphical flow rendering for uAgent screens.",
-        properties: [],
-        events: []
     }
 ];
 
