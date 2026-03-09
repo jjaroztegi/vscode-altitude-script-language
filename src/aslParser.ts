@@ -69,6 +69,7 @@ export interface AslAnalysis {
 }
 
 interface MutableFrame {
+    id?: number;
     kind: string;
     name?: string;
     control?: string;
@@ -83,6 +84,7 @@ export interface AslSymbolReference {
     range: vscode.Range;
     fullText: string;
     fullRange: vscode.Range;
+    referenceKind?: "node" | "variable" | "cursor" | "namespace" | "type" | "symbol";
 }
 
 interface PendingSymbolFrame {
@@ -103,9 +105,14 @@ const RECORD_SECTION_VARIABLES = new Map<string, string>([
 
 const RECORD_SECTION_NAMES = new Set(RECORD_SECTION_VARIABLES.values());
 
-const DOCUMENTED_SECTION_PATTERN = /^(modules|dependencies|constants|types|variables|parameters|cursors|using namespaces|campaign record|contact record|workflow record|transferred record|outcome record|contact profile extensions|flow view)\b/i;
+const DOCUMENTED_SECTION_PATTERN = /^(modules|dependencies|constants|types|variables|parameters|cursors|using namespaces|campaign record|contact record|workflow record|transferred record|outcome record|contact profile extensions)\b/i;
 
 const RESERVED_REFERENCE_TOKENS = buildReservedReferenceTokens();
+const IDENTIFIER_START = "\\p{L}_";
+const IDENTIFIER_CONTINUE = "\\p{L}\\p{N}_";
+const IDENTIFIER_PATTERN = `[${IDENTIFIER_START}][${IDENTIFIER_CONTINUE}]*`;
+const QUALIFIED_IDENTIFIER_PATTERN = `${IDENTIFIER_PATTERN}(?:\\.${IDENTIFIER_PATTERN})*`;
+const UNICODE_IDENTIFIER_CHAIN_REGEX = new RegExp(`@?${QUALIFIED_IDENTIFIER_PATTERN}`, "gu");
 
 export class AslAnalysisService {
     private readonly cache = new Map<string, { version: number; analysis: AslAnalysis }>();
@@ -136,10 +143,11 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
     const controlUsages: AslControlUsage[] = [];
     const frames: MutableFrame[] = [];
     let pendingSymbolFrame: PendingSymbolFrame | undefined;
+    let nextFrameId = 1;
 
     const pushSymbol = (symbol: AslSymbol): void => {
         const parent = [...frames].reverse().find((frame) => frame.symbol)?.symbol;
-        symbol.scopeKey = parent ? createSymbolIdentity(parent) : "<root>";
+        symbol.scopeKey = createScopeKey(frames, parent);
         if (parent) {
             parent.children.push(symbol);
         } else {
@@ -154,7 +162,7 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
     };
 
     const pushChildSymbol = (symbol: AslSymbol, parent: AslSymbol): void => {
-        symbol.scopeKey = createSymbolIdentity(parent);
+        symbol.scopeKey = createScopeKey(frames, parent);
         parent.children.push(symbol);
         symbols.push(symbol);
         const key = normalizeAslName(symbol.name);
@@ -190,12 +198,13 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
 
         let remainingOpens = opens;
         if (semanticFrame) {
+            semanticFrame.id = nextFrameId++;
             frames.push(semanticFrame);
             remainingOpens -= 1;
         }
 
         for (let openIndex = 0; openIndex < Math.max(remainingOpens, 0); openIndex += 1) {
-            frames.push({ kind: "scope" });
+            frames.push({ id: nextFrameId++, kind: "scope" });
         }
 
         for (let closeIndex = 0; closeIndex < closes; closeIndex += 1) {
@@ -248,31 +257,39 @@ function parseDeclarations(
     controlUsages: AslControlUsage[],
     setPendingSymbolFrame: (frame: PendingSymbolFrame | undefined) => void
 ): void {
-    const nodeMatch = trimmed.match(/^(?:private\s+)?node\s+["']([^"']+)["']\s*\{/i);
+    const nodeMatch = trimmed.match(/^(?:private\s+)?node\s+["']([^"']+)["'](?:\s*\{)?$/i);
     if (nodeMatch) {
-        pushSymbol(createBlockSymbol(document, lineNumber, nodeMatch[1], "node"));
+        const symbol = createBlockSymbol(document, lineNumber, nodeMatch[1], "node");
+        pushSymbol(symbol);
+        setPendingSymbolFrame(trimmed.includes("{") ? undefined : { kind: "node", name: nodeMatch[1], symbol });
         return;
     }
 
-    const blockMatch = trimmed.match(/^block\s+["']([^"']+)["']\s*\{/i);
+    const blockMatch = trimmed.match(/^block\s+["']([^"']+)["'](?:\s*\{)?$/i);
     if (blockMatch) {
-        pushSymbol(createBlockSymbol(document, lineNumber, blockMatch[1], "block"));
+        const symbol = createBlockSymbol(document, lineNumber, blockMatch[1], "block");
+        pushSymbol(symbol);
+        setPendingSymbolFrame(trimmed.includes("{") ? undefined : { kind: "block", name: blockMatch[1], symbol });
         return;
     }
 
     const sectionMatch = trimmed.match(DOCUMENTED_SECTION_PATTERN);
     if (sectionMatch && trimmed.includes("{")) {
-        pushSymbol(createBlockSymbol(document, lineNumber, sectionMatch[1], "section"));
+        const symbol = createBlockSymbol(document, lineNumber, sectionMatch[1], "section");
+        pushSymbol(symbol);
+        setPendingSymbolFrame(trimmed.includes("{") ? undefined : { kind: "section", name: sectionMatch[1], symbol });
         return;
     }
 
-    const eventMatch = trimmed.match(/^(on\s+.+?)\s*\{/i);
+    const eventMatch = trimmed.match(/^(on\s+.+?)(?:\s*\{)?$/i);
     if (eventMatch) {
-        pushSymbol(createBlockSymbol(document, lineNumber, eventMatch[1], "event"));
+        const symbol = createBlockSymbol(document, lineNumber, eventMatch[1], "event");
+        pushSymbol(symbol);
+        setPendingSymbolFrame(trimmed.includes("{") ? undefined : { kind: "event", name: eventMatch[1], symbol });
         return;
     }
 
-    const subroutineMatch = trimmed.match(/^subroutine\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+    const subroutineMatch = trimmed.match(new RegExp(`^subroutine\\s+(${IDENTIFIER_PATTERN})`, "iu"));
     if (subroutineMatch) {
         const routine = parseRoutineDeclaration(document, lineNumber, "subroutine");
         const symbol = createBlockSymbol(document, lineNumber, routine.name, "subroutine", routine.detail);
@@ -284,7 +301,7 @@ function parseDeclarations(
         return;
     }
 
-    const functionMatch = trimmed.match(/^function\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+    const functionMatch = trimmed.match(new RegExp(`^function\\s+(${IDENTIFIER_PATTERN})`, "iu"));
     if (functionMatch) {
         const routine = parseRoutineDeclaration(document, lineNumber, "function");
         const symbol = createBlockSymbol(document, lineNumber, routine.name, "function", routine.detail);
@@ -297,7 +314,7 @@ function parseDeclarations(
     }
 
     if (hasExecutableContext(frames)) {
-        const localVariableMatch = trimmed.match(/^var\s+([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+?)(?:\s*:=.*)?$/i);
+        const localVariableMatch = trimmed.match(new RegExp(`^var\\s+(${IDENTIFIER_PATTERN})\\s*:\\s*(.+?)(?:\\s*:=.*)?$`, "iu"));
         if (localVariableMatch) {
             pushSymbol(createLineSymbol(document, lineNumber, localVariableMatch[1], "variable", localVariableMatch[2].trim()));
             return;
@@ -306,7 +323,7 @@ function parseDeclarations(
 
     const recordOwner = getRecordOwner(frames);
     if (recordOwner) {
-        const fieldMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+?)(?:\s*,)?$/);
+        const fieldMatch = trimmed.match(new RegExp(`^(${IDENTIFIER_PATTERN})\\s*:\\s*(.+?)(?:\\s*,)?$`, "u"));
         if (fieldMatch) {
             pushSymbol(createLineSymbol(document, lineNumber, fieldMatch[1], "field", fieldMatch[2].trim()));
             return;
@@ -317,7 +334,7 @@ function parseDeclarations(
     if (activeSection) {
         const sectionName = normalizeAslName(activeSection);
         if (sectionName === "types") {
-            const typeMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(record|enumeration)\s*\{/);
+            const typeMatch = trimmed.match(new RegExp(`^(${IDENTIFIER_PATTERN})\\s*:\\s*(record|enumeration)\\s*\\{`, "iu"));
             if (typeMatch) {
                 pushSymbol(createBlockSymbol(document, lineNumber, typeMatch[1], "type", typeMatch[2]));
                 return;
@@ -325,7 +342,7 @@ function parseDeclarations(
         }
 
         if (sectionName === "cursors") {
-            const cursorMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+)$/);
+            const cursorMatch = trimmed.match(new RegExp(`^(${IDENTIFIER_PATTERN})\\s*:\\s*(.+)$`, "u"));
             if (cursorMatch) {
                 pushSymbol(createLineSymbol(document, lineNumber, cursorMatch[1], "cursor", cursorMatch[2].trim()));
                 return;
@@ -333,14 +350,15 @@ function parseDeclarations(
         }
 
         if (sectionName === "variables" || sectionName === "parameters") {
-            const recordDeclarationMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*record\s*\{$/i);
+            const parameterPrefix = sectionName === "parameters" ? "(?:ref\\s+)?" : "";
+            const recordDeclarationMatch = trimmed.match(new RegExp(`^${parameterPrefix}(${IDENTIFIER_PATTERN})\\s*:\\s*record\\s*\\{$`, "iu"));
             if (recordDeclarationMatch) {
                 const kind: AslSymbolKindName = sectionName === "variables" ? "variable" : "parameter";
                 pushSymbol(createBlockSymbol(document, lineNumber, recordDeclarationMatch[1], kind, "record"));
                 return;
             }
 
-            const typedMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*([^:=]+?)(?:\s*:=.*)?$/);
+            const typedMatch = trimmed.match(new RegExp(`^${parameterPrefix}(${IDENTIFIER_PATTERN})\\s*:\\s*([^:=]+?)(?:\\s*:=.*)?$`, "iu"));
             if (typedMatch) {
                 const kind: AslSymbolKindName = sectionName === "variables" ? "variable" : "parameter";
                 pushSymbol(createLineSymbol(document, lineNumber, typedMatch[1], kind, typedMatch[2].trim()));
@@ -349,7 +367,7 @@ function parseDeclarations(
         }
 
         if (sectionName === "constants") {
-            const constantMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:=/);
+            const constantMatch = trimmed.match(new RegExp(`^(${IDENTIFIER_PATTERN})\\s*:=`, "u"));
             if (constantMatch) {
                 pushSymbol(createLineSymbol(document, lineNumber, constantMatch[1], "constant"));
                 return;
@@ -357,7 +375,7 @@ function parseDeclarations(
         }
 
         if (sectionName === "modules") {
-            const namespaceMatch = trimmed.match(/\binto namespace\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+            const namespaceMatch = trimmed.match(new RegExp(`\\binto namespace\\s+(${IDENTIFIER_PATTERN})`, "iu"));
             if (namespaceMatch) {
                 pushSymbol(createLineSymbol(document, lineNumber, namespaceMatch[1], "namespace"));
                 return;
@@ -365,7 +383,7 @@ function parseDeclarations(
         }
 
         if (sectionName === "using namespaces") {
-            const aliasMatch = trimmed.match(/\bas\s+([A-Za-z_][A-Za-z0-9_]*)$/i);
+            const aliasMatch = trimmed.match(new RegExp(`\\bas\\s+(${IDENTIFIER_PATTERN})$`, "iu"));
             if (aliasMatch) {
                 pushSymbol(createLineSymbol(document, lineNumber, aliasMatch[1], "namespace"));
                 return;
@@ -404,7 +422,7 @@ function parseReferences(document: vscode.TextDocument, lineNumber: number, text
         references.push(createReference(document, lineNumber, match[1], "node", match.index ?? 0, match[0].length));
     }
 
-    for (const match of text.matchAll(/\bcursor\s+([A-Za-z_][A-Za-z0-9_]*)/gi)) {
+    for (const match of text.matchAll(new RegExp(`\\bcursor\\s+(${IDENTIFIER_PATTERN})`, "giu"))) {
         references.push(createReference(document, lineNumber, match[1], "cursor", match.index ?? 0, match[0].length));
     }
 }
@@ -477,13 +495,19 @@ function createSemanticFrame(
         return undefined;
     }
 
-    const nodeMatch = trimmed.match(/^(?:private\s+)?node\s+["']([^"']+)["']\s*\{/i);
+    const nodeMatch = trimmed.match(/^(?:private\s+)?node\s+["']([^"']+)["'](?:\s*\{)?$/i);
     if (nodeMatch) {
+        if (!trimmed.includes("{") && !pendingSymbolFrame) {
+            return undefined;
+        }
         return { kind: "node", name: nodeMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "node") };
     }
 
-    const blockMatch = trimmed.match(/^block\s+["']([^"']+)["']\s*\{/i);
+    const blockMatch = trimmed.match(/^block\s+["']([^"']+)["'](?:\s*\{)?$/i);
     if (blockMatch) {
+        if (!trimmed.includes("{") && !pendingSymbolFrame) {
+            return undefined;
+        }
         return { kind: "block", name: blockMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "block") };
     }
 
@@ -492,17 +516,20 @@ function createSemanticFrame(
         return { kind: "section", name: sectionMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "section") };
     }
 
-    const eventMatch = trimmed.match(/^(on\s+.+?)\s*\{/i);
+    const eventMatch = trimmed.match(/^(on\s+.+?)(?:\s*\{)?$/i);
     if (eventMatch) {
+        if (!trimmed.includes("{") && !pendingSymbolFrame) {
+            return undefined;
+        }
         return { kind: "event", name: eventMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "event") };
     }
 
-    const subroutineMatch = trimmed.match(/^subroutine\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+    const subroutineMatch = trimmed.match(new RegExp(`^subroutine\\s+(${IDENTIFIER_PATTERN})`, "iu"));
     if (subroutineMatch) {
         return { kind: "subroutine", name: subroutineMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "subroutine") };
     }
 
-    const functionMatch = trimmed.match(/^function\s+([A-Za-z_][A-Za-z0-9_]*)/i);
+    const functionMatch = trimmed.match(new RegExp(`^function\\s+(${IDENTIFIER_PATTERN})`, "iu"));
     if (functionMatch) {
         return { kind: "function", name: functionMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "function") };
     }
@@ -511,7 +538,7 @@ function createSemanticFrame(
         return { kind: pendingSymbolFrame.kind, name: pendingSymbolFrame.name, symbol: pendingSymbolFrame.symbol };
     }
 
-    const typeLikeMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(record|enumeration)\s*\{/i);
+    const typeLikeMatch = trimmed.match(new RegExp(`^(${IDENTIFIER_PATTERN})\\s*:\\s*(record|enumeration)\\s*\\{`, "iu"));
     if (typeLikeMatch) {
         const typeSymbol = findNewestSymbol(symbols, lineNumber, "type");
         if (typeSymbol) {
@@ -544,7 +571,7 @@ function createSemanticFrame(
         return { kind: "comment", name: "comment" };
     }
 
-    if (/^(label|font|columns|column|item|level|image)\b/i.test(trimmed)) {
+    if (/^(label|font|columns|column|item|level|image|flow view)\b/i.test(trimmed)) {
         return { kind: "property-block" };
     }
 
@@ -557,7 +584,7 @@ function findNewestSymbol(symbols: AslSymbol[], lineNumber: number, kind: AslSym
 
 function matchControlStart(trimmed: string): { control: string; name?: string; targetName?: string } | undefined {
     for (const controlName of CONTROL_NAMES_BY_LENGTH) {
-        const pattern = new RegExp(`^${escapeRegExp(controlName)}\\b(?:\\s+["']([^"']+)["'])?(?:\\s+for\\s+([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*))?`, "i");
+        const pattern = new RegExp(`^${escapeRegExp(controlName)}\\b(?:\\s+["']([^"']+)["'])?(?:\\s+for\\s+(${QUALIFIED_IDENTIFIER_PATTERN}))?`, "iu");
         const match = trimmed.match(pattern);
         if (match && trimmed.includes("{")) {
             return { control: controlName, name: match[1], targetName: match[2] };
@@ -818,7 +845,7 @@ function buildReservedReferenceTokens(): Set<string> {
 
 function tokenizeReferenceName(value: string): string[] {
     return value
-        .split(/[^A-Za-z0-9_@]+/)
+    .split(/[^\p{L}\p{N}_@]+/u)
         .map((token) => normalizeAslName(token))
         .filter((token) => token.length > 0);
 }
@@ -904,6 +931,30 @@ function shouldValidateDuplicate(symbol: AslSymbol): boolean {
 
 function createSymbolIdentity(symbol: AslSymbol): string {
     return `${symbol.kind}:${symbol.name.toLowerCase()}:${symbol.selectionRange.start.line}`;
+}
+
+function createScopeKey(frames: MutableFrame[], parent?: AslSymbol): string {
+    const parts: string[] = [];
+
+    if (parent) {
+        parts.push(createSymbolIdentity(parent));
+    } else {
+        parts.push("<root>");
+    }
+
+    for (const frame of frames) {
+        if (frame.id === undefined) {
+            continue;
+        }
+
+        if (frame.kind === "comment" || frame.kind === "property-block") {
+            continue;
+        }
+
+        parts.push(`${frame.kind}:${frame.id}`);
+    }
+
+    return parts.join("|");
 }
 
 function getRecordOwner(frames: MutableFrame[]): MutableFrame | undefined {
@@ -993,7 +1044,7 @@ function maskQuotedContent(text: string): string {
 }
 
 function isWordCharacter(value: string): boolean {
-    return /[A-Za-z0-9_]/.test(value);
+    return /[\p{L}\p{N}_]/u.test(value);
 }
 
 function countCharacters(value: string, char: string): number {
@@ -1014,8 +1065,8 @@ function parseRoutineDeclaration(document: vscode.TextDocument, lineNumber: numb
     const header = collectRoutineHeader(document, lineNumber);
     const collapsed = header.replace(/\s+/g, " ").trim();
     const pattern = kind === "subroutine"
-        ? /^subroutine\s+([A-Za-z_][A-Za-z0-9_]*)(?:\s*\((.*?)\))?/i
-        : /^function\s+([A-Za-z_][A-Za-z0-9_]*)(?:\s*\((.*?)\))?(?:\s*:\s*(.+?))?(?:\s*\{)?$/i;
+        ? new RegExp(`^subroutine\\s+(${IDENTIFIER_PATTERN})(?:\\s*\\((.*?)\\))?`, "iu")
+        : new RegExp(`^function\\s+(${IDENTIFIER_PATTERN})(?:\\s*\\((.*?)\\))?(?:\\s*:\\s*(.+?))?(?:\\s*\\{)?$`, "iu");
     const match = collapsed.match(pattern);
     const name = match?.[1] ?? `${kind}_${lineNumber + 1}`;
     const parameters = normalizeRoutineParameters(match?.[2] ?? "");
@@ -1054,7 +1105,7 @@ function createRoutineParameterSymbols(document: vscode.TextDocument, startLine:
 
     for (let line = startLine; line < Math.min(document.lineCount, startLine + 12); line += 1) {
         const text = document.lineAt(line).text;
-        for (const match of text.matchAll(/(?:^|[,(])\s*(?:ref\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*:\s*([^,)\{]+)/gi)) {
+        for (const match of text.matchAll(new RegExp(`(?:^|[,(])\\s*(?:ref\\s+)?(${IDENTIFIER_PATTERN})\\s*:\\s*([^,)\\{]+)`, "giu"))) {
             const name = match[1];
             const key = normalizeAslName(name);
             if (seen.has(key)) {
@@ -1100,6 +1151,10 @@ export function findSymbolAtPosition(document: vscode.TextDocument, position: vs
 }
 
 export function resolveReferenceSymbols(analysis: AslAnalysis, reference: AslSymbolReference): AslSymbol[] {
+    if (reference.referenceKind && reference.referenceKind !== "symbol") {
+        return (analysis.symbolIndex.get(normalizeAslName(reference.text)) ?? []).filter((symbol) => symbol.kind === reference.referenceKind);
+    }
+
     const targetParts = reference.parts.slice(0, reference.activePartIndex + 1);
     const preferNonTypeBase = reference.parts.length > 1 && reference.activePartIndex === 0;
     return resolveReferenceSymbolsFromParts(analysis, targetParts, preferNonTypeBase);
@@ -1221,7 +1276,7 @@ function collectLineSymbolReferences(text: string, lineNumber: number): AslSymbo
     const references: AslSymbolReference[] = [];
     const masked = maskCommentContent(maskQuotedContent(text), false);
 
-    for (const match of masked.matchAll(/@?[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*/g)) {
+    for (const match of masked.matchAll(UNICODE_IDENTIFIER_CHAIN_REGEX)) {
         const start = match.index ?? 0;
         const fullText = text.slice(start, start + match[0].length);
         const parts = fullText.split(".");
@@ -1234,7 +1289,8 @@ function collectLineSymbolReferences(text: string, lineNumber: number): AslSymbo
                 activePartIndex: index,
                 range: new vscode.Range(lineNumber, segmentStart, lineNumber, segmentStart + part.length),
                 fullText,
-                fullRange: new vscode.Range(lineNumber, start, lineNumber, start + fullText.length)
+                fullRange: new vscode.Range(lineNumber, start, lineNumber, start + fullText.length),
+                referenceKind: "symbol"
             });
             segmentStart += part.length + 1;
         }
@@ -1248,7 +1304,8 @@ function collectLineSymbolReferences(text: string, lineNumber: number): AslSymbo
             activePartIndex: 0,
             range: new vscode.Range(lineNumber, quoteStart, lineNumber, quoteStart + match[1].length),
             fullText: match[1],
-            fullRange: new vscode.Range(lineNumber, quoteStart, lineNumber, quoteStart + match[1].length)
+            fullRange: new vscode.Range(lineNumber, quoteStart, lineNumber, quoteStart + match[1].length),
+            referenceKind: "node"
         });
     }
 
