@@ -89,7 +89,7 @@
                 "altitudeScriptLanguage.diagnostics.undefinedReferences": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Report unresolved user-defined symbol references in supported ASL expressions and actions."
+                    "description": "Report unresolved explicit node, variable-target, and cursor references recognized by the ASL analyzer."
                 },
                 "altitudeScriptLanguage.diagnostics.controlProperties": {
                     "type": "boolean",
