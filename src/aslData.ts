@@ -43,6 +43,7 @@ export const TOP_LEVEL_BLOCKS: AslHelpEntry[] = [
     { name: "transferred record", description: "Declare the transferred record shape.", insertText: "transferred record {\n\t$0\n}" },
     { name: "contact profile extensions", description: "Declare contact profile extension fields.", insertText: "contact profile extensions {\n\t$0\n}" },
     { name: "outcome record", description: "Declare the outcome record shape.", insertText: "outcome record {\n\t$0\n}" },
+    { name: "flow view", description: "Declare flow-view metadata used by Script Developer.", insertText: "flow view {\n\t$0\n}" },
     { name: "node", description: "Create a script node.", insertText: "node \"${1:NAME}\" {\n\t$0\n}" },
     { name: "private node", description: "Create a node scoped for private use within the script.", insertText: "private node \"${1:NAME}\" {\n\t$0\n}" },
     { name: "block", description: "Create a reusable block.", insertText: "block \"${1:NAME}\" {\n\t$0\n}" }
