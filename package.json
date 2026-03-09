@@ -1,6 +1,6 @@
 {
     "name": "vscode-altitude-script-language",
-    "displayName": "Altitude Script Language",
+    "displayName": "Altitude Script Language Support",
     "description": "VS Code language support for Altitude Script Language (ASL) with highlighting, IntelliSense, diagnostics, navigation, formatting, snippets, and embedded SQL.",
     "version": "0.1.0",
     "publisher": "jjaroztegi",
@@ -27,7 +27,8 @@
         "node": ">=22.0.0"
     },
     "categories": [
-        "Programming Languages"
+        "Programming Languages",
+        "Snippets"
     ],
     "keywords": [
         "vscode",
@@ -44,7 +45,7 @@
         "diagnostics"
     ],
     "icon": "images/logo_128.png",
-    "license": "MIT",
+    "license": "SEE LICENSE IN LICENSE",
     "repository": {
         "type": "git",
         "url": "https://github.com/jjaroztegi/vscode-altitude-script-language.git"
