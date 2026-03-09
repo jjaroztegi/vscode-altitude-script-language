@@ -31,6 +31,11 @@ import {
 
 const LANGUAGE_ID = "asl";
 const ASL_WORKSPACE_GLOB = "**/*.{ags,irs,gem,agm,irm,bak}";
+const IDENTIFIER_START = "\\p{L}_";
+const IDENTIFIER_CONTINUE = "\\p{L}\\p{N}_";
+const IDENTIFIER_PATTERN = `[${IDENTIFIER_START}][${IDENTIFIER_CONTINUE}]*`;
+const QUALIFIED_IDENTIFIER_PATTERN = `${IDENTIFIER_PATTERN}(?:\\.${IDENTIFIER_PATTERN})*`;
+const MEMBER_ACCESS_AT_END_REGEX = new RegExp(`(@?${QUALIFIED_IDENTIFIER_PATTERN})\\.(${IDENTIFIER_PATTERN})?$`, "u");
 
 export function activate(context: vscode.ExtensionContext): void {
     const analysisService = new AslAnalysisService();
@@ -111,7 +116,7 @@ class AslCompletionProvider implements vscode.CompletionItemProvider {
         const statementContext = `${previousNonEmptyLine}\n${linePrefix}`.trim();
         const completions: vscode.CompletionItem[] = [];
 
-        const memberAccessMatch = linePrefix.match(/(@?[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*)\.([A-Za-z_0-9]*)$/);
+        const memberAccessMatch = linePrefix.match(MEMBER_ACCESS_AT_END_REGEX);
         if (memberAccessMatch) {
             return deduplicateCompletions(
                 getMemberSymbols(analysis, memberAccessMatch[1]).map((symbol) => createSymbolCompletion(symbol, vscode.CompletionItemKind.Field))
@@ -310,7 +315,7 @@ class AslRenameProvider implements vscode.RenameProvider {
             return undefined;
         }
 
-        if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(newName)) {
+        if (!(new RegExp(`^${IDENTIFIER_PATTERN}$`, "u")).test(newName)) {
             throw new Error("ASL symbol names must start with a letter or underscore and contain only letters, digits, or underscores.");
         }
 
@@ -492,7 +497,8 @@ function getRenameTarget(document: vscode.TextDocument, position: vscode.Positio
                 activePartIndex: 0,
                 range: declaredSymbol.selectionRange,
                 fullText: declaredSymbol.name,
-                fullRange: declaredSymbol.selectionRange
+                fullRange: declaredSymbol.selectionRange,
+                referenceKind: "symbol"
             },
             symbol: declaredSymbol
         };
