@@ -2,49 +2,48 @@
 
 Language support for Altitude Script Language (ASL) in Visual Studio Code.
 
-
-This extension is focused on practical ASL authoring: readable highlighting, parser-backed diagnostics, and editor navigation that works on real Altitude scripts.
-
 ## Features
 
-- Syntax highlighting for ASL keywords, controls, events, built-ins, record fields, path literals, interpolation, and embedded SQL.
-- IntelliSense for sections, controls, properties, events, nodes, variables, cursors, routines, built-ins, and common ASL actions.
-- Diagnostics for unresolved explicit references recognized by the analyzer, duplicate declarations, brace issues, and unsupported control properties.
-- Navigation support including hover, go to definition, find references, rename, document outline, and workspace symbols.
-- Formatting support with configurable indentation fallback.
+- Syntax highlighting for ASL keywords, controls, events, built-ins, interpolation, and embedded SQL.
+- IntelliSense for sections, controls, properties, events, nodes, variables, cursors, routines, and common ASL actions.
+- Diagnostics for unresolved references, duplicate declarations, brace issues, and unsupported control properties.
+- Hover, go to definition, find references, rename, document symbols, and workspace symbols.
+- Formatting with configurable indentation fallback.
 - Snippets for common controls and UI patterns.
+- Optional Script Developer compiler validation for `.ags` and `.irs`.
 
 ## Supported Files
 
-The extension activates for `.ags`, `.irs`, `.gem`, `.agm`, `.irm`, and `.bak` files.
+The extension activates for `.ags`, `.irs`, `.gem`, `.agm`, `.irm`, and `.bak`.
 
-## Settings
+## Commands
 
-- `altitudeScriptLanguage.format.indentSize`: Fallback indentation width for the formatter.
-- `altitudeScriptLanguage.diagnostics.undefinedReferences`: Enable unresolved explicit reference diagnostics recognized by the analyzer.
-- `altitudeScriptLanguage.diagnostics.controlProperties`: Validate control properties against documented ASL control schemas.
+- `Altitude Script: Validate Current File`
 
-## Development
+## Requirements
 
-Repository: https://github.com/jjaroztegi/vscode-altitude-script-language
+Compiler validation uses `ec.exe /go` from Altitude Script Developer and is available for `.ags` and `.irs` files.
 
-```bash
-npm install
-npm run compile
-```
+Required for compiler validation:
 
-Launch an Extension Development Host with `F5`.
+- Altitude Script Developer installed locally.
+- Visual Studio Build Tools with the VC toolchain.
+- `rc.exe` available on `PATH` or through a Windows SDK install.
 
-To build a VSIX:
+Other ASL file types use the built-in analyzer only.
 
-```bash
-npm run package
-```
+## Extension Settings
 
-## Support
+- `altitudeScriptLanguage.format.indentSize`
+- `altitudeScriptLanguage.diagnostics.undefinedReferences`
+- `altitudeScriptLanguage.diagnostics.controlProperties`
+- `altitudeScriptLanguage.compiler.enabled`
+- `altitudeScriptLanguage.compiler.runOnSave`
+- `altitudeScriptLanguage.compiler.runOnType`
+- `altitudeScriptLanguage.compiler.debounceMs`
+- `altitudeScriptLanguage.compiler.installRoot`
+- `altitudeScriptLanguage.compiler.timeoutMs`
 
-Issues and feature requests: https://github.com/jjaroztegi/vscode-altitude-script-language/issues
+## Issues
 
-## License
-
-See [LICENSE](LICENSE).
+Issues and feature requests: [GitHub repository](https://github.com/jjaroztegi/vscode-altitude-script-language/issues)
