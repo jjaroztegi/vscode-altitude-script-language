@@ -1,7 +1,7 @@
 {
     "name": "vscode-altitude-script-language",
-    "displayName": "Altitude Script Language Support",
-    "description": "VS Code language support for Altitude Script Language (ASL) with highlighting, IntelliSense, diagnostics, navigation, formatting, snippets, and embedded SQL.",
+    "displayName": "Altitude Script Language",
+    "description": "Syntax highlighting, IntelliSense, diagnostics, navigation, formatting, and validation for Altitude Script Language.",
     "version": "0.1.0",
     "publisher": "jjaroztegi",
     "main": "./out/extension.js",
@@ -13,39 +13,38 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "package": "vsce package",
-        "publish:vscode": "vsce publish"
+        "package": "npx vsce package",
+        "publish:ovsx": "npx ovsx publish",
+        "publish:vscode": "npx vsce publish"
     },
     "devDependencies": {
         "@types/node": "^24.12.0",
-        "@types/vscode": "^1.109.0",
+        "@types/vscode": "^1.57.0",
         "@vscode/vsce": "^3.7.1",
         "typescript": "^5.9.3"
     },
     "engines": {
-        "vscode": "^1.109.0",
-        "node": ">=22.0.0"
+        "vscode": "^1.57.0"
     },
     "categories": [
         "Programming Languages",
-        "Snippets"
+        "Linters",
+        "Formatters"
     ],
     "keywords": [
-        "vscode",
         "altitude",
         "asl",
-        "scripting",
+        "ags",
+        "irs",
+        "script developer",
         "contact center",
-        "contact-center",
-        "sql",
-        "language support",
-        "syntax highlighting",
-        "intellisense",
         "formatter",
-        "diagnostics"
+        "diagnostics",
+        "intellisense",
+        "syntax highlighting"
     ],
     "icon": "images/logo_128.png",
-    "license": "SEE LICENSE IN LICENSE",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/jjaroztegi/vscode-altitude-script-language.git"
@@ -58,9 +57,16 @@
         "access": "public"
     },
     "activationEvents": [
-        "onLanguage:asl"
+        "onLanguage:asl",
+        "onCommand:altitudeScriptLanguage.validateWithCompiler"
     ],
     "contributes": {
+        "commands": [
+            {
+                "command": "altitudeScriptLanguage.validateWithCompiler",
+                "title": "Altitude Script: Validate Current File"
+            }
+        ],
         "languages": [{
             "id": "asl",
             "aliases": ["Altitude Script", "asl"],
@@ -95,6 +101,40 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Validate ASL control properties against the documented Altitude control schemas."
+                },
+                "altitudeScriptLanguage.compiler.enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable Script Developer compiler validation for .ags and .irs files."
+                },
+                "altitudeScriptLanguage.compiler.runOnSave": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run Script Developer compiler validation after save when validation is enabled."
+                },
+                "altitudeScriptLanguage.compiler.runOnType": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run Script Developer compiler validation after edits using a debounce interval."
+                },
+                "altitudeScriptLanguage.compiler.debounceMs": {
+                    "type": "integer",
+                    "default": 1200,
+                    "minimum": 200,
+                    "maximum": 10000,
+                    "description": "Debounce interval in milliseconds for on-type Script Developer compiler validation."
+                },
+                "altitudeScriptLanguage.compiler.installRoot": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional Altitude Script Developer install root. Leave empty to auto-detect common install locations."
+                },
+                "altitudeScriptLanguage.compiler.timeoutMs": {
+                    "type": "integer",
+                    "default": 20000,
+                    "minimum": 1000,
+                    "maximum": 120000,
+                    "description": "Timeout in milliseconds for Script Developer validation runs."
                 }
             }
         }
