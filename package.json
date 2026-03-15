@@ -1,6 +1,6 @@
 {
     "name": "vscode-altitude-script-language",
-    "displayName": "Altitude Script Language",
+    "displayName": "Altitude ASL Language Support",
     "description": "Syntax highlighting, IntelliSense, diagnostics, navigation, formatting, and validation for Altitude Script Language.",
     "version": "0.1.0",
     "publisher": "jjaroztegi",
