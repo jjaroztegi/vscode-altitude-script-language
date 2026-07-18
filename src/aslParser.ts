@@ -323,6 +323,12 @@ function parseDeclarations(
 
     const recordOwner = getRecordOwner(frames);
     if (recordOwner) {
+        const fieldRecordMatch = trimmed.match(new RegExp(`^(${IDENTIFIER_PATTERN})\\s*:\\s*record\\s*\\{$`, "iu"));
+        if (fieldRecordMatch) {
+            pushSymbol(createBlockSymbol(document, lineNumber, fieldRecordMatch[1], "field", "record"));
+            return;
+        }
+
         const fieldMatch = trimmed.match(new RegExp(`^(${IDENTIFIER_PATTERN})\\s*:\\s*(.+?)(?:\\s*,)?$`, "u"));
         if (fieldMatch) {
             pushSymbol(createLineSymbol(document, lineNumber, fieldMatch[1], "field", fieldMatch[2].trim()));
@@ -358,7 +364,7 @@ function parseDeclarations(
                 return;
             }
 
-            const typedMatch = trimmed.match(new RegExp(`^${parameterPrefix}(${IDENTIFIER_PATTERN})\\s*:\\s*([^:=]+?)(?:\\s*:=.*)?$`, "iu"));
+            const typedMatch = trimmed.match(new RegExp(`^${parameterPrefix}(${IDENTIFIER_PATTERN})\\s*:\\s*((?:::|[^:=])+?)(?:\\s*:=.*)?$`, "iu"));
             if (typedMatch) {
                 const kind: AslSymbolKindName = sectionName === "variables" ? "variable" : "parameter";
                 pushSymbol(createLineSymbol(document, lineNumber, typedMatch[1], kind, typedMatch[2].trim()));
@@ -422,7 +428,10 @@ function parseReferences(document: vscode.TextDocument, lineNumber: number, text
         references.push(createReference(document, lineNumber, match[1], "node", match.index ?? 0, match[0].length));
     }
 
-    for (const match of text.matchAll(new RegExp(`\\bcursor\\s+(${IDENTIFIER_PATTERN})`, "giu"))) {
+    // Mask string literals so words like "cursor" inside SQL text are not
+    // picked up as cursor references.
+    const masked = maskQuotedContent(text);
+    for (const match of masked.matchAll(new RegExp(`\\bcursor\\s+(${IDENTIFIER_PATTERN}(?:::${IDENTIFIER_PATTERN})*)`, "giu"))) {
         references.push(createReference(document, lineNumber, match[1], "cursor", match.index ?? 0, match[0].length));
     }
 }
@@ -554,6 +563,11 @@ function createSemanticFrame(
         if (parameterSymbol && normalizeAslName(parameterSymbol.detail ?? "") === "record") {
             return { kind: "parameter", name: typeLikeMatch[1], symbol: parameterSymbol };
         }
+
+        const fieldSymbol = findNewestSymbol(symbols, lineNumber, "field");
+        if (fieldSymbol && normalizeAslName(fieldSymbol.detail ?? "") === "record") {
+            return { kind: "field", name: typeLikeMatch[1], symbol: fieldSymbol };
+        }
     }
 
     const controlMatch = matchControlStart(trimmed);
@@ -584,9 +598,11 @@ function findNewestSymbol(symbols: AslSymbol[], lineNumber: number, kind: AslSym
 
 function matchControlStart(trimmed: string): { control: string; name?: string; targetName?: string } | undefined {
     for (const controlName of CONTROL_NAMES_BY_LENGTH) {
-        const pattern = new RegExp(`^${escapeRegExp(controlName)}\\b(?:\\s+["']([^"']+)["'])?(?:\\s+for\\s+(${QUALIFIED_IDENTIFIER_PATTERN}))?`, "iu");
+        // Anchored to "{" so action statements such as `table 'x' set font {`
+        // are not mistaken for control declarations.
+        const pattern = new RegExp(`^${escapeRegExp(controlName)}\\b(?:\\s+["']([^"']+)["'])?(?:\\s+for\\s+(${QUALIFIED_IDENTIFIER_PATTERN}))?\\s*\\{`, "iu");
         const match = trimmed.match(pattern);
-        if (match && trimmed.includes("{")) {
+        if (match) {
             return { control: controlName, name: match[1], targetName: match[2] };
         }
     }
@@ -674,7 +690,28 @@ function validateDuplicates(symbolIndex: Map<string, AslSymbol[]>, issues: AslIs
 }
 
 function validateReferences(symbolIndex: Map<string, AslSymbol[]>, references: AslReference[], issues: AslIssue[]): void {
+    // With module imports present, unqualified node names may live in the
+    // imported .agm/.gem, which single-file analysis cannot see.
+    const hasModuleImports = [...symbolIndex.values()].some((symbols) => symbols.some((symbol) => symbol.kind === "namespace"));
+
     for (const reference of references) {
+        // Namespace-qualified and interpolated names live in imported modules
+        // or are dynamic; single-file analysis cannot resolve them.
+        if (reference.name.includes("$(") || reference.name.includes("::")) {
+            continue;
+        }
+        if (reference.kind === "node" && hasModuleImports) {
+            continue;
+        }
+
+        // Member chains on variables typed by a module-qualified type cannot
+        // be verified without the module source.
+        if ((reference.kind === "variable" || reference.kind === "symbol") && reference.name.includes(".")) {
+            const baseSymbols = symbolIndex.get(normalizeAslName(reference.name.split(".")[0])) ?? [];
+            if (baseSymbols.some((symbol) => (symbol.detail ?? "").includes("::"))) {
+                continue;
+            }
+        }
         const matches = reference.kind === "variable" || reference.kind === "symbol"
             ? resolveReferenceSymbolsFromParts({ symbolIndex } as AslAnalysis, reference.name.split("."))
             : symbolIndex.get(normalizeAslName(reference.name)) ?? [];
@@ -871,16 +908,6 @@ function validateControlUsage(usage: AslControlUsage, issues: AslIssue[]): void 
             range: usage.range
         });
     }
-
-    for (const requiredProperty of ["size", "at"]) {
-        if (!usage.properties.has(requiredProperty)) {
-            issues.push({
-                message: `Control '${usage.control}' is missing documented property '${requiredProperty}'.`,
-                severity: vscode.DiagnosticSeverity.Warning,
-                range: usage.range
-            });
-        }
-    }
 }
 
 function extractKnownNames(trimmed: string, knownNames: string[]): string[] {
@@ -922,11 +949,8 @@ function maskCommentContent(text: string, inComment: boolean): string {
 }
 
 function shouldValidateDuplicate(symbol: AslSymbol): boolean {
-    if (symbol.kind === "control") {
-        return !symbol.anonymous;
-    }
-
-    return true;
+    // Control "names" are display labels; Script Developer accepts repeats.
+    return symbol.kind !== "control";
 }
 
 function createSymbolIdentity(symbol: AslSymbol): string {
@@ -967,7 +991,7 @@ function getRecordOwner(frames: MutableFrame[]): MutableFrame | undefined {
             return true;
         }
 
-        if ((frame.symbol.kind === "variable" || frame.symbol.kind === "parameter") && normalizeAslName(frame.symbol.detail ?? "") === "record") {
+        if ((frame.symbol.kind === "variable" || frame.symbol.kind === "parameter" || frame.symbol.kind === "field") && normalizeAslName(frame.symbol.detail ?? "") === "record") {
             return true;
         }
 
@@ -1003,6 +1027,13 @@ function maskQuotedContent(text: string): string {
             continue;
         }
 
+        if ((inSingle || inDouble) && char === "\\") {
+            // Escaped character inside a string literal (e.g. \' in SQL text).
+            result += "  ";
+            index += 1;
+            continue;
+        }
+
         if (!inSingle && char === '"') {
             inDouble = !inDouble;
             result += " ";
@@ -1020,7 +1051,9 @@ function maskQuotedContent(text: string): string {
             }
 
             if (!inSingle) {
-                if (!isWordCharacter(previous)) {
+                // A quote preceded by a backslash outside a string (comment
+                // prose about SQL escaping) never opens a string literal.
+                if (!isWordCharacter(previous) && previous !== "\\") {
                     inSingle = true;
                     result += " ";
                     continue;
