@@ -3,7 +3,12 @@
         "prefix": "node",
         "body": [
             "node \"${1:NAME}\" {",
-            "\t$0",
+            "\tmaster \"${2:MASTER}\"",
+            "\ton first enter {",
+            "\t\t$0",
+            "\t}",
+            "\ton enter {}",
+            "\ton exit {}",
             "}"
         ],
         "description": "Create a new node"
@@ -50,38 +55,89 @@
             "\tsize ${3:200},${4:24} at ${5:0},${6:0}",
             "\tfont {",
             "\t\tname \"Segoe UI\"",
-            "\t\t\tsize 10",
+            "\t\tsize 10",
             "\t}",
             "\t$0",
             "}"
         ],
         "description": "Input field for a variable"
     },
-    "Dashboard Pattern": {
-        "prefix": "pattern-dashboard",
+    "Combo Box": {
+        "prefix": "combo box",
         "body": [
-            "node \"MASTER\" {",
-            "\tstatic box {",
-            "\t\tsize 1840,72 at 40,24",
-            "\t\tbackground color rgb 32,36,40",
-            "\t\tborder etched",
+            "combo box \"${1:cmbName}\" for ${2:VAR} {",
+            "\tsize ${3:200},${4:24} at ${5:0},${6:0}",
+            "\tcursor ${7:cur_values} with values column ${8:1} labels column ${9:2}",
+            "\tdrop on demand",
+            "\ton list selection commit {",
+            "\t\t$0",
             "\t}",
-            "",
-            "\tstatic text {",
-            "\t\tsize 500,28 at 72,44",
-            "\t\tbackground transparent",
-            "\t\tlabel 'Operational Dashboard' {",
-            "\t\t\tfont {",
-            "\t\t\t\tname \"Georgia\"",
-            "\t\t\t\tsize 18",
-            "\t\t\t\tbold",
-            "\t\t\t\tcolor \"White\"",
-            "\t\t\t}",
+            "}"
+        ],
+        "description": "Combo box backed by a cursor"
+    },
+    "Table": {
+        "prefix": "table",
+        "body": [
+            "table \"${1:tblName}\" for ${2:cursorName} {",
+            "\tsize ${3:600},${4:300} at ${5:0},${6:0}",
+            "\tcolumns {",
+            "\t\tcolumn '${7:Header}' {",
+            "\t\t\tsize ${8:120}",
             "\t\t}",
             "\t}",
+            "\ton selection change commit {",
+            "\t\t$0",
+            "\t}",
+            "}"
+        ],
+        "description": "Table element bound to a cursor"
+    },
+    "Overlay Popup (8.7 web)": {
+        "prefix": "open window overlay",
+        "body": [
+            "open window '${1:MsgPopup::QUESTION}' at ${2:755}, ${3:330} size ${4:390}, ${5:200} caption ' ' overlay on close trigger event ${6:OnPopupClosed} arguments ${7:'¿Pregunta?'}, '${8:Sí}', '${9:No}', ${10:vg_Respuesta}",
+            "",
+            "on event ${6:OnPopupClosed}() {",
+            "\tif ${10:vg_Respuesta} = '${8:Sí}' then {",
+            "\t\t$0",
+            "\t} else {}",
+            "}"
+        ],
+        "description": "Async overlay popup with response handled in the on close event (8.7 web has no modal windows)"
+    },
+    "Deferred popup from on enter (8.7 web)": {
+        "prefix": "on enter popup",
+        "body": [
+            "on enter {",
+            "\tset timer to 1 trigger event ${1:AbrirPregunta}()",
+            "}",
+            "on event ${1:AbrirPregunta}() {",
+            "\topen window '${2:MsgPopup::QUESTION}' at ${3:755}, ${4:330} size ${5:390}, ${6:200} caption ' ' overlay on close trigger event ${7:OnPopupClosed} arguments $0",
+            "}"
+        ],
+        "description": "Never open overlays directly in on enter / on first enter; defer with a timer"
+    },
+    "Subroutine": {
+        "prefix": "subroutine",
+        "body": [
+            "subroutine ${1:Sub_Name}(${2})",
+            "{",
             "\t$0",
             "}"
         ],
-        "description": "Operational Dashboard Layout Pattern"
+        "description": "Subroutine declaration"
+    },
+    "SQL select into": {
+        "prefix": "sql select",
+        "body": [
+            "clear error",
+            "sql select '${1:SELECT campo FROM tabla WHERE id = \\$(vg_Id)}' into",
+            "\tvariable ${2:vg_Destino}",
+            "if @error then {",
+            "\t$0",
+            "} else {}"
+        ],
+        "description": "SQL select with error handling"
     }
 }
