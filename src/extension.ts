@@ -41,22 +41,12 @@ const IDENTIFIER_CONTINUE = "\\p{L}\\p{N}_";
 const IDENTIFIER_PATTERN = `[${IDENTIFIER_START}][${IDENTIFIER_CONTINUE}]*`;
 const QUALIFIED_IDENTIFIER_PATTERN = `${IDENTIFIER_PATTERN}(?:\\.${IDENTIFIER_PATTERN})*`;
 const MEMBER_ACCESS_AT_END_REGEX = new RegExp(`(@?${QUALIFIED_IDENTIFIER_PATTERN})\\.(${IDENTIFIER_PATTERN})?$`, "u");
-type CompilerValidationTrigger = "save" | "command" | "type";
+type CompilerValidationTrigger = "save" | "command";
 
 export function activate(context: vscode.ExtensionContext): void {
     const analysisService = new AslAnalysisService();
     const diagnostics = vscode.languages.createDiagnosticCollection(LANGUAGE_ID);
     const compilerValidationService = new AslCompilerValidationService();
-    const pendingValidationTimers = new Map<string, NodeJS.Timeout>();
-
-    const clearPendingValidation = (uri: vscode.Uri): void => {
-        const key = uri.toString();
-        const timer = pendingValidationTimers.get(key);
-        if (timer) {
-            clearTimeout(timer);
-            pendingValidationTimers.delete(key);
-        }
-    };
 
     const refreshDiagnostics = (document: vscode.TextDocument): void => {
         if (document.languageId !== LANGUAGE_ID) {
@@ -89,7 +79,7 @@ export function activate(context: vscode.ExtensionContext): void {
         }
 
         const configuration = vscode.workspace.getConfiguration(COMPILER_CONFIGURATION_ROOT);
-        const enabled = configuration.get<boolean>("enabled", false);
+        const enabled = configuration.get<boolean>("enabled", true);
         if (!enabled) {
             compilerValidationService.clearDiagnostics(document.uri);
             refreshDiagnostics(document);
@@ -114,29 +104,6 @@ export function activate(context: vscode.ExtensionContext): void {
         }
     };
 
-    const scheduleTypeValidation = (document: vscode.TextDocument): void => {
-        if (document.languageId !== LANGUAGE_ID || document.uri.scheme !== "file") {
-            return;
-        }
-
-        const configuration = vscode.workspace.getConfiguration(COMPILER_CONFIGURATION_ROOT);
-        const enabled = configuration.get<boolean>("enabled", false);
-        const runOnType = configuration.get<boolean>("runOnType", false);
-        if (!enabled || !runOnType) {
-            clearPendingValidation(document.uri);
-            return;
-        }
-
-        const debounceMs = Math.max(configuration.get<number>("debounceMs", 1200), 200);
-        clearPendingValidation(document.uri);
-        const timer = setTimeout(() => {
-            pendingValidationTimers.delete(document.uri.toString());
-            void runCompilerValidation(document, "type");
-        }, debounceMs);
-
-        pendingValidationTimers.set(document.uri.toString(), timer);
-    };
-
     for (const document of vscode.workspace.textDocuments) {
         refreshDiagnostics(document);
     }
@@ -149,12 +116,17 @@ export function activate(context: vscode.ExtensionContext): void {
             diagnostics.delete(document.uri);
             analysisService.clear(document);
             compilerValidationService.clearDiagnostics(document.uri);
-            clearPendingValidation(document.uri);
         }),
         vscode.workspace.onDidChangeTextDocument((event) => {
             analysisService.clear(event.document);
             refreshDiagnostics(event.document);
-            scheduleTypeValidation(event.document);
+        }),
+        vscode.workspace.onWillSaveTextDocument((event) => {
+            // Script Developer requires CRLF (plus UTF-8 BOM, which the
+            // [asl] files.encoding default handles). Normalize silently on save.
+            if (event.document.languageId === LANGUAGE_ID && event.document.eol === vscode.EndOfLine.LF) {
+                event.waitUntil(Promise.resolve([vscode.TextEdit.setEndOfLine(vscode.EndOfLine.CRLF)]));
+            }
         }),
         vscode.workspace.onDidSaveTextDocument((document) => {
             const configuration = vscode.workspace.getConfiguration(COMPILER_CONFIGURATION_ROOT);
@@ -170,7 +142,6 @@ export function activate(context: vscode.ExtensionContext): void {
                     analysisService.clear(document);
                     if (event.affectsConfiguration(COMPILER_CONFIGURATION_ROOT)) {
                         compilerValidationService.clearDiagnostics(document.uri);
-                        clearPendingValidation(document.uri);
                     }
                     refreshDiagnostics(document);
                 }
@@ -186,15 +157,6 @@ export function activate(context: vscode.ExtensionContext): void {
             await runCompilerValidation(editor.document, "command");
         })
     );
-
-    context.subscriptions.push({
-        dispose: () => {
-            for (const timer of pendingValidationTimers.values()) {
-                clearTimeout(timer);
-            }
-            pendingValidationTimers.clear();
-        }
-    });
 
     context.subscriptions.push(
         vscode.languages.registerCompletionItemProvider({ language: LANGUAGE_ID }, new AslCompletionProvider(analysisService), " ", ":", ".", "\"", "'"),
@@ -811,6 +773,11 @@ function maskQuotedContent(text: string): string {
             }
             continue;
         }
+        if ((inSingle || inDouble) && char === "\\") {
+            result += "  ";
+            index += 1;
+            continue;
+        }
         if (!inSingle && char === '"') {
             inDouble = !inDouble;
             result += " ";
@@ -852,14 +819,6 @@ interface CompilerValidationResult {
     executionMessage?: string;
 }
 
-interface PreparedCompilerInput {
-    acceptedPaths?: string[];
-    cleanup?: () => Promise<void>;
-    errFilePath?: string;
-    filePath: string;
-    tempDirectory?: string;
-}
-
 interface ErrDiagnosticAnchor {
     kind: "block" | "statement";
     text: string;
@@ -868,12 +827,6 @@ interface ErrDiagnosticAnchor {
 interface ErrDiagnosticLocation {
     endLineIndex?: number;
     lineIndex: number;
-}
-
-interface EcCompilerEnvironment {
-    cCompilerRoot: string;
-    executablePath: string;
-    rcExecutablePath: string;
 }
 
 class AslCompilerValidationService implements vscode.Disposable {
@@ -921,150 +874,53 @@ class AslCompilerValidationService implements vscode.Disposable {
             };
         }
 
-        const installRoot = await this.resolveInstallRoot(configuration);
-        if (!installRoot) {
+        const ecExecutablePath = await this.resolveEcExecutable(configuration);
+        if (!ecExecutablePath) {
             return {
-                diagnostics: [
-                    createDocumentStartDiagnostic(
-                        document,
-                        "Script Developer validation requires an Altitude Script Developer installation. Configure altitudeScriptLanguage.compiler.installRoot if auto-discovery is not enough.",
-                        vscode.DiagnosticSeverity.Warning
-                    )
-                ],
-                executionMessage: "Script Developer validation prerequisites were not found."
+                diagnostics: [],
+                executionMessage:
+                    trigger === "command"
+                        ? "ec.exe was not found. Install Altitude Script Developer or set altitudeScriptLanguage.compiler.installRoot to the install folder containing bin\\ec.exe."
+                        : undefined
             };
         }
 
-        const timeoutMs = configuration.get<number>("timeoutMs", 20000);
-        const workingDirectory = this.resolveWorkingDirectory(document);
-        const ecEnvironment = await this.resolveEcCompilerEnvironment(installRoot);
-        if (!ecEnvironment) {
-            return {
-                diagnostics: [
-                    createDocumentStartDiagnostic(
-                        document,
-                        "Script Developer compiler validation requires ec.exe, Visual Studio Build Tools (VC), and rc.exe. Configure altitudeScriptLanguage.compiler.installRoot if Script Developer auto-discovery is not enough.",
-                        vscode.DiagnosticSeverity.Warning
-                    )
-                ],
-                executionMessage: "Script Developer compiler validation prerequisites were not found."
-            };
-        }
-
-        const input = await this.prepareEcCompilerInput(document, trigger);
-        const args = this.buildEcCompilerArguments(document, ecEnvironment.cCompilerRoot, input);
-        const processEnvironment = createCompilerProcessEnvironment(ecEnvironment.rcExecutablePath);
-        this.outputChannel.appendLine(`Running: ${ecEnvironment.executablePath} ${args.join(" ")}`);
-        this.outputChannel.appendLine(`Working directory: ${workingDirectory}`);
+        const timeoutMs = configuration.get<number>("timeoutMs", 60000);
+        const workingDirectory = path.dirname(document.fileName);
+        const binDirectory = path.dirname(ecExecutablePath);
+        const tempDirectory = await fs.promises.mkdtemp(path.join(os.tmpdir(), "asl-vscode-"));
+        // Mirrors the invocation Script Developer itself uses: /generateOnly with the
+        // Script Developer bin as cCompilerRoot/shareDir — no Visual Studio needed.
+        const args = [
+            `/scriptType=${inferScriptType(document)}`,
+            `/cCompilerRoot=${binDirectory}`,
+            "/generateOnly",
+            "/maxErrors=1000",
+            "/maxWarnings=1000",
+            `/tempDirectory=${tempDirectory}`,
+            `/targetDir=${tempDirectory}`,
+            `/shareDir=${binDirectory}`,
+            document.fileName
+        ];
+        const errFilePath = replaceFileExtension(document.fileName, ".err");
+        this.outputChannel.appendLine(`Running: ${ecExecutablePath} ${args.join(" ")}`);
 
         try {
-            return await this.runEcCompilerProcess(ecEnvironment.executablePath, args, workingDirectory, timeoutMs, processEnvironment, document, input);
+            return await this.runEcCompilerProcess(ecExecutablePath, args, workingDirectory, timeoutMs, document, errFilePath);
         } finally {
-            if (input.cleanup) {
-                await input.cleanup();
-            }
+            await fs.promises.rm(tempDirectory, { recursive: true, force: true }).catch(() => undefined);
         }
     }
 
-    private async resolveInstallRoot(configuration: vscode.WorkspaceConfiguration): Promise<string | undefined> {
+    private async resolveEcExecutable(configuration: vscode.WorkspaceConfiguration): Promise<string | undefined> {
         const configuredRoot = configuration.get<string>("installRoot", "").trim();
-        if (configuredRoot) {
-            const normalized = path.normalize(configuredRoot);
-            if (await isScriptDeveloperInstallRoot(normalized)) {
-                return normalized;
-            }
-            return undefined;
-        }
+        const roots = configuredRoot ? [path.normalize(configuredRoot)] : getCommonScriptDeveloperRoots();
 
-        for (const candidate of getCommonScriptDeveloperRoots()) {
-            if (await isScriptDeveloperInstallRoot(candidate)) {
-                return candidate;
-            }
-        }
-
-        return undefined;
-    }
-
-    private async resolveEcCompilerEnvironment(installRoot: string): Promise<EcCompilerEnvironment | undefined> {
-        const executablePath = await this.resolveEcCompilerExecutable(installRoot);
-        const cCompilerRoot = await this.resolveCCompilerRoot();
-        const rcExecutablePath = await this.resolveRcExecutablePath();
-        if (!executablePath || !cCompilerRoot || !rcExecutablePath) {
-            return undefined;
-        }
-
-        return { cCompilerRoot, executablePath, rcExecutablePath };
-    }
-
-    private async resolveEcCompilerExecutable(installRoot: string): Promise<string | undefined> {
-        const candidates = [path.join(installRoot, "bin", "ec.exe"), path.join(installRoot, "ec.exe")];
-        for (const candidate of candidates) {
-            if (await fileExists(candidate)) {
-                return candidate;
-            }
-        }
-        return undefined;
-    }
-
-    private buildEcCompilerArguments(document: vscode.TextDocument, cCompilerRoot: string, input: PreparedCompilerInput): string[] {
-        return [`/st=${inferScriptType(document)}`, "/go", `/ccr=${cCompilerRoot}`, `/odir=${input.tempDirectory ?? path.dirname(input.filePath)}`, input.filePath];
-    }
-
-    private resolveWorkingDirectory(document: vscode.TextDocument): string {
-        return path.dirname(document.fileName);
-    }
-
-    private async prepareEcCompilerInput(document: vscode.TextDocument, trigger: CompilerValidationTrigger): Promise<PreparedCompilerInput> {
-        const tempFolder = await fs.promises.mkdtemp(path.join(os.tmpdir(), "asl-vscode-"));
-        if (trigger !== "type" || !document.isDirty) {
-            return {
-                acceptedPaths: [document.fileName],
-                cleanup: async () => {
-                    await fs.promises.rm(tempFolder, { recursive: true, force: true });
-                },
-                errFilePath: replaceFileExtension(document.fileName, ".err"),
-                filePath: document.fileName,
-                tempDirectory: tempFolder
-            };
-        }
-
-        const extension = path.extname(document.fileName);
-        const basename = path.basename(document.fileName, extension);
-        const tempFilePath = path.join(path.dirname(document.fileName), `.${basename}.vscode-asl-${Date.now()}${extension}`);
-        await fs.promises.writeFile(tempFilePath, document.getText(), "utf8");
-        const tempErrPath = replaceFileExtension(tempFilePath, ".err");
-        return {
-            acceptedPaths: [document.fileName, tempFilePath],
-            cleanup: async () => {
-                await fs.promises.rm(tempFilePath, { force: true });
-                await fs.promises.rm(tempErrPath, { force: true });
-                await fs.promises.rm(tempFolder, { recursive: true, force: true });
-            },
-            errFilePath: tempErrPath,
-            filePath: tempFilePath,
-            tempDirectory: tempFolder
-        };
-    }
-
-    private async resolveCCompilerRoot(): Promise<string | undefined> {
-        for (const candidate of getCommonCCompilerRoots()) {
-            if (await fileExists(candidate)) {
-                return candidate;
-            }
-        }
-
-        return undefined;
-    }
-
-    private async resolveRcExecutablePath(): Promise<string | undefined> {
-        const fromPath = await findExecutableOnPath("rc.exe");
-        if (fromPath) {
-            return fromPath;
-        }
-
-        for (const candidate of await getCommonRcExecutablePaths()) {
-            if (await fileExists(candidate)) {
-                return candidate;
+        for (const root of roots) {
+            for (const candidate of [path.join(root, "bin", "ec.exe"), path.join(root, "ec.exe")]) {
+                if (await fileExists(candidate)) {
+                    return candidate;
+                }
             }
         }
 
@@ -1076,9 +932,8 @@ class AslCompilerValidationService implements vscode.Disposable {
         args: string[],
         cwd: string,
         timeoutMs: number,
-        env: NodeJS.ProcessEnv,
         document: vscode.TextDocument,
-        input: PreparedCompilerInput
+        errFilePath: string
     ): Promise<CompilerValidationResult> {
         const key = document.uri.toString();
         const previousProcess = this.runningProcessByUri.get(key);
@@ -1091,7 +946,7 @@ class AslCompilerValidationService implements vscode.Disposable {
             let stderr = "";
             let timedOut = false;
 
-            const process = spawn(executablePath, args, { cwd, env, windowsHide: true });
+            const process = spawn(executablePath, args, { cwd, windowsHide: true });
             this.runningProcessByUri.set(key, process);
 
             const timeout = setTimeout(() => {
@@ -1133,9 +988,17 @@ class AslCompilerValidationService implements vscode.Disposable {
                     return;
                 }
 
+                // Two report channels: located stdout lines ("Error: 652,53 [23516]: ...",
+                // emitted for syntax errors, which produce no .err file) always count;
+                // the .err file anchors semantic errors/warnings to source lines; plain
+                // unlocated stdout lines are only a fallback when the .err gave nothing.
+                const stdoutDiagnostics = parseCompilerOutput(combinedOutput, document);
+                const locatedStdout = stdoutDiagnostics.filter((diagnostic) => diagnostic.range.start.line > 0 || diagnostic.range.start.character > 0);
+                const errDiagnostics = await readCompilerErrDiagnostics(errFilePath, document);
                 const diagnostics = deduplicateDiagnostics([
-                    ...parseCompilerOutput(combinedOutput, document, cwd, input.acceptedPaths ?? [document.fileName]),
-                    ...(input.errFilePath ? await readCompilerErrDiagnostics(input.errFilePath, document) : [])
+                    ...locatedStdout,
+                    ...errDiagnostics,
+                    ...(errDiagnostics.length === 0 && locatedStdout.length === 0 ? stdoutDiagnostics : [])
                 ]);
                 if (diagnostics.length > 0) {
                     resolve({ diagnostics });
@@ -1157,62 +1020,48 @@ class AslCompilerValidationService implements vscode.Disposable {
     }
 }
 
-function parseCompilerOutput(output: string, document: vscode.TextDocument, cwd: string, acceptedPaths: string[]): vscode.Diagnostic[] {
-    if (!output.trim()) {
-        return [];
-    }
-
+function parseCompilerOutput(output: string, document: vscode.TextDocument): vscode.Diagnostic[] {
     const diagnostics: vscode.Diagnostic[] = [];
-    const acceptedPathSet = new Set(acceptedPaths.map((candidate) => path.normalize(candidate).toLowerCase()));
 
     for (const rawLine of output.split(/\r?\n/)) {
         const line = rawLine.trim();
-        if (!line) {
+
+        // Syntax errors carry a location: "Error: 652,53 [23516]: symbol '}' expected."
+        const located = line.match(/^(error|warning|info)\s*:\s*(\d+)\s*,\s*(\d+)\s*(?:\[(\d+)\])?\s*:\s*(.+)$/i);
+        if (located) {
+            const codeSuffix = located[4] ? ` [${located[4]}]` : "";
+            diagnostics.push(createCompilerDiagnostic(
+                document,
+                Number.parseInt(located[2], 10),
+                Number.parseInt(located[3], 10),
+                `${located[5]}${codeSuffix}`,
+                toDiagnosticSeverity(located[1])
+            ));
             continue;
         }
 
-        const filePatternA = line.match(/^(.+?)\((\d+)(?:,(\d+))?\)\s*:\s*(?:(error|warning|info)\s*[:\-]?\s*)?(.+)$/i);
-        if (filePatternA) {
-            const targetPath = resolveDiagnosticPath(filePatternA[1], cwd);
-            if (targetPath && !acceptedPathSet.has(targetPath)) {
-                continue;
-            }
-            diagnostics.push(createCompilerDiagnostic(document, Number.parseInt(filePatternA[2], 10), parseOptionalNumber(filePatternA[3]), filePatternA[5], toDiagnosticSeverity(filePatternA[4])));
-            continue;
-        }
-
-        const filePatternB = line.match(/^(.+?):(\d+):(\d+):\s*(?:(error|warning|info)\s*[:\-]?\s*)?(.+)$/i);
-        if (filePatternB) {
-            const targetPath = resolveDiagnosticPath(filePatternB[1], cwd);
-            if (targetPath && !acceptedPathSet.has(targetPath)) {
-                continue;
-            }
-            diagnostics.push(createCompilerDiagnostic(document, Number.parseInt(filePatternB[2], 10), Number.parseInt(filePatternB[3], 10), filePatternB[5], toDiagnosticSeverity(filePatternB[4])));
-            continue;
-        }
-
-        const linePattern = line.match(/^(?:(error|warning|info)\s*[:\-]?\s*)?line\s+(\d+)(?:\s*(?:,|:)\s*(?:col|column)\s*(\d+))?\s*[:\-]\s*(.+)$/i);
-        if (linePattern) {
-            diagnostics.push(createCompilerDiagnostic(document, Number.parseInt(linePattern[2], 10), parseOptionalNumber(linePattern[3]), linePattern[4], toDiagnosticSeverity(linePattern[1])));
-            continue;
-        }
-
-        const ecPattern = line.match(/^(error|warning|info)\s*:\s*(\d+)\s*,\s*(\d+)\s*(?:\[(\d+)\])?\s*:\s*(.+)$/i);
-        if (ecPattern) {
-            const codeSuffix = ecPattern[4] ? ` [${ecPattern[4]}]` : "";
-            diagnostics.push(
-                createCompilerDiagnostic(
-                    document,
-                    Number.parseInt(ecPattern[2], 10),
-                    Number.parseInt(ecPattern[3], 10),
-                    `${ecPattern[5]}${codeSuffix}`,
-                    toDiagnosticSeverity(ecPattern[1])
-                )
-            );
+        const plain = line.match(/^(error|warning|info)\s*:\s*(.+)$/i);
+        if (plain) {
+            diagnostics.push(createDocumentStartDiagnostic(document, plain[2], toDiagnosticSeverity(plain[1])));
         }
     }
 
     return diagnostics;
+}
+
+function createCompilerDiagnostic(document: vscode.TextDocument, lineNumber: number, columnNumber: number | undefined, message: string, severity: vscode.DiagnosticSeverity): vscode.Diagnostic {
+    const lineIndex = Math.min(Math.max(lineNumber - 1, 0), Math.max(document.lineCount - 1, 0));
+    const lineText = document.lineAt(lineIndex).text;
+    const characterIndex = columnNumber ? Math.max(columnNumber - 1, 0) : getFirstMeaningfulCharacterIndex(lineText);
+    const startCharacter = Math.min(characterIndex, lineText.length);
+    const endCharacter = Math.min(startCharacter + Math.max(getIdentifierLength(lineText, startCharacter), 1), Math.max(lineText.length, startCharacter + 1));
+    return new vscode.Diagnostic(new vscode.Range(lineIndex, startCharacter, lineIndex, endCharacter), message.trim(), severity);
+}
+
+function getIdentifierLength(text: string, start: number): number {
+    const remainder = text.slice(start);
+    const match = remainder.match(/^[A-Za-z_\p{L}][A-Za-z0-9_\p{L}\p{N}]*/u);
+    return match ? match[0].length : 1;
 }
 
 async function readCompilerErrDiagnostics(errFilePath: string, document: vscode.TextDocument): Promise<vscode.Diagnostic[]> {
@@ -1257,25 +1106,6 @@ function parseCompilerErrFile(content: string, document: vscode.TextDocument): v
     return diagnostics;
 }
 
-function resolveDiagnosticPath(filePath: string, cwd: string): string | undefined {
-    const normalized = filePath.trim();
-    if (!normalized) {
-        return undefined;
-    }
-
-    const absolutePath = path.isAbsolute(normalized) ? normalized : path.join(cwd, normalized);
-    return path.normalize(absolutePath).toLowerCase();
-}
-
-function createCompilerDiagnostic(document: vscode.TextDocument, lineNumber: number, columnNumber: number | undefined, message: string, severity: vscode.DiagnosticSeverity): vscode.Diagnostic {
-    const lineIndex = Math.min(Math.max(lineNumber - 1, 0), Math.max(document.lineCount - 1, 0));
-    const lineText = document.lineAt(lineIndex).text;
-    const characterIndex = columnNumber ? Math.max(columnNumber - 1, 0) : getFirstMeaningfulCharacterIndex(lineText);
-    const startCharacter = Math.min(characterIndex, lineText.length);
-    const endCharacter = Math.min(startCharacter + Math.max(getIdentifierLength(lineText, startCharacter), 1), Math.max(lineText.length, startCharacter + 1));
-    return new vscode.Diagnostic(new vscode.Range(lineIndex, startCharacter, lineIndex, endCharacter), message.trim(), severity);
-}
-
 function createErrFileDiagnostic(document: vscode.TextDocument, location: ErrDiagnosticLocation, message: string, severity: vscode.DiagnosticSeverity): vscode.Diagnostic {
     const startLine = document.lineAt(location.lineIndex);
     const startCharacter = getFirstMeaningfulCharacterIndex(startLine.text);
@@ -1302,24 +1132,9 @@ function createDocumentStartDiagnostic(document: vscode.TextDocument, message: s
     return new vscode.Diagnostic(range, message.trim(), severity);
 }
 
-function getIdentifierLength(text: string, start: number): number {
-    const remainder = text.slice(start);
-    const match = remainder.match(/^[A-Za-z_\p{L}][A-Za-z0-9_\p{L}\p{N}]*/u);
-    return match ? match[0].length : 1;
-}
-
 function getFirstMeaningfulCharacterIndex(text: string): number {
     const match = text.match(/\S/u);
     return match?.index ?? 0;
-}
-
-function parseOptionalNumber(value: string | undefined): number | undefined {
-    if (!value) {
-        return undefined;
-    }
-
-    const parsed = Number.parseInt(value, 10);
-    return Number.isFinite(parsed) ? parsed : undefined;
 }
 
 function toDiagnosticSeverity(value: string | undefined): vscode.DiagnosticSeverity {
@@ -1381,25 +1196,6 @@ function compactCompilerMessage(output: string, code: number | null): string {
         .filter((line) => !/^[A-Z]:\\.+>$/.test(line));
 
     return (lines[0] ?? `Compiler exited with code ${code ?? "unknown"}.`).slice(0, 500);
-}
-
-function createCompilerProcessEnvironment(rcExecutablePath: string): NodeJS.ProcessEnv {
-    const rcDirectory = path.dirname(rcExecutablePath);
-    return {
-        ...process.env,
-        PATH: prependDirectoryToPath(rcDirectory, process.env.PATH)
-    };
-}
-
-function prependDirectoryToPath(directory: string, currentPath: string | undefined): string {
-    const entries = (currentPath ?? "")
-        .split(path.delimiter)
-        .filter((entry) => entry.length > 0);
-    const normalizedDirectory = path.normalize(directory).toLowerCase();
-    if (!entries.some((entry) => path.normalize(entry).toLowerCase() === normalizedDirectory)) {
-        entries.unshift(directory);
-    }
-    return entries.join(path.delimiter);
 }
 
 function normalizeComparableLine(value: string): string {
@@ -1569,97 +1365,21 @@ function replaceFileExtension(filePath: string, extension: string): string {
     return path.join(parsed.dir, `${parsed.name}${extension}`);
 }
 
-async function findExecutableOnPath(executableName: string): Promise<string | undefined> {
-    const pathEntries = (process.env.PATH ?? "")
-        .split(path.delimiter)
-        .map((entry) => entry.trim())
-        .filter((entry) => entry.length > 0);
-
-    for (const entry of pathEntries) {
-        const candidate = path.join(entry, executableName);
-        if (await fileExists(candidate)) {
-            return candidate;
-        }
-    }
-
-    return undefined;
-}
-
-async function getCommonRcExecutablePaths(): Promise<string[]> {
-    const candidates: string[] = [];
-
-    for (const driveRoot of getCandidateDriveRoots()) {
-        const basePath = path.join(driveRoot, "Program Files (x86)", "Windows Kits", "10", "bin");
-        const versionDirectories = await getVersionDirectories(basePath);
-        for (const versionDirectory of versionDirectories) {
-            candidates.push(path.join(versionDirectory, "x64", "rc.exe"));
-            candidates.push(path.join(versionDirectory, "x86", "rc.exe"));
-        }
-
-        candidates.push(path.join(basePath, "x64", "rc.exe"));
-        candidates.push(path.join(basePath, "x86", "rc.exe"));
-    }
-
-    return deduplicateStrings(candidates);
-}
-
-async function getVersionDirectories(basePath: string): Promise<string[]> {
-    try {
-        const entries = await fs.promises.readdir(basePath, { withFileTypes: true });
-        return entries
-            .filter((entry) => entry.isDirectory() && /^\d+\.\d+\.\d+\.\d+$/.test(entry.name))
-            .map((entry) => path.join(basePath, entry.name))
-            .sort((left, right) => compareVersionStrings(path.basename(right), path.basename(left)));
-    } catch {
-        return [];
-    }
-}
-
-async function isScriptDeveloperInstallRoot(root: string): Promise<boolean> {
-    return (await fileExists(path.join(root, "bin", "Altitude.ASL.Compiler.dll"))) || (await fileExists(path.join(root, "Altitude.ASL.Compiler.dll")));
-}
-
-function compareVersionStrings(left: string, right: string): number {
-    const leftParts = left.split(".").map((part) => Number.parseInt(part, 10));
-    const rightParts = right.split(".").map((part) => Number.parseInt(part, 10));
-    const length = Math.max(leftParts.length, rightParts.length);
-
-    for (let index = 0; index < length; index += 1) {
-        const leftPart = leftParts[index] ?? 0;
-        const rightPart = rightParts[index] ?? 0;
-        if (leftPart !== rightPart) {
-            return leftPart - rightPart;
-        }
-    }
-
-    return 0;
-}
-
 function getCommonScriptDeveloperRoots(): string[] {
+    // Newest first; the unversioned root hosts in-place-upgraded installs.
+    const installNames = [
+        "Altitude Script Developer 8.7",
+        "Altitude Script Developer 8.6",
+        "Altitude Script Developer",
+        "Altitude Script Developer 8.5"
+    ];
     const candidates: string[] = [];
-    for (const driveRoot of getCandidateDriveRoots()) {
-        candidates.push(path.join(driveRoot, "Program Files (x86)", "Altitude", "Altitude uCI 8", "Altitude Script Developer"));
-        candidates.push(path.join(driveRoot, "Program Files", "Altitude", "Altitude uCI 8", "Altitude Script Developer"));
-    }
-    return deduplicateStrings(candidates);
-}
-
-function getCommonCCompilerRoots(): string[] {
-    const candidates: string[] = [];
-    const skus = ["BuildTools", "Community", "Professional", "Enterprise"];
-    const versions = ["2022", "2019"];
-    const programFilesRoots = ["Program Files (x86)", "Program Files"];
-
-    for (const driveRoot of getCandidateDriveRoots()) {
-        for (const programFilesRoot of programFilesRoots) {
-            for (const version of versions) {
-                for (const sku of skus) {
-                    candidates.push(path.join(driveRoot, programFilesRoot, "Microsoft Visual Studio", version, sku, "VC"));
-                }
-            }
+    for (const installName of installNames) {
+        for (const driveRoot of getCandidateDriveRoots()) {
+            candidates.push(path.join(driveRoot, "Program Files (x86)", "Altitude", "Altitude uCI 8", installName));
+            candidates.push(path.join(driveRoot, "Program Files", "Altitude", "Altitude uCI 8", installName));
         }
     }
-
     return deduplicateStrings(candidates);
 }
 
