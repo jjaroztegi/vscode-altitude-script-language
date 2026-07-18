@@ -1,6 +1,8 @@
 node_modules
 *.vsix
 out
+dist
+dist-test
 .vscode-test
 .DS_Store
 npm-debug.log*
