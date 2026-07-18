@@ -29,6 +29,8 @@ export interface AslSymbol {
     range: vscode.Range;
     selectionRange: vscode.Range;
     children: AslSymbol[];
+    /** Set on symbols that come from an imported module file. */
+    sourceUri?: string;
 }
 
 export interface AslReference {
@@ -40,6 +42,14 @@ export interface AslReference {
 export interface AslIssue {
     message: string;
     severity: vscode.DiagnosticSeverity;
+    range: vscode.Range;
+    /** Marks unresolved-reference issues so they can be recomputed with module context. */
+    isReference?: boolean;
+}
+
+export interface AslModuleImport {
+    namespace: string;
+    path: string;
     range: vscode.Range;
 }
 
@@ -66,6 +76,11 @@ export interface AslAnalysis {
     issues: AslIssue[];
     lineContexts: AslContextFrame[][];
     controlUsages: AslControlUsage[];
+    moduleImports: AslModuleImport[];
+    /** True for .agm/.gem/.irm files: their unqualified node references may target host-script nodes. */
+    isModuleFile: boolean;
+    /** Present on module-augmented analyses: lowercased namespace → module analysis. */
+    moduleAnalyses?: Map<string, AslAnalysis>;
 }
 
 interface MutableFrame {
@@ -111,8 +126,12 @@ const RESERVED_REFERENCE_TOKENS = buildReservedReferenceTokens();
 const IDENTIFIER_START = "\\p{L}_";
 const IDENTIFIER_CONTINUE = "\\p{L}\\p{N}_";
 const IDENTIFIER_PATTERN = `[${IDENTIFIER_START}][${IDENTIFIER_CONTINUE}]*`;
+// .gem/.agm modules declare DLL routines as e.g. `external session stdcall subroutine Name`.
+const ROUTINE_MODIFIERS_PATTERN = "(?:(?:external|session|script|stdcall|cdecl|pascal|managed)\\s+)*";
+// A segment may be namespace-qualified (MsgPopup::MASTER, mgi::cur_tipoVale).
+const SEGMENT_PATTERN = `${IDENTIFIER_PATTERN}(?:::${IDENTIFIER_PATTERN})*`;
 const QUALIFIED_IDENTIFIER_PATTERN = `${IDENTIFIER_PATTERN}(?:\\.${IDENTIFIER_PATTERN})*`;
-const UNICODE_IDENTIFIER_CHAIN_REGEX = new RegExp(`@?${QUALIFIED_IDENTIFIER_PATTERN}`, "gu");
+const UNICODE_IDENTIFIER_CHAIN_REGEX = new RegExp(`@?${SEGMENT_PATTERN}(?:\\.${SEGMENT_PATTERN})*`, "gu");
 
 export class AslAnalysisService {
     private readonly cache = new Map<string, { version: number; analysis: AslAnalysis }>();
@@ -141,8 +160,10 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
     const issues: AslIssue[] = [];
     const lineContexts: AslContextFrame[][] = [];
     const controlUsages: AslControlUsage[] = [];
+    const moduleImports: AslModuleImport[] = [];
     const frames: MutableFrame[] = [];
     let pendingSymbolFrame: PendingSymbolFrame | undefined;
+    let pendingImportPath: string | undefined;
     let nextFrameId = 1;
 
     const pushSymbol = (symbol: AslSymbol): void => {
@@ -185,6 +206,18 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
             });
             parseReferences(document, lineNumber, text, references);
             parseControlProperties(document, lineNumber, trimmed, frames, issues);
+
+            // Pair `import <"File.agm">` with its `into namespace NS`, which may
+            // be on the same or a following line.
+            const importMatch = trimmed.match(/\bimport\s*<"([^"]+)">/i);
+            if (importMatch) {
+                pendingImportPath = importMatch[1];
+            }
+            const namespaceMatch = trimmed.match(new RegExp(`\\binto namespace\\s+(${IDENTIFIER_PATTERN})`, "iu"));
+            if (namespaceMatch && pendingImportPath) {
+                moduleImports.push({ namespace: namespaceMatch[1], path: pendingImportPath, range: line.range });
+                pendingImportPath = undefined;
+            }
         }
 
         const structural = maskCommentContent(maskQuotedContent(text), inComment);
@@ -240,9 +273,15 @@ export function analyzeDocument(document: vscode.TextDocument): AslAnalysis {
     }
 
     validateDuplicates(symbolIndex, issues);
-    validateReferences(symbolIndex, references, issues);
+    const isModuleFile = /\.(agm|gem|irm)$/i.test(document.uri.path ?? document.uri.toString());
+    issues.push(...validateReferences(symbolIndex, references, {
+        hasModuleImports: moduleImports.length > 0,
+        isModuleFile,
+        loadedNamespaces: new Set(),
+        modulesFullyLoaded: false
+    }));
 
-    return { symbols, topLevelSymbols, symbolIndex, references, issues, lineContexts, controlUsages };
+    return { symbols, topLevelSymbols, symbolIndex, references, issues, lineContexts, controlUsages, moduleImports, isModuleFile };
 }
 
 function parseDeclarations(
@@ -289,7 +328,7 @@ function parseDeclarations(
         return;
     }
 
-    const subroutineMatch = trimmed.match(new RegExp(`^subroutine\\s+(${IDENTIFIER_PATTERN})`, "iu"));
+    const subroutineMatch = trimmed.match(new RegExp(`^${ROUTINE_MODIFIERS_PATTERN}subroutine\\s+(${IDENTIFIER_PATTERN})`, "iu"));
     if (subroutineMatch) {
         const routine = parseRoutineDeclaration(document, lineNumber, "subroutine");
         const symbol = createBlockSymbol(document, lineNumber, routine.name, "subroutine", routine.detail);
@@ -301,7 +340,7 @@ function parseDeclarations(
         return;
     }
 
-    const functionMatch = trimmed.match(new RegExp(`^function\\s+(${IDENTIFIER_PATTERN})`, "iu"));
+    const functionMatch = trimmed.match(new RegExp(`^${ROUTINE_MODIFIERS_PATTERN}function\\s+(${IDENTIFIER_PATTERN})`, "iu"));
     if (functionMatch) {
         const routine = parseRoutineDeclaration(document, lineNumber, "function");
         const symbol = createBlockSymbol(document, lineNumber, routine.name, "function", routine.detail);
@@ -431,8 +470,16 @@ function parseReferences(document: vscode.TextDocument, lineNumber: number, text
     // Mask string literals so words like "cursor" inside SQL text are not
     // picked up as cursor references.
     const masked = maskQuotedContent(text);
-    for (const match of masked.matchAll(new RegExp(`\\bcursor\\s+(${IDENTIFIER_PATTERN}(?:::${IDENTIFIER_PATTERN})*)`, "giu"))) {
+    for (const match of masked.matchAll(new RegExp(`\\bcursor\\s+(${SEGMENT_PATTERN})`, "giu"))) {
         references.push(createReference(document, lineNumber, match[1], "cursor", match.index ?? 0, match[0].length));
+    }
+
+    // Subroutine/function calls: call [ns::]Name(...). `call node` is handled above.
+    for (const match of masked.matchAll(new RegExp(`\\bcall\\s+(${SEGMENT_PATTERN})\\s*\\(`, "giu"))) {
+        if (/^node$/i.test(match[1])) {
+            continue;
+        }
+        references.push(createReference(document, lineNumber, match[1], "symbol", match.index ?? 0, match[0].length));
     }
 }
 
@@ -533,12 +580,12 @@ function createSemanticFrame(
         return { kind: "event", name: eventMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "event") };
     }
 
-    const subroutineMatch = trimmed.match(new RegExp(`^subroutine\\s+(${IDENTIFIER_PATTERN})`, "iu"));
+    const subroutineMatch = trimmed.match(new RegExp(`^${ROUTINE_MODIFIERS_PATTERN}subroutine\\s+(${IDENTIFIER_PATTERN})`, "iu"));
     if (subroutineMatch) {
         return { kind: "subroutine", name: subroutineMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "subroutine") };
     }
 
-    const functionMatch = trimmed.match(new RegExp(`^function\\s+(${IDENTIFIER_PATTERN})`, "iu"));
+    const functionMatch = trimmed.match(new RegExp(`^${ROUTINE_MODIFIERS_PATTERN}function\\s+(${IDENTIFIER_PATTERN})`, "iu"));
     if (functionMatch) {
         return { kind: "function", name: functionMatch[1], symbol: findNewestSymbol(symbols, lineNumber, "function") };
     }
@@ -689,23 +736,41 @@ function validateDuplicates(symbolIndex: Map<string, AslSymbol[]>, issues: AslIs
     }
 }
 
-function validateReferences(symbolIndex: Map<string, AslSymbol[]>, references: AslReference[], issues: AslIssue[]): void {
-    // With module imports present, unqualified node names may live in the
-    // imported .agm/.gem, which single-file analysis cannot see.
-    const hasModuleImports = [...symbolIndex.values()].some((symbols) => symbols.some((symbol) => symbol.kind === "namespace"));
+export interface ReferenceValidationOptions {
+    hasModuleImports: boolean;
+    /** Module files may goto host-script nodes, which no analysis of the module alone can see. */
+    isModuleFile: boolean;
+    /** Lowercased namespaces whose module symbols are present in the symbol index. */
+    loadedNamespaces: Set<string>;
+    /** True when every reachable imported module was loaded, making unqualified node checks safe. */
+    modulesFullyLoaded: boolean;
+}
+
+function validateReferences(symbolIndex: Map<string, AslSymbol[]>, references: AslReference[], options: ReferenceValidationOptions): AslIssue[] {
+    const issues: AslIssue[] = [];
 
     for (const reference of references) {
-        // Namespace-qualified and interpolated names live in imported modules
-        // or are dynamic; single-file analysis cannot resolve them.
-        if (reference.name.includes("$(") || reference.name.includes("::")) {
+        // Interpolated names are dynamic; nothing to resolve.
+        if (reference.name.includes("$(")) {
             continue;
         }
-        if (reference.kind === "node" && hasModuleImports) {
+
+        // Namespace-qualified names resolve only when that module is loaded
+        // into the index. Member chains into module symbols stay best-effort
+        // (no diagnostics) because module types may nest beyond our view.
+        if (reference.name.includes("::")) {
+            const namespace = normalizeAslName(reference.name.slice(0, reference.name.indexOf("::")));
+            if (!options.loadedNamespaces.has(namespace) || reference.name.includes(".")) {
+                continue;
+            }
+        }
+
+        if (reference.kind === "node" && !reference.name.includes("::") && (options.isModuleFile || (options.hasModuleImports && !options.modulesFullyLoaded))) {
             continue;
         }
 
         // Member chains on variables typed by a module-qualified type cannot
-        // be verified without the module source.
+        // be verified reliably; skip them.
         if ((reference.kind === "variable" || reference.kind === "symbol") && reference.name.includes(".")) {
             const baseSymbols = symbolIndex.get(normalizeAslName(reference.name.split(".")[0])) ?? [];
             if (baseSymbols.some((symbol) => (symbol.detail ?? "").includes("::"))) {
@@ -734,10 +799,61 @@ function validateReferences(symbolIndex: Map<string, AslSymbol[]>, references: A
                     ? `Unresolved symbol reference '${reference.name}'.`
                     : `Unresolved ${reference.kind} reference '${reference.name}'.`,
                 severity: vscode.DiagnosticSeverity.Warning,
-                range: reference.range
+                range: reference.range,
+                isReference: true
             });
         }
     }
+
+    return issues;
+}
+
+/**
+ * Builds a module-aware analysis: module symbols become resolvable under
+ * `ns::name` keys, module nodes under their plain names, and unresolved
+ * reference issues are recomputed with that knowledge.
+ */
+export function augmentAnalysisWithModules(
+    base: AslAnalysis,
+    directModules: Map<string, AslAnalysis>,
+    allModules: AslAnalysis[],
+    modulesFullyLoaded: boolean
+): AslAnalysis {
+    const mergedIndex = new Map(base.symbolIndex);
+
+    const addToIndex = (key: string, symbols: AslSymbol[]): void => {
+        if (symbols.length === 0) {
+            return;
+        }
+        mergedIndex.set(key, [...(mergedIndex.get(key) ?? []), ...symbols]);
+    };
+
+    for (const [namespace, moduleAnalysis] of directModules) {
+        for (const [key, symbols] of moduleAnalysis.symbolIndex) {
+            addToIndex(`${namespace}::${key}`, symbols);
+        }
+    }
+
+    // goto node / master legitimately reference module nodes unqualified.
+    for (const moduleAnalysis of allModules) {
+        for (const symbol of moduleAnalysis.symbols) {
+            if (symbol.kind === "node") {
+                addToIndex(normalizeAslName(symbol.name), [symbol]);
+            }
+        }
+    }
+
+    const issues = [
+        ...base.issues.filter((issue) => !issue.isReference),
+        ...validateReferences(mergedIndex, base.references, {
+            hasModuleImports: base.moduleImports.length > 0,
+            isModuleFile: base.isModuleFile,
+            loadedNamespaces: new Set(directModules.keys()),
+            modulesFullyLoaded
+        })
+    ];
+
+    return { ...base, symbolIndex: mergedIndex, issues, moduleAnalyses: directModules };
 }
 
 function collectGenericSymbolReferences(
@@ -1098,8 +1214,8 @@ function parseRoutineDeclaration(document: vscode.TextDocument, lineNumber: numb
     const header = collectRoutineHeader(document, lineNumber);
     const collapsed = header.replace(/\s+/g, " ").trim();
     const pattern = kind === "subroutine"
-        ? new RegExp(`^subroutine\\s+(${IDENTIFIER_PATTERN})(?:\\s*\\((.*?)\\))?`, "iu")
-        : new RegExp(`^function\\s+(${IDENTIFIER_PATTERN})(?:\\s*\\((.*?)\\))?(?:\\s*:\\s*(.+?))?(?:\\s*\\{)?$`, "iu");
+        ? new RegExp(`^${ROUTINE_MODIFIERS_PATTERN}subroutine\\s+(${IDENTIFIER_PATTERN})(?:\\s*\\((.*?)\\))?`, "iu")
+        : new RegExp(`^${ROUTINE_MODIFIERS_PATTERN}function\\s+(${IDENTIFIER_PATTERN})(?:\\s*\\((.*?)\\))?(?:\\s*:\\s*(.+?))?(?:\\s*\\{)?$`, "iu");
     const match = collapsed.match(pattern);
     const name = match?.[1] ?? `${kind}_${lineNumber + 1}`;
     const parameters = normalizeRoutineParameters(match?.[2] ?? "");

@@ -8,6 +8,7 @@ Language support for Altitude Script Language (ASL) in Visual Studio Code, targe
 - IntelliSense for sections, controls, properties, events, nodes, variables, cursors, routines, and common ASL actions, based on the Altitude 8.7 ASL reference.
 - Diagnostics for unresolved references, duplicate declarations (ASL is case-insensitive), brace issues, and undocumented control properties.
 - Hover, go to definition, find references, rename, document symbols, and workspace symbols.
+- Cross-file module resolution: `import <"Module.agm"> into namespace NS` is followed transitively, so `NS::symbol` references resolve, go to definition jumps into the module file, `NS::` triggers module-symbol completions, and unresolved node/call/cursor references are validated against imported modules (including `.gem` DLL wrappers with `external ... subroutine/function` declarations).
 - Compiler validation with Script Developer's `ec.exe` on save and on demand for `.ags` and `.irs` (errors and warnings mapped back to source lines from the `.err` report).
 - Script Developer file conventions enforced: UTF-8 with BOM, CRLF line endings (normalized on save), and tab indentation by default for ASL files.
 - Formatting with configurable indentation fallback.

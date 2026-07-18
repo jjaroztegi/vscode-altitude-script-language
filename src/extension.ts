@@ -23,6 +23,8 @@ import {
     AslAnalysis,
     AslAnalysisService,
     AslSymbol,
+    analyzeDocument,
+    augmentAnalysisWithModules,
     collectDocumentSymbolReferences,
     findSymbolReferenceAtPosition,
     getMemberSymbols,
@@ -32,6 +34,7 @@ import {
     isTopLevelContext,
     resolveReferenceSymbols
 } from "./aslParser";
+import { resolveModuleGraph } from "./aslModules";
 
 const LANGUAGE_ID = "asl";
 const ASL_WORKSPACE_GLOB = "**/*.{ags,irs,gem,agm,irm,bak}";
@@ -43,8 +46,101 @@ const QUALIFIED_IDENTIFIER_PATTERN = `${IDENTIFIER_PATTERN}(?:\\.${IDENTIFIER_PA
 const MEMBER_ACCESS_AT_END_REGEX = new RegExp(`(@?${QUALIFIED_IDENTIFIER_PATTERN})\\.(${IDENTIFIER_PATTERN})?$`, "u");
 type CompilerValidationTrigger = "save" | "command";
 
+/**
+ * Module-aware analysis service: analyses of `.ags`/`.irs` scripts are
+ * augmented with the symbols of their imported `.agm`/`.gem` modules
+ * (transitively), so namespace-qualified references resolve across files.
+ */
+class ModuleAwareAnalysisService {
+    private readonly base = new AslAnalysisService();
+    private readonly moduleCache = new Map<string, { stamp: string; analysis: AslAnalysis }>();
+    private readonly augmentedCache = new Map<string, { docVersion: number; stamps: string; analysis: AslAnalysis }>();
+
+    public getAnalysis(document: vscode.TextDocument): AslAnalysis {
+        const raw = this.base.getAnalysis(document);
+        if (raw.moduleImports.length === 0 || document.uri.scheme !== "file") {
+            return raw;
+        }
+
+        const stamps: string[] = [];
+        const graph = resolveModuleGraph(document.uri.fsPath, raw, (fsPath) => this.loadModule(fsPath, stamps));
+        const stampKey = stamps.join("|");
+        const cacheKey = document.uri.toString();
+        const cached = this.augmentedCache.get(cacheKey);
+        if (cached && cached.docVersion === document.version && cached.stamps === stampKey) {
+            return cached.analysis;
+        }
+
+        const augmented = augmentAnalysisWithModules(raw, graph.direct, graph.all, graph.fullyLoaded);
+        this.augmentedCache.set(cacheKey, { docVersion: document.version, stamps: stampKey, analysis: augmented });
+        return augmented;
+    }
+
+    public clear(document: vscode.TextDocument): void {
+        this.base.clear(document);
+        this.augmentedCache.delete(document.uri.toString());
+    }
+
+    private loadModule(fsPath: string, stamps: string[]): AslAnalysis | undefined {
+        const key = path.normalize(fsPath).toLowerCase();
+        const openDocument = vscode.workspace.textDocuments.find(
+            (candidate) => candidate.uri.scheme === "file" && path.normalize(candidate.uri.fsPath).toLowerCase() === key
+        );
+
+        let stamp: string;
+        let analyze: () => AslAnalysis;
+        if (openDocument) {
+            stamp = `v${openDocument.version}`;
+            analyze = () => analyzeDocument(openDocument);
+        } else {
+            let mtimeMs: number;
+            try {
+                mtimeMs = fs.statSync(fsPath).mtimeMs;
+            } catch {
+                stamps.push(`${key}:missing`);
+                return undefined;
+            }
+            stamp = `m${mtimeMs}`;
+            analyze = () => analyzeDocument(createFileTextDocument(fsPath, fs.readFileSync(fsPath, "utf8")));
+        }
+
+        stamps.push(`${key}:${stamp}`);
+        const cached = this.moduleCache.get(key);
+        if (cached && cached.stamp === stamp) {
+            return cached.analysis;
+        }
+
+        try {
+            const analysis = analyze();
+            const uri = vscode.Uri.file(fsPath).toString();
+            for (const symbol of analysis.symbols) {
+                symbol.sourceUri = uri;
+            }
+            this.moduleCache.set(key, { stamp, analysis });
+            return analysis;
+        } catch {
+            return undefined;
+        }
+    }
+}
+
+/** Minimal TextDocument over file content, for analyzing closed module files. */
+function createFileTextDocument(fsPath: string, content: string): vscode.TextDocument {
+    const lines = content.replace(/^\uFEFF/, "").split(/\r\n|\r|\n/);
+    const adapter = {
+        uri: vscode.Uri.file(fsPath),
+        version: 0,
+        lineCount: lines.length,
+        lineAt: (line: number) => {
+            const text = lines[line] ?? "";
+            return { text, lineNumber: line, range: new vscode.Range(line, 0, line, text.length) };
+        }
+    };
+    return adapter as unknown as vscode.TextDocument;
+}
+
 export function activate(context: vscode.ExtensionContext): void {
-    const analysisService = new AslAnalysisService();
+    const analysisService = new ModuleAwareAnalysisService();
     const diagnostics = vscode.languages.createDiagnosticCollection(LANGUAGE_ID);
     const compilerValidationService = new AslCompilerValidationService();
 
@@ -176,7 +272,7 @@ export function deactivate(): void {
 }
 
 class AslCompletionProvider implements vscode.CompletionItemProvider {
-    public constructor(private readonly analysisService: AslAnalysisService) {}
+    public constructor(private readonly analysisService: ModuleAwareAnalysisService) {}
 
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
         const analysis = this.analysisService.getAnalysis(document);
@@ -184,6 +280,19 @@ class AslCompletionProvider implements vscode.CompletionItemProvider {
         const previousNonEmptyLine = getPreviousNonEmptyLineText(document, position.line);
         const statementContext = `${previousNonEmptyLine}\n${linePrefix}`.trim();
         const completions: vscode.CompletionItem[] = [];
+
+        const namespaceAccessMatch = linePrefix.match(new RegExp(`(${IDENTIFIER_PATTERN})::(${IDENTIFIER_PATTERN})?$`, "u"));
+        if (namespaceAccessMatch) {
+            const moduleAnalysis = analysis.moduleAnalyses?.get(namespaceAccessMatch[1].toLowerCase());
+            if (!moduleAnalysis) {
+                return [];
+            }
+            return deduplicateCompletions(
+                moduleAnalysis.symbols
+                    .filter((symbol) => ["node", "subroutine", "function", "cursor", "variable", "parameter", "constant", "type"].includes(symbol.kind))
+                    .map((symbol) => createSymbolCompletion(symbol, mapCompletionKind(symbol.kind)))
+            );
+        }
 
         const memberAccessMatch = linePrefix.match(MEMBER_ACCESS_AT_END_REGEX);
         if (memberAccessMatch) {
@@ -274,7 +383,7 @@ class AslCompletionProvider implements vscode.CompletionItemProvider {
 }
 
 class AslHoverProvider implements vscode.HoverProvider {
-    public constructor(private readonly analysisService: AslAnalysisService) {}
+    public constructor(private readonly analysisService: ModuleAwareAnalysisService) {}
 
     public provideHover(document: vscode.TextDocument, position: vscode.Position): vscode.Hover | undefined {
         const analysis = this.analysisService.getAnalysis(document);
@@ -311,7 +420,7 @@ class AslHoverProvider implements vscode.HoverProvider {
 }
 
 class AslDefinitionProvider implements vscode.DefinitionProvider {
-    public constructor(private readonly analysisService: AslAnalysisService) {}
+    public constructor(private readonly analysisService: ModuleAwareAnalysisService) {}
 
     public provideDefinition(document: vscode.TextDocument, position: vscode.Position): vscode.Definition | undefined {
         const analysis = this.analysisService.getAnalysis(document);
@@ -330,12 +439,16 @@ class AslDefinitionProvider implements vscode.DefinitionProvider {
             return undefined;
         }
 
-        return matches.map((symbol) => new vscode.Location(document.uri, symbol.selectionRange));
+        return matches.map((symbol) => new vscode.Location(getSymbolUri(symbol, document), symbol.selectionRange));
     }
 }
 
+function getSymbolUri(symbol: AslSymbol, document: vscode.TextDocument): vscode.Uri {
+    return symbol.sourceUri ? vscode.Uri.parse(symbol.sourceUri) : document.uri;
+}
+
 class AslReferenceProvider implements vscode.ReferenceProvider {
-    public constructor(private readonly analysisService: AslAnalysisService) {}
+    public constructor(private readonly analysisService: ModuleAwareAnalysisService) {}
 
     public async provideReferences(document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext, token: vscode.CancellationToken): Promise<vscode.Location[]> {
         const target = getRenameTarget(document, position, this.analysisService);
@@ -348,7 +461,7 @@ class AslReferenceProvider implements vscode.ReferenceProvider {
 }
 
 class AslDocumentHighlightProvider implements vscode.DocumentHighlightProvider {
-    public constructor(private readonly analysisService: AslAnalysisService) {}
+    public constructor(private readonly analysisService: ModuleAwareAnalysisService) {}
 
     public provideDocumentHighlights(document: vscode.TextDocument, position: vscode.Position): vscode.DocumentHighlight[] {
         const target = getRenameTarget(document, position, this.analysisService);
@@ -367,7 +480,7 @@ class AslDocumentHighlightProvider implements vscode.DocumentHighlightProvider {
 }
 
 class AslRenameProvider implements vscode.RenameProvider {
-    public constructor(private readonly analysisService: AslAnalysisService) {}
+    public constructor(private readonly analysisService: ModuleAwareAnalysisService) {}
 
     public prepareRename(document: vscode.TextDocument, position: vscode.Position): vscode.Range | { range: vscode.Range; placeholder: string } {
         const target = getRenameTarget(document, position, this.analysisService);
@@ -399,7 +512,7 @@ class AslRenameProvider implements vscode.RenameProvider {
 }
 
 class AslDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
-    public constructor(private readonly analysisService: AslAnalysisService) {}
+    public constructor(private readonly analysisService: ModuleAwareAnalysisService) {}
 
     public provideDocumentSymbols(document: vscode.TextDocument): vscode.DocumentSymbol[] {
         const analysis = this.analysisService.getAnalysis(document);
@@ -408,7 +521,7 @@ class AslDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
 }
 
 class AslWorkspaceSymbolProvider implements vscode.WorkspaceSymbolProvider {
-    public constructor(private readonly analysisService: AslAnalysisService) {}
+    public constructor(private readonly analysisService: ModuleAwareAnalysisService) {}
 
     public async provideWorkspaceSymbols(query: string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
         const files = await vscode.workspace.findFiles(ASL_WORKSPACE_GLOB, undefined, 200, token);
@@ -488,6 +601,24 @@ function createSymbolCompletion(symbol: AslSymbol, kind: vscode.CompletionItemKi
     return item;
 }
 
+function mapCompletionKind(kind: AslSymbol["kind"]): vscode.CompletionItemKind {
+    switch (kind) {
+        case "node":
+            return vscode.CompletionItemKind.Reference;
+        case "subroutine":
+        case "function":
+            return vscode.CompletionItemKind.Function;
+        case "cursor":
+            return vscode.CompletionItemKind.Interface;
+        case "type":
+            return vscode.CompletionItemKind.Struct;
+        case "constant":
+            return vscode.CompletionItemKind.Constant;
+        default:
+            return vscode.CompletionItemKind.Variable;
+    }
+}
+
 function getEventCompletions(analysis: AslAnalysis, line: number): vscode.CompletionItem[] {
     const control = getNearestControlDefinition(analysis, line);
     if (control) {
@@ -555,7 +686,7 @@ function getSymbolDisplayDetail(symbol: AslSymbol): string {
     return symbol.detail ? `${symbol.kind}: ${symbol.detail}` : symbol.kind;
 }
 
-function getRenameTarget(document: vscode.TextDocument, position: vscode.Position, analysisService: AslAnalysisService): { reference: NonNullable<ReturnType<typeof findSymbolReferenceAtPosition>>; symbol: AslSymbol } | undefined {
+function getRenameTarget(document: vscode.TextDocument, position: vscode.Position, analysisService: ModuleAwareAnalysisService): { reference: NonNullable<ReturnType<typeof findSymbolReferenceAtPosition>>; symbol: AslSymbol } | undefined {
     const analysis = analysisService.getAnalysis(document);
     const declaredSymbol = getDeclaredSymbolAtPosition(analysis, position);
     if (declaredSymbol && isRenameableSymbol(declaredSymbol)) {
@@ -588,6 +719,12 @@ function getRenameTarget(document: vscode.TextDocument, position: vscode.Positio
         return undefined;
     }
 
+    // Module symbols cannot be renamed from an importing script; the rename
+    // would have to touch the module and every script that imports it.
+    if (symbol.sourceUri && symbol.sourceUri !== document.uri.toString()) {
+        return undefined;
+    }
+
     return { reference, symbol };
 }
 
@@ -595,7 +732,7 @@ function getDeclaredSymbolAtPosition(analysis: AslAnalysis, position: vscode.Pos
     return analysis.symbols.find((symbol) => symbol.selectionRange.contains(position));
 }
 
-async function findWorkspaceReferences(analysisService: AslAnalysisService, target: AslSymbol, includeDeclaration: boolean, token: vscode.CancellationToken): Promise<vscode.Location[]> {
+async function findWorkspaceReferences(analysisService: ModuleAwareAnalysisService, target: AslSymbol, includeDeclaration: boolean, token: vscode.CancellationToken): Promise<vscode.Location[]> {
     const files = await vscode.workspace.findFiles(ASL_WORKSPACE_GLOB, undefined, 300, token);
     const locations: vscode.Location[] = [];
     const targetIdentity = getSymbolIdentity(target);
@@ -636,7 +773,7 @@ function isRenameableSymbol(symbol: AslSymbol): boolean {
 }
 
 function getSymbolIdentity(symbol: AslSymbol): string {
-    return `${symbol.kind}:${symbol.name}:${symbol.selectionRange.start.line}:${symbol.selectionRange.start.character}`;
+    return `${symbol.sourceUri ?? ""}:${symbol.kind}:${symbol.name}:${symbol.selectionRange.start.line}:${symbol.selectionRange.start.character}`;
 }
 
 function deduplicateLocations(locations: vscode.Location[]): vscode.Location[] {
