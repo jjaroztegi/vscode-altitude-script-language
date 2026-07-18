@@ -2,6 +2,14 @@
 
 All notable changes to this extension are documented here.
 
+## [1.1.0] - 2026-07-18
+
+- Cross-file module resolution. Scripts' `modules {}` imports are resolved transitively (open editors preferred over disk, cached by version/mtime):
+  - Go to definition, hover, and find references work on `NS::symbol` across files; `NS::` offers module-symbol completions.
+  - Unresolved-reference diagnostics now check imported modules: dead `goto node` targets, broken `call NS::Sub(...)` calls, and `NS::cursor` references are reported; module files themselves skip unqualified node checks (they may target host-script nodes).
+  - `.gem` DLL wrappers parse correctly (`external session stdcall subroutine/function` declarations).
+  - Subroutine/function call references (`call [ns::]Name(...)`) are now validated everywhere.
+
 ## [1.0.0] - 2026-07-18
 
 Retargeted to Altitude 8.7 (web). No backwards compatibility with the 0.x line.

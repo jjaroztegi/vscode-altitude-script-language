@@ -2,7 +2,7 @@
     "name": "vscode-altitude-script-language",
     "displayName": "Altitude ASL Language Support",
     "description": "Syntax highlighting, IntelliSense, diagnostics, navigation, formatting, and compiler validation for Altitude Script Language (Altitude 8.7).",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "publisher": "jjaroztegi",
     "main": "./dist/extension.js",
     "galleryBanner": {

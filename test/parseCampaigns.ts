@@ -4,8 +4,32 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { analyzeDocument } from "../src/aslParser";
+import { AslAnalysis, analyzeDocument, augmentAnalysisWithModules } from "../src/aslParser";
+import { resolveModuleGraph } from "../src/aslModules";
 import { createTextDocument } from "./vscodeStub";
+
+const moduleAnalysisCache = new Map<string, AslAnalysis | undefined>();
+
+function loadModuleAnalysis(fsPath: string): AslAnalysis | undefined {
+    const key = path.normalize(fsPath).toLowerCase();
+    if (moduleAnalysisCache.has(key)) {
+        return moduleAnalysisCache.get(key);
+    }
+
+    let analysis: AslAnalysis | undefined;
+    try {
+        const content = fs.readFileSync(fsPath, "utf8");
+        analysis = analyzeDocument(createTextDocument(fsPath, content) as never);
+        for (const symbol of analysis.symbols) {
+            symbol.sourceUri = `file:///${fsPath.replace(/\\/g, "/")}`;
+        }
+    } catch {
+        analysis = undefined;
+    }
+
+    moduleAnalysisCache.set(key, analysis);
+    return analysis;
+}
 
 const EXTENSIONS = new Set([".ags", ".irs", ".gem", ".agm", ".irm"]);
 
@@ -58,7 +82,11 @@ function main(): void {
         const document = createTextDocument(file, content);
         try {
             // The analyzer accepts the stub document (same runtime shape).
-            const analysis = analyzeDocument(document as never);
+            let analysis = analyzeDocument(document as never);
+            if (analysis.moduleImports.length > 0) {
+                const graph = resolveModuleGraph(file, analysis, loadModuleAnalysis);
+                analysis = augmentAnalysisWithModules(analysis, graph.direct, graph.all, graph.fullyLoaded);
+            }
             totalIssues += analysis.issues.length;
             if (analysis.issues.length > 0) {
                 console.log(`${path.basename(path.dirname(file))}/${path.basename(file)}: ${analysis.issues.length} issue(s)`);
