@@ -1,0 +1,97 @@
+{
+    "Agent script": {
+        "prefix": "script",
+        "description": "Skeleton of an agent script (.ags) in the layout Script Developer writes",
+        "body": [
+            "version \"8.7\"",
+            "file version 1, 0",
+            "size ${1:945}, ${2:670}",
+            "",
+            "modules {",
+            "}",
+            "",
+            "dependencies {",
+            "}",
+            "",
+            "constants {}",
+            "types {}",
+            "variables {",
+            "\t$0",
+            "}",
+            "cursors {}",
+            "",
+            "on start {",
+            "\tgoto node '${3:MAIN}'",
+            "}",
+            "",
+            "on end {}",
+            "",
+            "node \"${3:MAIN}\" {",
+            "\tid 1",
+            "\tvariables {}",
+            "\ton first enter {}",
+            "\ton enter {}",
+            "\ton exit {}",
+            "}"
+        ]
+    },
+    "Popup with answer": {
+        "prefix": "popup",
+        "description": "Agent Portal popup: open an overlay and handle the answer in its on close event",
+        "body": [
+            "open window '${1:POPUP_NODE}' size ${2:390}, ${3:200} caption '${4: }' overlay on close trigger event ${5:OnPopupClosed} arguments ${6:'Question?'}, ${7:vAnswer}"
+        ]
+    },
+    "Popup answer handler": {
+        "prefix": "popup-handler",
+        "description": "Node event that receives a popup answer (the popup is asynchronous: never read the answer right after open window)",
+        "body": ["on event ${1:OnPopupClosed}()", "{", "\tif ${2:vAnswer} = ${3:1} then {", "\t\t$0", "\t}", "}"]
+    },
+    "Deferred popup on enter": {
+        "prefix": "popup-on-enter",
+        "description": "Open a popup when a node is entered without racing the node rendering",
+        "body": [
+            "on enter {",
+            "\tset timer to 1 trigger event ${1:OpenPopup}",
+            "}",
+            "",
+            "on event ${1:OpenPopup}()",
+            "{",
+            "\topen window '${2:POPUP_NODE}' size ${3:390}, ${4:200} caption '${5: }' overlay on close trigger event ${6:OnPopupClosed}",
+            "}"
+        ]
+    },
+    "Cursor loop": {
+        "prefix": "cursor-loop",
+        "description": "Open a cursor and fetch every row",
+        "body": [
+            "open cursor ${1:cursorName}",
+            "fetch cursor ${1:cursorName} into ${2:variable vRow}",
+            "while not @error_info.noRowsReturned do {",
+            "\t$0",
+            "\tfetch cursor ${1:cursorName} into ${2:variable vRow}",
+            "}",
+            "close cursor ${1:cursorName}"
+        ]
+    },
+    "SQL select with error check": {
+        "prefix": "sql-select",
+        "description": "Single-row SQL query with error handling",
+        "body": [
+            "clear error",
+            "sql select '${1:SELECT column FROM table WHERE id = $(vId)}' into",
+            "\tvariable ${2:vResult}",
+            "if @error_info.sqlError <> 0 then {",
+            "\tmessage 'SQL error $(@error_info.sqlError)'",
+            "}",
+            "else {",
+            "\t$0",
+            "}"
+        ]
+    },
+    "Append to email body": {
+        "prefix": "email-append",
+        "description": "Append HTML to the email body (a second 'set html body field' replaces the first)",
+        "body": ["email editor '${1:emailEditor}' insert html into body '${2:<p>text</p>}'"]
+    }
+}

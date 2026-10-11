@@ -1,31 +1,16 @@
 {
     "name": "vscode-altitude-script-language",
     "displayName": "Altitude ASL Language Support",
-    "description": "Syntax highlighting, IntelliSense, diagnostics, navigation, formatting, and compiler validation for Altitude Script Language (Altitude 8.7).",
-    "version": "1.1.0",
+    "description": "Language server for Altitude Scripting Language (ASL) 8.7: highlighting, diagnostics and lint rules, IntelliSense, cross-file navigation for .ags/.agm/.gem/.irs/.irm, formatting and Script Developer compiler validation.",
+    "version": "2.0.0",
     "publisher": "jjaroztegi",
-    "main": "./dist/extension.js",
+    "license": "MIT",
+    "icon": "images/logo_128.png",
+    "main": "./dist/client/node.js",
+    "browser": "./dist/client/browser.js",
     "galleryBanner": {
         "color": "#1b1f23",
         "theme": "dark"
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run package",
-        "check-types": "tsc --noEmit",
-        "compile": "npm run check-types && node esbuild.js",
-        "watch": "node esbuild.js --watch",
-        "package": "npm run check-types && node esbuild.js --production",
-        "test": "esbuild test/parseCampaigns.ts --bundle --platform=node --outfile=dist-test/parseCampaigns.js --alias:vscode=./test/vscodeStub.ts && node dist-test/parseCampaigns.js",
-        "vsix": "vsce package",
-        "publish:ovsx": "npx ovsx publish",
-        "publish:vscode": "vsce publish"
-    },
-    "devDependencies": {
-        "@types/node": "^24.12.0",
-        "@types/vscode": "~1.100.0",
-        "@vscode/vsce": "^3.7.1",
-        "esbuild": "^0.28.1",
-        "typescript": "^5.9.3"
     },
     "engines": {
         "vscode": "^1.100.0"
@@ -33,125 +18,246 @@
     "categories": [
         "Programming Languages",
         "Linters",
-        "Formatters"
+        "Formatters",
+        "Snippets"
     ],
     "keywords": [
         "altitude",
         "asl",
+        "altitude scripting language",
         "ags",
+        "agm",
+        "gem",
         "irs",
         "script developer",
         "contact center",
-        "formatter",
-        "diagnostics",
-        "intellisense",
-        "syntax highlighting"
+        "enghouse"
     ],
-    "icon": "images/logo_128.png",
-    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/jjaroztegi/vscode-altitude-script-language.git"
     },
-    "homepage": "https://github.com/jjaroztegi/vscode-altitude-script-language",
+    "homepage": "https://github.com/jjaroztegi/vscode-altitude-script-language#readme",
     "bugs": {
         "url": "https://github.com/jjaroztegi/vscode-altitude-script-language/issues"
     },
-    "publishConfig": {
-        "access": "public"
+    "capabilities": {
+        "virtualWorkspaces": true,
+        "untrustedWorkspaces": {
+            "supported": "limited",
+            "description": "Compiler validation runs Script Developer's ec.exe and is disabled in untrusted workspaces. Everything else works.",
+            "restrictedConfigurations": [
+                "altitudeScriptLanguage.compiler.installRoot",
+                "altitudeScriptLanguage.compiler.enabled"
+            ]
+        }
     },
     "contributes": {
+        "languages": [
+            {
+                "id": "altitude-asl",
+                "aliases": [
+                    "Altitude ASL",
+                    "Altitude Script"
+                ],
+                "extensions": [
+                    ".ags",
+                    ".agm",
+                    ".gem",
+                    ".irs",
+                    ".irm"
+                ],
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "light": "./images/file-icon.svg",
+                    "dark": "./images/file-icon.svg"
+                }
+            }
+        ],
+        "grammars": [
+            {
+                "language": "altitude-asl",
+                "scopeName": "source.altitude-asl",
+                "path": "./syntaxes/asl.tmLanguage.json",
+                "embeddedLanguages": {
+                    "meta.embedded.sql.altitude-asl": "sql"
+                }
+            }
+        ],
+        "snippets": [
+            {
+                "language": "altitude-asl",
+                "path": "./snippets/asl.code-snippets"
+            }
+        ],
         "configurationDefaults": {
-            "[asl]": {
+            "[altitude-asl]": {
                 "files.encoding": "utf8bom",
                 "files.eol": "\r\n",
                 "editor.insertSpaces": false,
                 "editor.detectIndentation": false,
-                "editor.tabSize": 4
+                "editor.tabSize": 4,
+                "editor.defaultFormatter": "jjaroztegi.vscode-altitude-script-language"
             }
         },
         "commands": [
             {
                 "command": "altitudeScriptLanguage.validateWithCompiler",
-                "title": "Altitude Script: Validate Current File"
-            }
-        ],
-        "languages": [
+                "title": "Validate with Script Developer Compiler",
+                "category": "Altitude ASL",
+                "enablement": "isWindows && isWorkspaceTrusted"
+            },
             {
-                "id": "asl",
-                "aliases": [
-                    "Altitude Script",
-                    "asl"
-                ],
-                "extensions": [
-                    ".ags",
-                    ".irs",
-                    ".gem",
-                    ".agm",
-                    ".irm"
-                ],
-                "configuration": "./language-configuration.json"
-            }
-        ],
-        "grammars": [
+                "command": "altitudeScriptLanguage.fixEncoding",
+                "title": "Save File as UTF-8 with BOM and CRLF",
+                "category": "Altitude ASL"
+            },
             {
-                "language": "asl",
-                "scopeName": "source.altitude",
-                "path": "./syntaxes/asl.tmLanguage.json"
-            }
-        ],
-        "snippets": [
+                "command": "altitudeScriptLanguage.fixEncodingAll",
+                "title": "Convert All ASL Files to UTF-8 with BOM and CRLF",
+                "category": "Altitude ASL",
+                "enablement": "isWorkspaceTrusted"
+            },
             {
-                "language": "asl",
-                "path": "./snippets/asl.json"
+                "command": "altitudeScriptLanguage.restartServer",
+                "title": "Restart Language Server",
+                "category": "Altitude ASL"
+            },
+            {
+                "command": "altitudeScriptLanguage.disableRule",
+                "title": "Turn Off Rule",
+                "category": "Altitude ASL"
+            },
+            {
+                "command": "altitudeScriptLanguage.showOutput",
+                "title": "Show Output",
+                "category": "Altitude ASL"
             }
         ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "altitudeScriptLanguage.validateWithCompiler",
+                    "when": "editorLangId == altitude-asl"
+                },
+                {
+                    "command": "altitudeScriptLanguage.fixEncoding",
+                    "when": "editorLangId == altitude-asl"
+                },
+                {
+                    "command": "altitudeScriptLanguage.disableRule",
+                    "when": "false"
+                }
+            ],
+            "editor/title": [
+                {
+                    "command": "altitudeScriptLanguage.validateWithCompiler",
+                    "when": "editorLangId == altitude-asl && isWindows && resourceExtname =~ /\\.(ags|irs)$/i",
+                    "group": "navigation@90"
+                }
+            ]
+        },
         "configuration": {
-            "title": "Altitude Script Language",
+            "title": "Altitude ASL",
             "properties": {
-                "altitudeScriptLanguage.format.indentSize": {
-                    "type": "integer",
-                    "default": 4,
-                    "minimum": 1,
-                    "maximum": 8,
-                    "description": "Indent size used by the ASL document formatter when the file does not already establish a consistent indentation style."
-                },
-                "altitudeScriptLanguage.diagnostics.undefinedReferences": {
+                "altitudeScriptLanguage.webEdition": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Report unresolved explicit node, variable-target, and cursor references recognized by the ASL analyzer."
+                    "markdownDescription": "Report constructs that are dropped or unsupported in ASL Web Edition (Agent Portal), such as modal windows, function keys and `run application`. Turn off only for scripts that never run in the Agent Portal."
                 },
-                "altitudeScriptLanguage.diagnostics.controlProperties": {
+                "altitudeScriptLanguage.lint.rules": {
+                    "type": "object",
+                    "default": {},
+                    "markdownDescription": "Override the severity of individual rules, for example `{ \"unused-variable\": \"off\", \"popup-then-goto\": \"error\" }`. The rule id appears in each diagnostic. Valid values: `off`, `hint`, `info`, `warning`, `error`.",
+                    "additionalProperties": {
+                        "type": "string",
+                        "enum": [
+                            "off",
+                            "hint",
+                            "info",
+                            "warning",
+                            "error"
+                        ]
+                    }
+                },
+                "altitudeScriptLanguage.inlayHints.parameterNames": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Validate ASL control properties against the documented Altitude control schemas."
+                    "default": false,
+                    "description": "Show parameter name hints for subroutine, function and built-in calls."
                 },
                 "altitudeScriptLanguage.compiler.enabled": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Run Script Developer compiler (ec.exe) validation for .ags and .irs files when an Altitude Script Developer installation is found."
+                    "scope": "machine-overridable",
+                    "description": "Run Script Developer compiler (ec.exe) validation for .ags and .irs files when an Altitude Script Developer installation is found (Windows only)."
                 },
                 "altitudeScriptLanguage.compiler.runOnSave": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Run compiler validation after save when validation is enabled."
+                    "description": "Run compiler validation after saving a script."
                 },
                 "altitudeScriptLanguage.compiler.installRoot": {
                     "type": "string",
                     "default": "",
-                    "description": "Optional Altitude Script Developer install root (the folder containing bin\\ec.exe). Leave empty to auto-detect common install locations."
+                    "scope": "machine-overridable",
+                    "markdownDescription": "Altitude Script Developer install folder (the one containing `bin\\ec.exe`). Leave empty to auto-detect."
                 },
                 "altitudeScriptLanguage.compiler.timeoutMs": {
                     "type": "integer",
                     "default": 60000,
                     "minimum": 5000,
                     "maximum": 300000,
-                    "description": "Timeout in milliseconds for compiler validation runs."
+                    "description": "Timeout in milliseconds for one compiler run."
+                },
+                "altitudeScriptLanguage.trace.server": {
+                    "type": "string",
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
+                    "default": "off",
+                    "description": "Trace communication between VS Code and the ASL language server."
                 }
             }
         }
     },
+    "scripts": {
+        "vscode:prepublish": "npm run package",
+        "check-types": "tsc --noEmit",
+        "build": "node esbuild.mjs",
+        "watch": "node esbuild.mjs --watch",
+        "package": "npm run check-types && node esbuild.mjs --production",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:integration": "node esbuild.mjs --tests && vscode-test",
+        "corpus": "esbuild scripts/corpus-check.ts --bundle --platform=node --log-level=warning --outfile=dist-test/corpus.js && node dist-test/corpus.js",
+        "vsix": "vsce package",
+        "publish:vscode": "vsce publish",
+        "publish:ovsx": "ovsx publish"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^24.12.0",
+        "@types/vscode": "~1.100.0",
+        "@vscode/test-cli": "^0.0.15",
+        "@vscode/test-electron": "^3.1.0",
+        "@vscode/vsce": "^4.0.0",
+        "esbuild": "^0.28.2",
+        "typescript": "^5.9.3",
+        "vitest": "^5.0.3",
+        "vscode-oniguruma": "^2.0.1",
+        "vscode-textmate": "^9.3.2"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^10.1.2",
+        "vscode-languageserver": "^10.1.2",
+        "vscode-languageserver-textdocument": "^1.0.15",
+        "vscode-languageserver-types": "^3.18.4",
+        "vscode-uri": "^3.2.0"
+    },
     "allowScripts": {
-        "esbuild@0.28.1": true
+        "esbuild@0.28.2": true,
+        "@vscode/vsce-sign@2.1.0": true
     }
 }

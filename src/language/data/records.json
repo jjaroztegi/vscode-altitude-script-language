@@ -1,0 +1,1256 @@
+[
+ {
+  "name": "ContactCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the contacts system cursor.",
+  "url": "ref/expr/contact-cursor-row.html",
+  "fields": [
+   {
+    "name": "contactCode",
+    "type": "number",
+    "doc": "Identifier of the contact."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent assigned to the contact."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent."
+   },
+   {
+    "name": "handlingAgentName",
+    "type": "text",
+    "doc": "Name of the agent that handled the interaction."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Moment after which the contact can be made."
+   },
+   {
+    "name": "priority",
+    "type": "number",
+    "doc": "Priority of the contact."
+   },
+   {
+    "name": "outboundRule",
+    "type": "text",
+    "doc": "Outbound rule of the contact."
+   },
+   {
+    "name": "timeZone",
+    "type": "text",
+    "doc": "Time zone of the contact."
+   },
+   {
+    "name": "loadable",
+    "type": "boolean",
+    "doc": "True if the contact is not locked and the agent can load the contact."
+   },
+   {
+    "name": "interactionState",
+    "type": "InteractionState",
+    "doc": "Interaction state of the contact."
+   },
+   {
+    "name": "contactList",
+    "type": "text",
+    "doc": "Contact list of the contact."
+   },
+   {
+    "name": "forcePowerDial",
+    "type": "boolean",
+    "doc": "If true, the Altitude uCI Server always makes power dial calls to the contact to ensure that an agent is available to talk to the contact."
+   },
+   {
+    "name": "manualScheduleTimeLimit",
+    "type": "time",
+    "doc": "Latest time of day to call the contact after a manual reschedule."
+   },
+   {
+    "name": "manualScheduleMoment",
+    "type": "datetime",
+    "doc": "Moment after which the contact can be made, after a manual reschedule."
+   },
+   {
+    "name": "skillProfile",
+    "type": "text",
+    "doc": "Skill profile required by the contact."
+   },
+   {
+    "name": "ignoreDoNotCallList",
+    "type": "boolean",
+    "doc": "If true, the Altitude uCI Server does not check if the contact phone numbers belong to a DNCL before calling the contact."
+   },
+   {
+    "name": "reschedulePhone",
+    "type": "text",
+    "doc": "Contact phone number for manual scheduled calls."
+   },
+   {
+    "name": "reschedulePhoneScheduleRule",
+    "type": "text",
+    "doc": "Name of the schedule rule for the reschedule phone."
+   },
+   {
+    "name": "businessStatus",
+    "type": "ContactBusinessStatus"
+   },
+   {
+    "name": "directoryName",
+    "type": "text",
+    "doc": "Directory of the contact profile of the contact."
+   },
+   {
+    "name": "contactProfileRecord",
+    "type": "ContactProfileRecord",
+    "doc": "Contact profile record of the contact."
+   }
+  ]
+ },
+ {
+  "name": "ContactProfileCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the contactProfiles system cursor.",
+  "url": "ref/expr/contact-profile-cursor-row.html",
+  "fields": [
+   {
+    "name": "directoryName",
+    "type": "text",
+    "doc": "Directory of the contact profile."
+   },
+   {
+    "name": "contactProfileRecord",
+    "type": "ContactProfileRecord",
+    "doc": "Contact profile record of the contact."
+   }
+  ]
+ },
+ {
+  "name": "ContactProfileInteractionHistoryCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the contactProfileInteractionsHistory and contactProfileInteractionsWithOutcomesHistory system cursors.",
+  "url": "ref/expr/contact-profile-interaction-history-cursor-row.html",
+  "fields": [
+   {
+    "name": "interactionId",
+    "type": "number",
+    "doc": "Id of the interaction."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign"
+   },
+   {
+    "name": "serviceName",
+    "type": "text"
+   },
+   {
+    "name": "scriptSession",
+    "type": "number",
+    "doc": "Id of the script session."
+   },
+   {
+    "name": "mediaName",
+    "type": "text",
+    "doc": "Name of the media type."
+   },
+   {
+    "name": "mediaDisplayName",
+    "type": "text",
+    "doc": "User-friendly name of the media type."
+   },
+   {
+    "name": "mediaType",
+    "type": "MediaType",
+    "doc": "Type of the media type."
+   },
+   {
+    "name": "interactionOrigin",
+    "type": "InteractionOrigin",
+    "doc": "Kind of interaction."
+   },
+   {
+    "name": "interactionThreadMoment",
+    "type": "datetime",
+    "doc": "Moment of the interaction thread."
+   },
+   {
+    "name": "interactionThreadDuration",
+    "type": "number",
+    "doc": "Duration of the interaction thread, in seconds."
+   },
+   {
+    "name": "interactionThreadRecorded",
+    "type": "boolean",
+    "doc": "True if the interaction thread was recorded."
+   },
+   {
+    "name": "scriptSessionMoment",
+    "type": "datetime",
+    "doc": "Moment of the script session."
+   },
+   {
+    "name": "scriptSessionDuration",
+    "type": "number",
+    "doc": "Duration of the script session, in seconds."
+   },
+   {
+    "name": "scriptSessionRecorded",
+    "type": "boolean",
+    "doc": "True if the script session was recorded."
+   },
+   {
+    "name": "extension",
+    "type": "text",
+    "doc": "Agent extension, or null."
+   },
+   {
+    "name": "terminationState",
+    "type": "InteractionTerminationState",
+    "doc": "Termination state of the interaction."
+   },
+   {
+    "name": "businessStatus",
+    "type": "BusinessStatus",
+    "doc": "Business status of the interaction."
+   },
+   {
+    "name": "from",
+    "type": "text",
+    "doc": "Interaction origin."
+   },
+   {
+    "name": "to",
+    "type": "text",
+    "doc": "Interaction destination. The to recipients cannot exceed 4000 characters."
+   },
+   {
+    "name": "wrapUpDuration",
+    "type": "number",
+    "doc": "Duration of the wrap-up of the interaction."
+   },
+   {
+    "name": "businessSegment",
+    "type": "text",
+    "doc": "The business segment of the interaction."
+   },
+   {
+    "name": "contactList",
+    "type": "text",
+    "doc": "The contact list of the interaction."
+   },
+   {
+    "name": "skillProfile",
+    "type": "text",
+    "doc": "The required skill profile of the interaction."
+   },
+   {
+    "name": "outcomeId",
+    "type": "number",
+    "doc": "Id of the activity outcome. Only for the cursor contactProfileInteractionsWithOutcomesHistory."
+   },
+   {
+    "name": "trunkLine",
+    "type": "text",
+    "doc": "For telephony interactions, the name of the trunk line."
+   }
+  ]
+ },
+ {
+  "name": "ContactProfileQueuedEmailCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the contactProfileQueuedEmails system cursor.",
+  "url": "ref/expr/contact-profile-queued-email-cursor-row.html",
+  "fields": [
+   {
+    "name": "interactionId",
+    "type": "number",
+    "doc": "Identifier of the email interaction on the queue, used by the action pick up email interaction."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent that handles the interaction."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent that handles the interaction."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Date and time of the beginning of the interaction."
+   },
+   {
+    "name": "priority",
+    "type": "number",
+    "doc": "Email priority."
+   },
+   {
+    "name": "emailId",
+    "type": "number",
+    "doc": "Email identifier."
+   },
+   {
+    "name": "from",
+    "type": "text",
+    "doc": "Sender of the email."
+   },
+   {
+    "name": "to",
+    "type": "text",
+    "doc": "Email recipient."
+   },
+   {
+    "name": "subject",
+    "type": "text",
+    "doc": "Subject of the email."
+   },
+   {
+    "name": "state",
+    "type": "QueuedEmailState",
+    "doc": "Pending email state."
+   },
+   {
+    "name": "canPickUp",
+    "type": "boolean",
+    "doc": "True if the email is queued for manual pick-up."
+   },
+   {
+    "name": "mediaName",
+    "type": "text",
+    "doc": "Name of the media."
+   },
+   {
+    "name": "mediaDisplayName",
+    "type": "text",
+    "doc": "User-friendly name of the media type."
+   },
+   {
+    "name": "handlingAgentName",
+    "type": "text",
+    "doc": "If the email is currently being handled, name of the agent currently handling the email."
+   },
+   {
+    "name": "anonymous",
+    "type": "boolean",
+    "doc": "True if the email relates to an anonymous campaign."
+   }
+  ]
+ },
+ {
+  "name": "ContactProfileInProgressWorkflowProcessTasksCursorRow",
+  "doc": "Predefined type returned by the fetch operation over thecontactProfileInProgressWorkflowProcessTasks system cursor.",
+  "url": "ref/expr/contact-profile-in-progress-workflow-process-tasks-cursor-row.html",
+  "fields": [
+   {
+    "name": "taskId",
+    "type": "number",
+    "doc": "Identifier of the workflow task on the queue, used by the action pick up workflow task."
+   },
+   {
+    "name": "processDefinitionName",
+    "type": "text",
+    "doc": "Name of the workflow definition of the workflow task."
+   },
+   {
+    "name": "processUniqueId",
+    "type": "number",
+    "doc": "Identifier of the workflow process of the workflow task."
+   },
+   {
+    "name": "taskName",
+    "type": "text",
+    "doc": "Name of the workflow task."
+   },
+   {
+    "name": "taskType",
+    "type": "WorkflowTaskType",
+    "doc": "Type of the workflow task."
+   },
+   {
+    "name": "interactionState",
+    "type": "InteractionState",
+    "doc": "State of the workflow task."
+   },
+   {
+    "name": "priorityClass",
+    "type": "WorkflowPriorityClass",
+    "doc": "Priority class of the workflow process."
+   },
+   {
+    "name": "processState",
+    "type": "WorkflowProcessState",
+    "doc": "State of the workflow process."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent that handled or will handle the workflow task."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent that handled or will handle the workflow task."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign of the workflow task."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Moment of the workflow task."
+   },
+   {
+    "name": "priority",
+    "type": "number",
+    "doc": "Priority of the workflow task."
+   },
+   {
+    "name": "canPickUp",
+    "type": "boolean",
+    "doc": "True if the workflow task is queued for manual pick-up."
+   },
+   {
+    "name": "skillProfile",
+    "type": "text"
+   }
+  ]
+ },
+ {
+  "name": "InteractionThreadHistoryCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the contactInteractionThreadsHistory and contactProfileInteractionThreadsHistory system cursors.",
+  "url": "ref/expr/interaction-thread-history-cursor-row.html",
+  "fields": [
+   {
+    "name": "interactionId",
+    "type": "number",
+    "doc": "Id of the interaction."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "serviceName",
+    "type": "text",
+    "doc": "Name of the service."
+   },
+   {
+    "name": "scriptSession",
+    "type": "number",
+    "doc": "Id of the script session."
+   },
+   {
+    "name": "addressType",
+    "type": "AddressType",
+    "doc": "Type of address to reach the customer."
+   },
+   {
+    "name": "mediaName",
+    "type": "text",
+    "doc": "Name of the media type."
+   },
+   {
+    "name": "mediaDisplayName",
+    "type": "text",
+    "doc": "User-friendly name of the media type."
+   },
+   {
+    "name": "mediaType",
+    "type": "MediaType",
+    "doc": "Type of the media type."
+   },
+   {
+    "name": "interactionOrigin",
+    "type": "InteractionOrigin",
+    "doc": "Type of interaction."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Moment of the interaction thread."
+   },
+   {
+    "name": "duration",
+    "type": "number",
+    "doc": "Duration of the interaction thread in seconds."
+   },
+   {
+    "name": "recorded",
+    "type": "boolean",
+    "doc": "True if the interaction thread was recorded."
+   },
+   {
+    "name": "extension",
+    "type": "text",
+    "doc": "Agent extension, or null."
+   },
+   {
+    "name": "terminationState",
+    "type": "InteractionTerminationState",
+    "doc": "Termination state of the interaction."
+   },
+   {
+    "name": "emailId",
+    "type": "number",
+    "doc": "Identifier of the email interaction."
+   },
+   {
+    "name": "from",
+    "type": "text",
+    "doc": "Interaction origin."
+   },
+   {
+    "name": "to",
+    "type": "text",
+    "doc": "Interaction destination. The to recipients cannot exceed 4000 characters."
+   },
+   {
+    "name": "subject",
+    "type": "text",
+    "doc": "Subject of the email interaction."
+   },
+   {
+    "name": "taskName",
+    "type": "text",
+    "doc": "Name of the workflow task."
+   },
+   {
+    "name": "taskType",
+    "type": "WorkflowTaskType",
+    "doc": "Type of the workflow task."
+   },
+   {
+    "name": "processDefinitionName",
+    "type": "text",
+    "doc": "Name of the workflow definition."
+   },
+   {
+    "name": "processUniqueId",
+    "type": "text",
+    "doc": "Unique identifier of the workflow process of the current interaction."
+   },
+   {
+    "name": "wrapUpDuration",
+    "type": "number",
+    "doc": "Duration of the wrap-up of the interaction."
+   },
+   {
+    "name": "businessSegment",
+    "type": "text",
+    "doc": "The business segment of the interaction."
+   },
+   {
+    "name": "contactList",
+    "type": "text",
+    "doc": "The contact list of the interaction."
+   },
+   {
+    "name": "skillProfile",
+    "type": "text",
+    "doc": "The required skill profile of the interaction."
+   }
+  ]
+ },
+ {
+  "name": "QueuedEmailCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the queuedEmails system cursor.",
+  "url": "ref/expr/queued-email-cursor-row.html",
+  "fields": [
+   {
+    "name": "interactionId",
+    "type": "number",
+    "doc": "Identifier of the email interaction in the queue, used in the action pick up email interaction."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Moment of the email."
+   },
+   {
+    "name": "priority",
+    "type": "number",
+    "doc": "Relative priority of the email."
+   },
+   {
+    "name": "absolutePriority",
+    "type": "number",
+    "doc": "Absolute priority of the email."
+   },
+   {
+    "name": "emailId",
+    "type": "number",
+    "doc": "Email identifier."
+   },
+   {
+    "name": "from",
+    "type": "text",
+    "doc": "Sender of the email."
+   },
+   {
+    "name": "to",
+    "type": "text",
+    "doc": "Email recipient."
+   },
+   {
+    "name": "subject",
+    "type": "text",
+    "doc": "Subject of the email."
+   },
+   {
+    "name": "state",
+    "type": "QueuedEmailState",
+    "doc": "State of the email interaction in the queue."
+   },
+   {
+    "name": "canPickUp",
+    "type": "boolean",
+    "doc": "True if the email was queued for manual pick-up."
+   },
+   {
+    "name": "mediaName",
+    "type": "text",
+    "doc": "Name of the media type of the email interaction."
+   },
+   {
+    "name": "mediaDisplayName",
+    "type": "text",
+    "doc": "User-friendly name of the media type."
+   },
+   {
+    "name": "handlingAgentName",
+    "type": "text",
+    "doc": "If the email is currently being handled, name of the agent currently handling the email."
+   },
+   {
+    "name": "directoryName",
+    "type": "text",
+    "doc": "Directory of the contact profile of the contact."
+   },
+   {
+    "name": "contactProfileRecord",
+    "type": "ContactProfileRecord",
+    "doc": "Contact profile record of the contact."
+   },
+   {
+    "name": "anonymous",
+    "type": "boolean",
+    "doc": "True if the email relates to an anonymous campaign."
+   }
+  ]
+ },
+ {
+  "name": "QueuedAgentPickUpTaskCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the queuedAgentPickUpTasks system cursor.",
+  "url": "ref/expr/queued-agent-pick-up-task-cursor-row.html",
+  "fields": [
+   {
+    "name": "taskId",
+    "type": "number",
+    "doc": "Identifier of the workflow task on the queue, used by the action pick up workflow task."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Moment of the workflow task."
+   },
+   {
+    "name": "priority",
+    "type": "number",
+    "doc": "Relative priority of the workflow task."
+   },
+   {
+    "name": "absolutePriority",
+    "type": "number",
+    "doc": "Absolute priority of the workflow task."
+   },
+   {
+    "name": "processDefinitionName",
+    "type": "text",
+    "doc": "Name of the workflow definition of the workflow task."
+   },
+   {
+    "name": "processUniqueId",
+    "type": "number",
+    "doc": "Identifier of the workflow process of the workflow task."
+   },
+   {
+    "name": "taskName",
+    "type": "text",
+    "doc": "Name of the workflow task."
+   },
+   {
+    "name": "taskType",
+    "type": "WorkflowTaskType",
+    "doc": "Type of the workflow task."
+   },
+   {
+    "name": "priorityClass",
+    "type": "WorkflowPriorityClass",
+    "doc": "Priority class of the workflow process."
+   },
+   {
+    "name": "canPickUp",
+    "type": "boolean",
+    "doc": "True if the workflow task is queued for manual pick-up."
+   },
+   {
+    "name": "directoryName",
+    "type": "text",
+    "doc": "Directory of the contact profile of the contact."
+   },
+   {
+    "name": "contactProfileRecord",
+    "type": "ContactProfileRecord",
+    "doc": "Contact profile record of the contact."
+   },
+   {
+    "name": "skillProfile",
+    "type": "text"
+   },
+   {
+    "name": "anonymous",
+    "type": "boolean",
+    "doc": "True if the workflow task relates to an anonymous campaign."
+   }
+  ]
+ },
+ {
+  "name": "ContactProfileScheduledContactCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the contactProfileScheduledContacts system cursor.",
+  "url": "ref/expr/contact-profile-scheduled-contact-cursor-row.html",
+  "fields": [
+   {
+    "name": "contactCode",
+    "type": "number",
+    "doc": "Identifier of the contact."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Moment after which the contact can be made."
+   },
+   {
+    "name": "priority",
+    "type": "number",
+    "doc": "Relative priority of the contact."
+   },
+   {
+    "name": "absolutePriority",
+    "type": "number",
+    "doc": "Absolute priority of the contact."
+   },
+   {
+    "name": "state",
+    "type": "ScheduledContactState",
+    "doc": "State of the scheduled contact."
+   }
+  ]
+ },
+ {
+  "name": "SentEmailCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the sentEmails system cursor.",
+  "url": "ref/expr/sent-email-cursor-row.html",
+  "fields": [
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Date and time when the email was sent."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent."
+   },
+   {
+    "name": "emailId",
+    "type": "number",
+    "doc": "Email identifier."
+   },
+   {
+    "name": "from",
+    "type": "text",
+    "doc": "Sender of the email."
+   },
+   {
+    "name": "to",
+    "type": "text",
+    "doc": "Email recipient."
+   },
+   {
+    "name": "subject",
+    "type": "text",
+    "doc": "Subject of the email."
+   },
+   {
+    "name": "state",
+    "type": "SentEmailState",
+    "doc": "State of the email."
+   },
+   {
+    "name": "interactionOrigin",
+    "type": "InteractionOrigin",
+    "doc": "Kind of interaction."
+   },
+   {
+    "name": "directoryName",
+    "type": "text",
+    "doc": "Directory of the contact profile of the contact."
+   },
+   {
+    "name": "contactProfileRecord",
+    "type": "ContactProfileRecord",
+    "doc": "Contact profile record of the contact."
+   }
+  ]
+ },
+ {
+  "name": "PendingWorkCursorRow",
+  "doc": "Predefined type returned by the fetch operation over the pendingWork system cursor.",
+  "url": "ref/expr/pending-work-cursor-row.html",
+  "fields": [
+   {
+    "name": "id",
+    "type": "number",
+    "doc": "Identifier of the activity on the queue, used by the actions pick up email interaction and pick up workflow task."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Moment of the activity."
+   },
+   {
+    "name": "priority",
+    "type": "number",
+    "doc": "Relative priority of the activity."
+   },
+   {
+    "name": "absolutePriority",
+    "type": "number",
+    "doc": "Absolute priority of the activity."
+   },
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "agentName",
+    "type": "text",
+    "doc": "Name of the agent."
+   },
+   {
+    "name": "agentFullName",
+    "type": "text",
+    "doc": "Full name of the agent."
+   },
+   {
+    "name": "outboundRule",
+    "type": "text",
+    "doc": "Outbound rule of the activity."
+   },
+   {
+    "name": "timeZone",
+    "type": "text",
+    "doc": "Time zone of the activity."
+   },
+   {
+    "name": "directoryName",
+    "type": "text",
+    "doc": "Name of the directory of the contact profile of the activity."
+   },
+   {
+    "name": "contactProfileUniqueId",
+    "type": "text",
+    "doc": "Unique ID of the contact profile of the activity."
+   },
+   {
+    "name": "type",
+    "type": "PendingWorkType",
+    "doc": "Type of activity."
+   },
+   {
+    "name": "emailId",
+    "type": "number",
+    "doc": "Email identifier."
+   },
+   {
+    "name": "from",
+    "type": "text",
+    "doc": "Sender of the email."
+   },
+   {
+    "name": "to",
+    "type": "text",
+    "doc": "Email recipient."
+   },
+   {
+    "name": "subject",
+    "type": "text",
+    "doc": "Subject of the email."
+   },
+   {
+    "name": "mediaName",
+    "type": "text",
+    "doc": "Name of the media."
+   },
+   {
+    "name": "mediaDisplayName",
+    "type": "text",
+    "doc": "User-friendly name of the media type."
+   },
+   {
+    "name": "taskName",
+    "type": "text",
+    "doc": "Name of the workflow task."
+   },
+   {
+    "name": "taskType",
+    "type": "WorkflowTaskType",
+    "doc": "Type of the workflow task."
+   },
+   {
+    "name": "processDefinitionName",
+    "type": "text",
+    "doc": "Name of the workflow definition of the workflow task."
+   },
+   {
+    "name": "processUniqueId",
+    "type": "number",
+    "doc": "Identifier of the workflow process of the workflow task."
+   },
+   {
+    "name": "skillProfile",
+    "type": "text",
+    "doc": "Required skill profile to handle the activity."
+   },
+   {
+    "name": "anonymous",
+    "type": "boolean",
+    "doc": "True if the activity relates to an anonymous campaign."
+   }
+  ]
+ },
+ {
+  "name": "ContactProfileRecord",
+  "doc": "Predefined type representing personal information about a customer. For example, the name, job information, home and work addresses, and telephone numbers.",
+  "url": "ref/expr/script-contact-profile.html",
+  "fields": [
+   {
+    "name": "additionalPhones",
+    "type": "array[15] of text"
+   },
+   {
+    "name": "additionalPhonesScheduleRules",
+    "type": "array[15] of text"
+   },
+   {
+    "name": "assistant",
+    "type": "text(100)"
+   },
+   {
+    "name": "birthday",
+    "type": "date"
+   },
+   {
+    "name": "businessCity",
+    "type": "text(80)"
+   },
+   {
+    "name": "businessCountry",
+    "type": "text(50)"
+   },
+   {
+    "name": "businessFax",
+    "type": "text(255)"
+   },
+   {
+    "name": "businessPhone",
+    "type": "text(32)"
+   },
+   {
+    "name": "businessPhoneScheduleRule",
+    "type": "text(50)"
+   },
+   {
+    "name": "businessPostalCode",
+    "type": "text(80)"
+   },
+   {
+    "name": "businessStateProvince",
+    "type": "text(30)"
+   },
+   {
+    "name": "businessStreet",
+    "type": "text(200)"
+   },
+   {
+    "name": "children",
+    "type": "number(5,0)"
+   },
+   {
+    "name": "comments",
+    "type": "text(500)"
+   },
+   {
+    "name": "company",
+    "type": "text(50)"
+   },
+   {
+    "name": "department",
+    "type": "text(80)"
+   },
+   {
+    "name": "email1",
+    "type": "text(255)"
+   },
+   {
+    "name": "email2",
+    "type": "text(255)"
+   },
+   {
+    "name": "email3",
+    "type": "text(255)"
+   },
+   {
+    "name": "firstName",
+    "type": "text(100)"
+   },
+   {
+    "name": "gender",
+    "type": "Gender"
+   },
+   {
+    "name": "homeCity",
+    "type": "text(80)"
+   },
+   {
+    "name": "homeCountry",
+    "type": "text(50)"
+   },
+   {
+    "name": "homeFax",
+    "type": "text(255)"
+   },
+   {
+    "name": "homePhone",
+    "type": "text(32)"
+   },
+   {
+    "name": "homePhoneScheduleRule",
+    "type": "text(50)"
+   },
+   {
+    "name": "homePostalCode",
+    "type": "text(80)"
+   },
+   {
+    "name": "homeStateProvince",
+    "type": "text(30)"
+   },
+   {
+    "name": "homeStreet",
+    "type": "text(200)"
+   },
+   {
+    "name": "income",
+    "type": "number(30,2)"
+   },
+   {
+    "name": "industry",
+    "type": "text(50)"
+   },
+   {
+    "name": "instantMessaging1",
+    "type": "text(255)"
+   },
+   {
+    "name": "instantMessaging2",
+    "type": "text(255)"
+   },
+   {
+    "name": "instantMessaging3",
+    "type": "text(255)"
+   },
+   {
+    "name": "jobTitle",
+    "type": "text(40)"
+   },
+   {
+    "name": "lastName",
+    "type": "text(100)"
+   },
+   {
+    "name": "manager",
+    "type": "text(100)"
+   },
+   {
+    "name": "maritalStatus",
+    "type": "text(20)"
+   },
+   {
+    "name": "middleName",
+    "type": "text(100)"
+   },
+   {
+    "name": "mobilePhone",
+    "type": "text(32)"
+   },
+   {
+    "name": "mobilePhoneScheduleRule",
+    "type": "text(50)"
+   },
+   {
+    "name": "nickname",
+    "type": "text(20)"
+   },
+   {
+    "name": "office",
+    "type": "text(80)"
+   },
+   {
+    "name": "otherCity",
+    "type": "text(80)"
+   },
+   {
+    "name": "otherCountry",
+    "type": "text(50)"
+   },
+   {
+    "name": "otherPhone",
+    "type": "text(32)"
+   },
+   {
+    "name": "otherPhoneScheduleRule",
+    "type": "text(50)"
+   },
+   {
+    "name": "otherPostalCode",
+    "type": "text(80)"
+   },
+   {
+    "name": "otherStateProvince",
+    "type": "text(30)"
+   },
+   {
+    "name": "otherStreet",
+    "type": "text(200)"
+   },
+   {
+    "name": "preferredLanguage",
+    "type": "text(20)"
+   },
+   {
+    "name": "profession",
+    "type": "text(40)"
+   },
+   {
+    "name": "spousePartner",
+    "type": "text(100)"
+   },
+   {
+    "name": "suffix",
+    "type": "text(20)"
+   },
+   {
+    "name": "title",
+    "type": "text(20)"
+   },
+   {
+    "name": "uniqueId",
+    "type": "text(254)"
+   }
+  ]
+ }
+]

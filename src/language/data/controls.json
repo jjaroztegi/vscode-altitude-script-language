@@ -1,0 +1,1229 @@
+[
+ {
+  "name": "static text",
+  "syntax": "static text [STRING] {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [enhanced style]\n  [background [transparent|color COLOR-UAGENT]]\n  [label Text { [FONT-UAGENT] [[align center|align right]] }]\n}",
+  "doc": "Displays text in the node window. The script displays static text elements above static boxes but below all other graphical elements.",
+  "url": "ref/decl/elem-static-text.html",
+  "webNotes": "No element-specific Web Edition limitation documented. No tab order / disabled if clause (not interactive).",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background",
+    "syntax": "background [transparent|color COLOR-UAGENT]",
+    "doc": "'background transparent' sets the background as transparent; 'background color COLOR-UAGENT' sets the background color. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "label",
+    "syntax": "label Text { [FONT-UAGENT] [[align center|align right]] }",
+    "doc": "Sets the text of the element to Text. FONT-UAGENT: displays text in the specified font (default: script default font). align center|right relative to the element; default left. NOTE: the font lives INSIDE the label braces."
+   }
+  ],
+  "events": []
+ },
+ {
+  "name": "static box",
+  "syntax": "static box [STRING] {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [border [edge|raised|sunken|etched]]\n  [enhanced style]\n  [background color COLOR-UAGENT]\n  [label Text { [FONT-UAGENT] [[align center|align right]] }]\n  [image Text { IMAGE }]\n}\nIMAGE:\n  [transparent color RGBColor]\n  [[tile|keep aspect ratio|keep size]]\n  [at [left|right|top|bottom]]",
+  "doc": "Visually groups a set of related elements inside a box. The script displays static boxes below any other element of the node.",
+  "url": "ref/decl/elem-static-box.html",
+  "webNotes": "No element-specific Web Edition limitation documented.",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "border",
+    "syntax": "border [edge|raised|sunken|etched]",
+    "doc": "Specifies one type of border. Static boxes have no border by default."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background color",
+    "syntax": "background color COLOR-UAGENT",
+    "doc": "Sets the background color of the element. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "label",
+    "syntax": "label Text { [FONT-UAGENT] [[align center|align right]] }",
+    "doc": "Sets the title of the element to Text; font and alignment as in static text."
+   },
+   {
+    "name": "image",
+    "syntax": "image Text { IMAGE }",
+    "doc": "Sets the background image of the element (Text = image name declared in the script 'dependencies { image ... }'). By default the image stretches to the size of the box."
+   },
+   {
+    "name": "transparent color",
+    "syntax": "transparent color RGBColor",
+    "doc": "Displays the image making transparent the specified color (built-in function rgbcolor; 8.7 function name rgb_color). Perceptually similar colors may have different RGB values.",
+    "parent": "image"
+   },
+   {
+    "name": "tile",
+    "syntax": "tile",
+    "doc": "If the image is smaller than the element, repeats the image to fill it; if larger, crops it.",
+    "parent": "image"
+   },
+   {
+    "name": "keep aspect ratio",
+    "syntax": "keep aspect ratio",
+    "doc": "Scales the image proportionally to fill the element.",
+    "parent": "image"
+   },
+   {
+    "name": "keep size",
+    "syntax": "keep size",
+    "doc": "If the image is smaller than the element, centers it; otherwise crops to fit.",
+    "parent": "image"
+   },
+   {
+    "name": "at",
+    "syntax": "at [left|right|top|bottom]",
+    "doc": "Position of the image in relation to the title. By default the title overlaps the image. (This 'at' is a sub-clause of image { }, not the element position.)",
+    "parent": "image"
+   }
+  ],
+  "events": []
+ },
+ {
+  "name": "container",
+  "syntax": "container [STRING] {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [border [edge|raised|sunken|etched]]\n  [background color COLOR-UAGENT]\n  [initial block STRING]\n}",
+  "doc": "Groups a set of graphical blocks (area of the node that can be refreshed independently; blocks are declared with `block STRING {...}` at script level).",
+  "url": "ref/decl/elem-container.html",
+  "webNotes": "No limitation documented. NOTE: example in doc uses an unquoted block name 'initial block myBlock' while the actions example quotes it ('Block1').",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "border",
+    "syntax": "border [edge|raised|sunken|etched]",
+    "doc": "Specifies one type of border. Static boxes have no border by default."
+   },
+   {
+    "name": "background color",
+    "syntax": "background color COLOR-UAGENT",
+    "doc": "Sets the background color of the element. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "initial block",
+    "syntax": "initial block STRING",
+    "doc": "Specifies the initial block to display in the container. (Concept page: the block the container displays when the script enters the node.)"
+   }
+  ],
+  "events": []
+ },
+ {
+  "name": "push button",
+  "syntax": "push button [STRING] {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [default button]\n  [tab order INT]\n  [disabled if Boolean]\n  [flat]\n  [tooltip Text]\n  [enhanced style]\n  [background [transparent|color COLOR-UAGENT]]\n  [label Text { [FONT-UAGENT] [align left|align right] }]\n  [image Text { IMAGE }]\n  [on click [[commit|rollback]] { ACTION* }]\n}\nIMAGE:\n  [image pressed Text]\n  [image focused Text]\n  [image disabled Text]\n  [transparent color RGBColor]\n  [[tile|keep aspect ratio|keep size]]\n  [at [left|right|top|bottom]]",
+  "doc": "Displays a button that invokes an event when the agent clicks it. Push buttons cannot overlap other active elements such as inputs and check boxes.",
+  "url": "ref/decl/elem-push-button.html",
+  "webNotes": "No element-specific limitation. Script Developer auto-inserts a push button with 'goto node' in on click when two nodes are connected in the flow editor.",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "default button",
+    "syntax": "default button",
+    "doc": "Sets the button as the default button of the window; executed when the agent presses Enter in an input. Each node can only have one default button."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "flat",
+    "syntax": "flat",
+    "doc": "Flat appearance instead of the default tridimensional appearance. Typically used for toolbars."
+   },
+   {
+    "name": "tooltip",
+    "syntax": "tooltip Text",
+    "doc": "Text displayed briefly when the agent hovers over the button."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background",
+    "syntax": "background [transparent|color COLOR-UAGENT]",
+    "doc": "'background transparent' sets the background as transparent; 'background color COLOR-UAGENT' sets the background color. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "label",
+    "syntax": "label Text { [FONT-UAGENT] [align left|align right] }",
+    "doc": "Text the button displays, with FONT-UAGENT or the default script font. Text is centered by default; align left|right (doc says 'The default value is center')."
+   },
+   {
+    "name": "image",
+    "syntax": "image Text { IMAGE }",
+    "doc": "If the button is enabled, sets the button image (image name declared in script dependencies). By default the image stretches to fit the element."
+   },
+   {
+    "name": "image pressed",
+    "syntax": "image pressed Text",
+    "doc": "Image displayed when the agent presses the button.",
+    "parent": "image"
+   },
+   {
+    "name": "image focused",
+    "syntax": "image focused Text",
+    "doc": "Image displayed when the focus is on the button.",
+    "parent": "image"
+   },
+   {
+    "name": "image disabled",
+    "syntax": "image disabled Text",
+    "doc": "Image displayed when the button is disabled.",
+    "parent": "image"
+   },
+   {
+    "name": "transparent color",
+    "syntax": "transparent color RGBColor",
+    "doc": "Displays the image making transparent the specified color (built-in function rgbcolor; 8.7 function name rgb_color). Perceptually similar colors may have different RGB values.",
+    "parent": "image"
+   },
+   {
+    "name": "tile",
+    "syntax": "tile",
+    "doc": "If the image is smaller than the element, repeats the image to fill it; if larger, crops it.",
+    "parent": "image"
+   },
+   {
+    "name": "keep aspect ratio",
+    "syntax": "keep aspect ratio",
+    "doc": "Scales the image proportionally to fill the element.",
+    "parent": "image"
+   },
+   {
+    "name": "keep size",
+    "syntax": "keep size",
+    "doc": "If the image is smaller than the element, centers it; otherwise crops to fit.",
+    "parent": "image"
+   },
+   {
+    "name": "at",
+    "syntax": "at [left|right|top|bottom]",
+    "doc": "Position of the image in relation to the title. By default the title overlaps the image. (This 'at' is a sub-clause of image { }, not the element position.)",
+    "parent": "image"
+   }
+  ],
+  "events": [
+   {
+    "name": "on click",
+    "syntax": "on click [[commit|rollback]] { ACTION* }",
+    "doc": "Executes the actions when the agent clicks the button, optionally after committing or rolling back the values on edit graphical elements into the corresponding variables."
+   }
+  ]
+ },
+ {
+  "name": "text button",
+  "syntax": "text button [STRING] {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [default button]\n  [tab order INT]\n  [disabled if Boolean]\n  [tooltip Text]\n  [enhanced style]\n  [background [transparent|color COLOR-UAGENT]]\n  [label Text { [FONT-UAGENT] [[align center|align right]] }]\n  [on click [[commit|rollback]] { ACTION* }]\n}",
+  "doc": "Displays text that invokes an event when the agent clicks it. Compared to push buttons, text buttons cannot specify an image but can align the text. Cannot overlap other active elements.",
+  "url": "ref/decl/elem-text-button.html",
+  "webNotes": "No element-specific limitation documented. No 'flat' or 'image' clauses (push button only).",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "default button",
+    "syntax": "default button",
+    "doc": "Sets the button as the default button of the window. Each node can only have one default button."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "tooltip",
+    "syntax": "tooltip Text",
+    "doc": "Text displayed briefly when hovering."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background",
+    "syntax": "background [transparent|color COLOR-UAGENT]",
+    "doc": "'background transparent' sets the background as transparent; 'background color COLOR-UAGENT' sets the background color. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "label",
+    "syntax": "label Text { [FONT-UAGENT] [[align center|align right]] }",
+    "doc": "Sets the text of the element; 'By default, the text aligns to the left'."
+   }
+  ],
+  "events": [
+   {
+    "name": "on click",
+    "syntax": "on click [[commit|rollback]] { ACTION* }",
+    "doc": "Executes the actions when the agent clicks, optionally after committing or rolling back values."
+   }
+  ]
+ },
+ {
+  "name": "check box",
+  "syntax": "check box [STRING] for VAR {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [tab order INT]\n  [disabled if Boolean]\n  [enhanced style]\n  [background [transparent|color COLOR-UAGENT]]\n  [label Text { [FONT-UAGENT]\n                [position left]\n                [align right|align center] }]\n  [checked if Expression]\n  [unchecked if Expression]\n  [on click [commit] { ACTION* }]\n}",
+  "doc": "Edits the contents of the destination variable VAR. Two editable values (checked / unchecked); displays as gray if a third value is assigned. Cannot overlap other active elements.",
+  "url": "ref/decl/elem-check-box.html",
+  "webNotes": "No element-specific limitation documented.",
+  "properties": [
+   {
+    "name": "for",
+    "syntax": "for VAR",
+    "doc": "Identifier of the destination variable (part of the declaration header, before '{')."
+   },
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background",
+    "syntax": "background [transparent|color COLOR-UAGENT]",
+    "doc": "'background transparent' sets the background as transparent; 'background color COLOR-UAGENT' sets the background color. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "label",
+    "syntax": "label Text { [FONT-UAGENT] [position left] [align right|align center] }",
+    "doc": "Text the box displays; text is always aligned to the left. 'position left' places the label to the left of the box (default right). 'align right' centers or aligns the label to the right (default left; 'align center' appears in the synopsis)."
+   },
+   {
+    "name": "checked if",
+    "syntax": "checked if Expression",
+    "doc": "If the agent checks the box, VAR takes the value of Expression. If VAR is assigned the value of Expression, the box becomes checked."
+   },
+   {
+    "name": "unchecked if",
+    "syntax": "unchecked if Expression",
+    "doc": "If the agent unchecks the box, VAR takes the value of Expression. If VAR is assigned that value, the box becomes unchecked."
+   }
+  ],
+  "events": [
+   {
+    "name": "on click",
+    "syntax": "on click [commit] { ACTION* }",
+    "doc": "Executes the actions when the agent clicks the check box, optionally after committing values (no rollback option for check box)."
+   }
+  ]
+ },
+ {
+  "name": "radio button",
+  "syntax": "radio button [STRING] for VAR {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [tab order INT]\n  [disabled if Boolean]\n  [enhanced style]\n  [background [transparent|color COLOR-UAGENT]]\n  [label Text { [FONT-UAGENT]\n                [position left]\n                [align right|align center] }]\n  [checked if Expression]\n  [on click [commit] { ACTION* }]\n}",
+  "doc": "Edits a variable with a specific value. One radio button per possible value of a set bound to the same variable; each is checked if the variable has that value. Cannot overlap other active elements.",
+  "url": "ref/decl/elem-radio-button.html",
+  "webNotes": "No element-specific limitation documented.",
+  "properties": [
+   {
+    "name": "for",
+    "syntax": "for VAR",
+    "doc": "Identifier of the destination variable."
+   },
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background",
+    "syntax": "background [transparent|color COLOR-UAGENT]",
+    "doc": "'background transparent' sets the background as transparent; 'background color COLOR-UAGENT' sets the background color. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "label",
+    "syntax": "label Text { [FONT-UAGENT] [position left] [align right|align center] }",
+    "doc": "As check box."
+   },
+   {
+    "name": "checked if",
+    "syntax": "checked if Expression",
+    "doc": "If the agent checks the radio button, VAR takes the value of Expression; if VAR is assigned that value the radio button becomes selected. (No 'unchecked if' clause.)"
+   }
+  ],
+  "events": [
+   {
+    "name": "on click",
+    "syntax": "on click [commit] { ACTION* }",
+    "doc": "Executes the actions when the agent clicks the radio button, optionally after committing values."
+   }
+  ]
+ },
+ {
+  "name": "input",
+  "syntax": "input [STRING] for VAR {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [password]\n  [uppercase]\n  [multiline [wordwrap]]\n  [align center|align right]\n  [year completion [disabled|closest|current|past|future]]\n  [format STRING]\n  [tab order INT]\n  [disabled if Boolean]\n  [read only if Boolean]\n  [enhanced style]\n  [background color COLOR-UAGENT]\n  [FONT-UAGENT]\n  [on lose focus [commit] { ACTION* }]\n}",
+  "doc": "Edits the contents of the destination variable VAR and displays its contents. Inputs cannot overlap other active elements.",
+  "url": "ref/decl/elem-input.html",
+  "webNotes": "No element-specific limitation documented. NOTE: font is an element-level 'font {...}' clause here (not inside a label).",
+  "properties": [
+   {
+    "name": "for",
+    "syntax": "for VAR",
+    "doc": "Identifier of the variable that is the destination of the typed values."
+   },
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "password",
+    "syntax": "password",
+    "doc": "Hides the value by representing each character as a dot or asterisk."
+   },
+   {
+    "name": "uppercase",
+    "syntax": "uppercase",
+    "doc": "Converts typed text to upper case."
+   },
+   {
+    "name": "multiline",
+    "syntax": "multiline [wordwrap]",
+    "doc": "multiline: multiple lines, vertical and horizontal scroll bars. multiline wordwrap: multiple lines, vertical scroll bar, text wraps automatically."
+   },
+   {
+    "name": "wordwrap",
+    "syntax": "wordwrap",
+    "doc": "Only as 'multiline wordwrap'.",
+    "parent": "multiline"
+   },
+   {
+    "name": "align",
+    "syntax": "align center|align right",
+    "doc": "Centers or aligns the text to the right. Default: left."
+   },
+   {
+    "name": "year completion",
+    "syntax": "year completion [disabled|closest|current|past|future]",
+    "doc": "Overrides the script year completion clause. disabled: requires 4-digit years. closest: 2-digit years -> closest year past or future. current: year in the current century. past: closest past year. future: closest future year."
+   },
+   {
+    "name": "format",
+    "syntax": "format STRING",
+    "doc": "Overrides the script clauses number format, date format, time format, or datetime format, depending on the type of VAR. The format of the edited values must match STRING."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "read only if",
+    "syntax": "read only if Boolean",
+    "doc": "If the condition is true, the input is read-only."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background color",
+    "syntax": "background color COLOR-UAGENT",
+    "doc": "Sets the background color of the element. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "font",
+    "syntax": "font { [name STRING] [size INT] [bold] [italic] [underline] [strikeout] [color COLOR-UAGENT] }",
+    "doc": "FONT-UAGENT. Specifies the font of the element contents. Overrides the script default font ('default FONT-UAGENT' of the script)."
+   }
+  ],
+  "events": [
+   {
+    "name": "on lose focus",
+    "syntax": "on lose focus [commit] { ACTION* }",
+    "doc": "Executes the actions when the cursor focus moves from the input to another element (agent action or set focus). Optionally commit values."
+   }
+  ]
+ },
+ {
+  "name": "combo box",
+  "syntax": "combo box [STRING] for VAR {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [input field height INT]\n  [year completion [disabled|closest|current|past|future]]\n  [format STRING]\n  [items [Expression [label STRING]],...] [cursor ID\n    [with [values column INT]\n          [labels column INT]]]\n  [automatically fill values] [drop on demand]\n  [allow other values] [uppercase]\n  [tab order INT]\n  [disabled if Boolean] [sort]\n  [align center|align right] [enhanced style]\n  [background color COLOR-UAGENT]\n  [FONT-UAGENT]\n  [on list selection [commit] { ACTION* }]\n  [on lose focus [commit] { ACTION* }]\n}",
+  "doc": "Input field with an associated list of label/value pairs. The labels are displayed; selecting a label assigns its value to VAR. The list comes from explicit items, from a cursor (values column / labels column), or automatically from an enumeration-typed VAR.",
+  "url": "ref/decl/elem-combo-box.html",
+  "webNotes": "No element-specific limitation documented. The doc's 'values column' example text swaps values/labels wording; syntax is authoritative.",
+  "properties": [
+   {
+    "name": "for",
+    "syntax": "for VAR",
+    "doc": "Identifier of the destination variable."
+   },
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "input field height",
+    "syntax": "input field height INT",
+    "doc": "Height of the combo box input field."
+   },
+   {
+    "name": "year completion",
+    "syntax": "year completion [disabled|closest|current|past|future]",
+    "doc": "Overrides the script year completion clause. disabled: requires 4-digit years. closest: 2-digit years -> closest year past or future. current: year in the current century. past: closest past year. future: closest future year."
+   },
+   {
+    "name": "format",
+    "syntax": "format STRING",
+    "doc": "Overrides the script clauses number format, date format, time format, or datetime format, depending on the type of VAR. The format of the edited values must match STRING."
+   },
+   {
+    "name": "items",
+    "syntax": "items [Expression [label STRING]],...",
+    "doc": "Expression value is associated with label STRING; the value is assigned to VAR when STRING is selected. Default label = textual representation of the value. Disabled when 'automatically fill values' is checked."
+   },
+   {
+    "name": "label",
+    "syntax": "label STRING",
+    "doc": "Only inside 'items': label for an item expression.",
+    "parent": "items"
+   },
+   {
+    "name": "cursor",
+    "syntax": "cursor ID [with [values column INT] [labels column INT]]",
+    "doc": "Cursor providing the list of labels and values. Disabled when 'automatically fill values' is checked."
+   },
+   {
+    "name": "values column",
+    "syntax": "values column INT",
+    "doc": "Column of the cursor with the values assigned to VAR (default first column). Only after 'cursor ID with'.",
+    "parent": "cursor"
+   },
+   {
+    "name": "labels column",
+    "syntax": "labels column INT",
+    "doc": "Column of the cursor with the labels shown (default first column). Only after 'cursor ID with'.",
+    "parent": "cursor"
+   },
+   {
+    "name": "automatically fill values",
+    "syntax": "automatically fill values",
+    "doc": "Fills labels and values from the enumeration type of VAR. Available only when VAR is an enumeration."
+   },
+   {
+    "name": "drop on demand",
+    "syntax": "drop on demand",
+    "doc": "If true, lists all possible values only when the agent clicks the combo box; otherwise the list is permanently displayed."
+   },
+   {
+    "name": "allow other values",
+    "syntax": "allow other values",
+    "doc": "Allows the agent to type other values. Not allowed if VAR is an enumeration defined in the Altitude uCI Server."
+   },
+   {
+    "name": "uppercase",
+    "syntax": "uppercase",
+    "doc": "Converts the combo box values to uppercase."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "sort",
+    "syntax": "sort",
+    "doc": "Sorts the displayed list according to the Windows regional settings."
+   },
+   {
+    "name": "align",
+    "syntax": "align center|align right",
+    "doc": "Centers or aligns the text to the right. Default: left."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background color",
+    "syntax": "background color COLOR-UAGENT",
+    "doc": "Sets the background color of the element. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "font",
+    "syntax": "font { [name STRING] [size INT] [bold] [italic] [underline] [strikeout] [color COLOR-UAGENT] }",
+    "doc": "FONT-UAGENT. Specifies the font of the element contents. Overrides the script default font ('default FONT-UAGENT' of the script)."
+   }
+  ],
+  "events": [
+   {
+    "name": "on list selection",
+    "syntax": "on list selection [commit] { ACTION* }",
+    "doc": "Executes the actions when the agent selects one value from the list."
+   },
+   {
+    "name": "on lose focus",
+    "syntax": "on lose focus [commit] { ACTION* }",
+    "doc": "Executes the actions when the focus moves away (agent or set focus)."
+   }
+  ]
+ },
+ {
+  "name": "menu",
+  "syntax": "menu [STRING] {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [items MenuItemArray | items list { ITEM,... }]\n  [formattings { FORMATTING,... }]\n  [tab order INT]\n  [disabled if Boolean]\n  [enhanced style]\n  [background color COLOR-UAGENT]\n  [on expand (menuitem_tag: text, menuitem_label: text) [commit] { ACTION* }]\n  [on leaf selected (menuitem_tag: text, menuitem_label: text) [commit] { ACTION* }]\n}\nITEM:\n  item {\n    tag Text\n    label Text\n    items { ITEM* }\n  }\nFORMATTING:\n  level INT {\n    [FONT-UAGENT]\n    [background color COLOR-UAGENT]\n    [selection FONT-UAGENT]\n    [selection background color COLOR-UAGENT]\n  }\nMenuItem: record {\n  tag : text\n  label: text\n  items: array of MenuItem\n}",
+  "doc": "Displays a tree of items and sub-items. Each item has a label (displayed) and a tag (identifies the item in the on expand / on leaf selected handlers).",
+  "url": "ref/decl/elem-menu.html",
+  "webNotes": "No element-specific limitation documented. Dynamic example: ASL examples 'menu-graphical-element' (items menuItems with `add menuItemL1 to menuItems`).",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "items",
+    "syntax": "items MenuItemArray | items list { ITEM,... }",
+    "doc": "Either an expression of type array of MenuItem, or a literal item list."
+   },
+   {
+    "name": "items list",
+    "syntax": "items list { ITEM,... }",
+    "doc": "Sequence of menu items defining a tree of labels and tags."
+   },
+   {
+    "name": "item",
+    "syntax": "item { tag Text label Text items { ITEM* } }",
+    "doc": "An item to be displayed; nested 'items { }' are its sub-items (use 'items {}' for leaves).",
+    "parent": "items list"
+   },
+   {
+    "name": "tag",
+    "syntax": "tag Text",
+    "doc": "Tag of the menu item.",
+    "parent": "item"
+   },
+   {
+    "name": "label",
+    "syntax": "label Text",
+    "doc": "Label of the menu item (inside item).",
+    "parent": "item"
+   },
+   {
+    "name": "formattings",
+    "syntax": "formattings { FORMATTING,... }",
+    "doc": "Font and colors of the menu items depending on tree level."
+   },
+   {
+    "name": "level",
+    "syntax": "level INT { [FONT-UAGENT] [background color COLOR-UAGENT] [selection FONT-UAGENT] [selection background color COLOR-UAGENT] }",
+    "doc": "Tree level (first level = 1) that uses the formatting.",
+    "parent": "formattings"
+   },
+   {
+    "name": "selection font",
+    "syntax": "selection FONT-UAGENT",
+    "doc": "Font of items in the level when selected.",
+    "parent": "level"
+   },
+   {
+    "name": "selection background color",
+    "syntax": "selection background color COLOR-UAGENT",
+    "doc": "Background color of items in the level when selected.",
+    "parent": "level"
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background color",
+    "syntax": "background color COLOR-UAGENT",
+    "doc": "Sets the background color of the element. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   }
+  ],
+  "events": [
+   {
+    "name": "on expand",
+    "syntax": "on expand (menuitem_tag: text, menuitem_label: text) [commit] { ACTION* }",
+    "doc": "Executes when the agent selects an item that contains sub-items."
+   },
+   {
+    "name": "on leaf selected",
+    "syntax": "on leaf selected (menuitem_tag: text, menuitem_label: text) [commit] { ACTION* }",
+    "doc": "Executes when the agent selects an item without sub-items."
+   }
+  ]
+ },
+ {
+  "name": "table",
+  "syntax": "table [STRING] for ID {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [tab order INT]\n  [disabled if Boolean]\n  [enhanced style]\n  [background color COLOR-UAGENT]\n  [FONT-UAGENT]\n  [header background color COLOR-UAGENT]\n  [header FONT-UAGENT]\n  columns {COLUMN,...}\n}\nCOLUMN:\n  column [Text] {\n    size INT\n    [hidden]\n    [align center|align right]\n    [format STRING]\n    [sortable]\n    [tag Text]\n    [header align center|align right]\n  }",
+  "doc": "Displays a cursor as a table. Clicking or double-clicking a row sets the current position of the cursor and invokes an event. Tables cannot overlap other active elements. NOTE: the doc synopsis omits the event clauses but its clause list and example define 'on double click', 'on selection change' and 'on sort request'.",
+  "url": "ref/decl/elem-table.html",
+  "webNotes": "No element-specific limitation documented.",
+  "properties": [
+   {
+    "name": "for",
+    "syntax": "for ID",
+    "doc": "Identifier of the cursor represented by the table."
+   },
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background color",
+    "syntax": "background color COLOR-UAGENT",
+    "doc": "Sets the background color of the element. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "font",
+    "syntax": "font { ... }",
+    "doc": "FONT-UAGENT of the values in the table cells (default: script default font)."
+   },
+   {
+    "name": "header background color",
+    "syntax": "header background color COLOR-UAGENT",
+    "doc": "Background color of the table header (doc text: 'cells or header'). Default: Windows appearance scheme."
+   },
+   {
+    "name": "header font",
+    "syntax": "header FONT-UAGENT",
+    "doc": "Font of the table headers (i.e. `header font { ... }`)."
+   },
+   {
+    "name": "columns",
+    "syntax": "columns {COLUMN,...}",
+    "doc": "Column declarations (required in synopsis)."
+   },
+   {
+    "name": "column",
+    "syntax": "column [Text] { size INT [hidden] [align center|align right] [format STRING] [sortable] [tag Text] [header align center|align right] }",
+    "doc": "Column; Text = the header of the column.",
+    "parent": "columns"
+   },
+   {
+    "name": "size",
+    "syntax": "size INT",
+    "doc": "Column width (inside column; 'Column width in pixels' per property grid).",
+    "parent": "column"
+   },
+   {
+    "name": "hidden",
+    "syntax": "hidden",
+    "doc": "Hides the column (inside column; property grid says 'hidden' is a boolean expression).",
+    "parent": "column"
+   },
+   {
+    "name": "align",
+    "syntax": "align center|align right",
+    "doc": "Text alignment of the column. Default left.",
+    "parent": "column"
+   },
+   {
+    "name": "format",
+    "syntax": "format STRING",
+    "doc": "Formats the cell contents of the column; overrides script number/date/time/datetime format.",
+    "parent": "column"
+   },
+   {
+    "name": "sortable",
+    "syntax": "sortable",
+    "doc": "Allows the agent to sort the table by the column.",
+    "parent": "column"
+   },
+   {
+    "name": "tag",
+    "syntax": "tag Text",
+    "doc": "Value of the parameter column_tag of the event on sort request.",
+    "parent": "column"
+   },
+   {
+    "name": "header align",
+    "syntax": "header align center|align right",
+    "doc": "Text alignment of the column header. Default center.",
+    "parent": "column"
+   }
+  ],
+  "events": [
+   {
+    "name": "on double click",
+    "syntax": "on double click [[commit|rollback]] { ACTION* }",
+    "doc": "Executes when the agent double-clicks a row; the row becomes the current cursor position. Optionally commit or roll back values."
+   },
+   {
+    "name": "on selection change",
+    "syntax": "on selection change [[commit|rollback]] { ACTION* }",
+    "doc": "Executes when the agent selects a row; the row becomes the current cursor position. Optionally commit or roll back."
+   },
+   {
+    "name": "on sort request",
+    "syntax": "on sort request (column_index: number, column_tag: text, sort_direction: TableSortOrder) { ACTION* }",
+    "doc": "Called when the user requests a sort on a sortable column. The enumeration TableSortOrder is not defined anywhere in the 8.7 docs."
+   }
+  ]
+ },
+ {
+  "name": "web browser",
+  "syntax": "web browser [STRING] {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [enhanced style]\n  [background [transparent|color COLOR-UAGENT]]\n  [initial url Text]\n  [tab order INT]\n  [persistent]\n  [disabled if Boolean]\n  [on EVENT-WEB-BROWSER { ACTION* }]\n}",
+  "doc": "Displays a Web browser on a rectangle within the script window. Cannot overlap other active elements. EVENT-WEB-BROWSER is NOT defined in the ASL reference (only 'Executes the actions on specific Web browser events'); event names come from the Script Developer property grid.",
+  "url": "ref/decl/elem-web-browser.html",
+  "webNotes": "Per ASL Web Edition features page: web browsers cannot change toolbar position; 'The web browser graphical element for the Agent Portal does not include the toolbar or event processing' (=> the web browser events above do not fire / toolbar properties have no effect). Not supported actions: go back, go forward, stop, refresh, print, input font, background color. URLs that cannot be used inside frames (e.g. https://www.google.com) cannot be opened. current_url / current_html cannot return browser URL/HTML (cross-domain). Generic 'set background color' is 'Not available for Web browsers'; 'set font' not available for Web browsers. URL: https://docs.enghouseinteractive.com/altitude/8.7/en-US/Development/Altitude_Scripting_Language_Reference/concept/uagent-win-vs-web.html ; https://docs.enghouseinteractive.com/altitude/8.7/en-US/Development/Altitude_Scripting_Language_Reference/ref/action/elem.html",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background",
+    "syntax": "background [transparent|color COLOR-UAGENT]",
+    "doc": "'background transparent' sets the background as transparent; 'background color COLOR-UAGENT' sets the background color. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "initial url",
+    "syntax": "initial url Text",
+    "doc": "Starts the Web browser on the specified URL."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "persistent",
+    "syntax": "persistent",
+    "doc": "If persistent, when the script returns to the node the browser displays the last Web page; otherwise the page defined by initial URL."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   }
+  ],
+  "events": [
+   {
+    "name": "On before frame navigate",
+    "syntax": "on before frame navigate { ACTION* }  (exact textual form/parameters NOT documented)",
+    "doc": "Listed in the Script Developer property grid for the Web browser; the ASL reference gives no signature."
+   },
+   {
+    "name": "On error navigate",
+    "syntax": "on error navigate { ACTION* }  (exact textual form/parameters NOT documented)",
+    "doc": "Listed in the Script Developer property grid for the Web browser; the ASL reference gives no signature."
+   },
+   {
+    "name": "On frame complete",
+    "syntax": "on frame complete { ACTION* }  (exact textual form/parameters NOT documented)",
+    "doc": "Listed in the Script Developer property grid for the Web browser; the ASL reference gives no signature."
+   },
+   {
+    "name": "On new browser window",
+    "syntax": "on new browser window { ACTION* }  (exact textual form/parameters NOT documented)",
+    "doc": "Listed in the Script Developer property grid for the Web browser; the ASL reference gives no signature."
+   },
+   {
+    "name": "On page complete",
+    "syntax": "on page complete { ACTION* }  (exact textual form/parameters NOT documented)",
+    "doc": "Listed in the Script Developer property grid for the Web browser; the ASL reference gives no signature."
+   },
+   {
+    "name": "On toolbar before navigate",
+    "syntax": "on toolbar before navigate { ACTION* }  (exact textual form/parameters NOT documented)",
+    "doc": "Listed in the Script Developer property grid for the Web browser; the ASL reference gives no signature."
+   }
+  ]
+ },
+ {
+  "name": "email editor",
+  "syntax": "email editor [STRING] {\n  size INT,INT at INT,INT\n  [media name Text]\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [enhanced style]\n  [background [transparent|color COLOR-UAGENT]]\n  [initial email id Integer]\n  [TOOLBAR toolbar hidden if Boolean]\n  [BUTTON hidden if Boolean]\n  [tab order INT]\n  [disabled if Boolean]\n  [[HEADER | attachments] unavailable if Boolean]\n  [[HEADER | attachments | body] read only if Boolean]\n  [on EVENT-EMAIL-EDITOR { ACTION* }]*\n}\nTOOLBAR:\n  | email | knowledge base | formatting | table\nBUTTON:\n  | print | add image | add link | spell check\nHEADER:\n  | from | to | cc | bcc | subject",
+  "doc": "Displays an email editor in a rectangle of the script window. Displays inbound emails, outbound emails and composes new emails; fields To, From, Cc, Subject, body, attachments.",
+  "url": "ref/decl/elem-email-editor.html",
+  "webNotes": "ASL Web Edition features page: the interface of the email editor is the Agent Portal email page; the user cannot hide toolbars ('email editor graphical element for the Agent Portal does not support hiding the toolbars'). Email editor changes since 8.6.2000 (concept/email-editor-actions-events.html): check names and spell check actions DROPPED; many actions are asynchronous (insert into body, insert knowledge base document, open/remove/save attachment, reply/forward, set field) and only ONE asynchronous action may run per action block; sequences like load email + insert into body / set field + insert knowledge base document / insert knowledge base document + store email do not work; use `on email loaded` instead of on enter; get body selection returns the text the agent selected; set body selection start/end places the cursor, all selects everything; print prints visible fields (hide other fields to print body only); store email is synchronous. Actions executed in the web server with NETWORK_SERVICE: email editor add attachment file, save attachment. URLs: https://docs.enghouseinteractive.com/altitude/8.7/en-US/Development/Altitude_Scripting_Language_Reference/concept/uagent-win-vs-web.html ; https://docs.enghouseinteractive.com/altitude/8.7/en-US/Development/Altitude_Scripting_Language_Reference/concept/email-editor-actions-events.html",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "media name",
+    "syntax": "media name Text",
+    "doc": "Media name used when the email is sent. By default, the built-in email media is used."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "enhanced style",
+    "syntax": "enhanced style",
+    "doc": "If selected, the graphical element appears in the Agent Portal with an improved user interface."
+   },
+   {
+    "name": "background",
+    "syntax": "background [transparent|color COLOR-UAGENT]",
+    "doc": "'background transparent' sets the background as transparent; 'background color COLOR-UAGENT' sets the background color. If omitted, the element uses the color specified in the Windows appearance scheme of the agent workstation."
+   },
+   {
+    "name": "initial email id",
+    "syntax": "initial email id Integer",
+    "doc": "Loads the email with that numeric identifier and makes the fields read-only by default."
+   },
+   {
+    "name": "TOOLBAR toolbar hidden if",
+    "syntax": "TOOLBAR toolbar hidden if Boolean",
+    "doc": "Hides a toolbar if the condition is true. TOOLBAR = email | knowledge base | formatting | table. (Literal e.g. `email toolbar hidden if cond`; there is NO 'standard' toolbar.)"
+   },
+   {
+    "name": "BUTTON hidden if",
+    "syntax": "BUTTON hidden if Boolean",
+    "doc": "Hides a button of the editor if the condition is true. BUTTON = print | add image | add link | spell check."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "Disables the element if the condition is true. The agent sees the element (grayed) but cannot interact with it."
+   },
+   {
+    "name": "unavailable if",
+    "syntax": "[HEADER | attachments] unavailable if Boolean",
+    "doc": "Hides the email field or the attachments area if true. HEADER = from | to | cc | bcc | subject."
+   },
+   {
+    "name": "read only if",
+    "syntax": "[HEADER | attachments | body] read only if Boolean",
+    "doc": "Prevents editing of the field, the attachments, or the body if true. If omitted, fields are read-only when displaying an email and editable when composing."
+   },
+   {
+    "name": "inputs background color",
+    "syntax": "inputs background color COLOR-UAGENT",
+    "doc": "UNCERTAIN: appears only in the clause list ('Sets the background color of the email editor, the labels or the inputs'), not in the synopsis (which has 'background [transparent|color COLOR-UAGENT]'). Script Developer property grid has Labels and Inputs groups each with font, Color and Background color; the textual declaration form of those (labels font / inputs font / labels background color) is NOT documented. The action forms are 'set [labels|inputs] FONT' and 'set [labels|inputs] background color to RGBColor'."
+   }
+  ],
+  "events": [
+   {
+    "name": "on HEADER lose focus",
+    "syntax": "on [from|to|cc|bcc|subject|body] lose focus (ref input_text: text) { ACTION* }",
+    "doc": "Called when the focus leaves an email editor field. input_text can be modified by the handler."
+   },
+   {
+    "name": "on before attachment",
+    "syntax": "on before [add|remove|open|save] attachment (attach_info: AttachmentInfo, ref cancel_default_behavior: boolean) { ACTION* }",
+    "doc": "Called when the agent tries to manipulate a file attachment. AttachmentInfo: record { name : text, size : number, contentType : text }. Concrete names: before add attachment, before remove attachment, before open attachment, before save attachment."
+   },
+   {
+    "name": "on before open message attachment",
+    "syntax": "on before open message attachment (attach_info: AttachmentInfo, ref email_editor: text, ref wnd: number, ref cancel_default_behavior: boolean) { ACTION* }",
+    "doc": "Called when the agent tries to open an email message that is an attachment."
+   },
+   {
+    "name": "on toolbar BUTTON click",
+    "syntax": "on toolbar [print|send|reply|reply all|forward] click (ref cancel: boolean) { ACTION* }",
+    "doc": "Called when the agent clicks the toolbar button; ref cancel = true makes the editor ignore the click. (Property grid names: On toolbar forward/print/reply/reply all/send.)"
+   },
+   {
+    "name": "on email loaded",
+    "syntax": "on email loaded () { ACTION* }",
+    "doc": "Called when the editor has an empty email; if @email_info.emailId has a value; if load email id is called; when all fields are updated. Recommended place for get/set field, insert into body, reply/forward, print, store email, attachment actions."
+   },
+   {
+    "name": "on email sent",
+    "syntax": "on email sent (email_id: number) { ACTION* }",
+    "doc": "Called when the agent sends an email that received numeric identifier email_id. @script_info.windowId holds the id of the window containing the editor."
+   }
+  ]
+ },
+ {
+  "name": "chat control",
+  "syntax": "chat control [STRING] {\n  size INT,INT at INT,INT\n  [hidden if Boolean]\n  [anchor [left,top,right,bottom]]\n  [background [transparent|color COLOR-UAGENT]]\n  [tab order INT]\n  [disabled if Boolean]\n  [on EVENT-IM { ACTION* }]\n}",
+  "doc": "DEPRECATED ('must be replaced with the new media panel actions and events'). Displays a chat interface in a rectangle within the script window. Script Developer menu Script > Convert Chat Control to Media Panel migrates scripts. 'The legacy instant messaging control is not supported' (ALTITUDE-353).",
+  "url": "ref/decl/elem-chat-control.html",
+  "deprecated": true,
+  "webNotes": "Web Edition: interface is the Agent Portal instant messaging page; the user cannot change the colors of participants (https://docs.enghouseinteractive.com/altitude/8.7/en-US/Development/Altitude_Scripting_Language_Reference/concept/uagent-win-vs-web.html). 'instant messaging control save transcript' runs in the web server (NETWORK_SERVICE). Generic 'set font' not available for the chat control. Replaced by media panel.",
+  "properties": [
+   {
+    "name": "size",
+    "syntax": "size INT,INT at INT,INT",
+    "doc": "Width, height, and horizontal and vertical coordinates of the element. 'size' and 'at' form ONE clause (no standalone 'at' clause); the synopsis does not bracket it, so it is required. (0,0) is the top left corner of the node canvas (Script Developer property grid, Layout)."
+   },
+   {
+    "name": "hidden if",
+    "syntax": "hidden if Boolean",
+    "doc": "Hides the element if the condition is true."
+   },
+   {
+    "name": "anchor",
+    "syntax": "anchor [left,top,right,bottom]",
+    "doc": "Anchoring of the graphical element, related to the script window. Anchoring means that graphical elements can adapt to the script window size, and can be done using a combination of at least two of the options left, top, right, and bottom. For example, setting an anchor of left, top means that the element is fixed to the left side of the window."
+   },
+   {
+    "name": "background",
+    "syntax": "background [transparent|color COLOR-UAGENT]",
+    "doc": "transparent: 'Specifies that no border is drawn and that the background color is to be ignored.' color: background color of the control."
+   },
+   {
+    "name": "tab order",
+    "syntax": "tab order INT",
+    "doc": "Sets the tab order among graphical elements of the node to INT. When the agent presses the tab key, the input focus moves by default from left to right and from top to bottom. Elements with a tab order are visited in numeric order before elements without the clause."
+   },
+   {
+    "name": "disabled if",
+    "syntax": "disabled if Boolean",
+    "doc": "The agent sees the control, but it does not display new messages and the agent cannot write messages."
+   }
+  ],
+  "events": [
+   {
+    "name": "on before message send",
+    "syntax": "on before message send (ref msg: text, extdlg: boolean, ref cancel_default_behavior: boolean) { ACTION* }",
+    "doc": "Called when a message is sent on the chat control; msg editable; cancel_default_behavior true cancels sending."
+   },
+   {
+    "name": "on save transcript complete",
+    "syntax": "on save transcript complete (transcript_result: text) { ACTION* }",
+    "doc": "Called when the save-transcript action completes; transcript is JSON."
+   }
+  ]
+ },
+ {
+  "name": "group",
+  "syntax": "group {...}",
+  "doc": "Groups other graphical elements for convenience (the only documentation: ref/decl/elem-generic.html and the ASL example 'Group graphical elements'). NO clauses are documented: no size/at/hidden/anchor/label/background.",
+  "url": "ref/decl/elem-generic.html",
+  "webNotes": "Script Developer: Graphic > Grouping groups/ungroups elements 'for editing convenience'.",
+  "properties": [],
+  "events": []
+ }
+]

@@ -1,0 +1,687 @@
+[
+ {
+  "name": "@script_start_reason",
+  "type": "ScriptStartReason",
+  "doc": "Returns the reason why the session started. The value remains constant throughout the session.",
+  "url": "ref/expr/script-start-reason.html",
+  "fields": []
+ },
+ {
+  "name": "@agent_campaigns_info",
+  "type": "array of AgentCampaignInfo",
+  "doc": "Returns the list of assigned campaigns of the agent.",
+  "url": "ref/expr/agent-campaigns-info.html",
+  "fields": [
+   {
+    "name": "campaignName",
+    "type": "text",
+    "doc": "Name of the campaign."
+   },
+   {
+    "name": "open",
+    "type": "boolean",
+    "doc": "If true, the agent has the campaign open."
+   },
+   {
+    "name": "signOn",
+    "type": "boolean",
+    "doc": "If true, the agent is logged in an extension and can handle calls for the campaign."
+   },
+   {
+    "name": "ready",
+    "type": "boolean",
+    "doc": "If true, the agent is ready in the campaign."
+   }
+  ]
+ },
+ {
+  "name": "@audio_choose_option",
+  "type": "AudioChooseOption",
+  "doc": "Returns the current menu index, DTMF option, and default TTS string in the context of the clause for each option play of the IVR audio action choose. The values are used to parametrize the TTS string, audio file, or audio resource expressions played for each menu option.",
+  "url": "ref/expr/audio-choose-option.html",
+  "fields": [
+   {
+    "name": "index",
+    "type": "number",
+    "doc": "Index of the current menu option, starting at 1."
+   },
+   {
+    "name": "dtmf",
+    "type": "text",
+    "doc": "DTMF option of the current menu option."
+   },
+   {
+    "name": "speech",
+    "type": "text",
+    "doc": "Default TTS string of the current menu option."
+   }
+  ]
+ },
+ {
+  "name": "@email_info",
+  "type": "EmailInfo",
+  "doc": "Returns the state of the current email interaction.",
+  "url": "ref/expr/email-info.html",
+  "fields": [
+   {
+    "name": "state",
+    "type": "EmailState",
+    "doc": "Current state of the email interaction, as an enumeration of type EmailState."
+   },
+   {
+    "name": "mediaName",
+    "type": "text"
+   },
+   {
+    "name": "emailId",
+    "type": "number",
+    "doc": "Numeric identifier of the email."
+   },
+   {
+    "name": "from",
+    "type": "text",
+    "doc": "For inbound sessions. Contents of the From field of the email."
+   },
+   {
+    "name": "replyTo",
+    "type": "text",
+    "doc": "For inbound sessions. Contents of the Reply To field of the email."
+   },
+   {
+    "name": "subject",
+    "type": "text",
+    "doc": "For inbound sessions. Contents of the Subject field of the email."
+   },
+   {
+    "name": "acknowledgeGiven",
+    "type": "boolean",
+    "doc": "For inbound sessions. True if the email gateway or a routing script acknowledged the email."
+   },
+   {
+    "name": "defaultEmailTemplate",
+    "type": "number",
+    "doc": "Identifier of the default email template configured for the campaign. Used when the campaign has the attribute **Default email template** defined."
+   },
+   {
+    "name": "recovered",
+    "type": "boolean",
+    "doc": "True if the email was recovered from a previous unfinished session."
+   },
+   {
+    "name": "suspended",
+    "type": "boolean",
+    "doc": "True if the email is suspended."
+   },
+   {
+    "name": "sentTo",
+    "type": "text",
+    "doc": "For outbound email sessions, email address to receive the email. Typically used as the contents of the To field of the email editor."
+   },
+   {
+    "name": "fromAddressList",
+    "type": "array of text",
+    "doc": "Array with the address of the possible senders of campaign emails, as configured for the campaign."
+   }
+  ]
+ },
+ {
+  "name": "@error",
+  "type": "number",
+  "doc": "Returns the number of the last error.",
+  "url": "ref/expr/error.html",
+  "fields": []
+ },
+ {
+  "name": "@error_info",
+  "type": "ErrorInfo",
+  "doc": "Returns a specification of the last error that occurred in the script.",
+  "url": "ref/expr/error-info.html",
+  "fields": [
+   {
+    "name": "reporting",
+    "type": "boolean",
+    "doc": "For uAgent scripts, True if the script displays all errors to the agent in the Agent Portal errors area."
+   },
+   {
+    "name": "type",
+    "type": "ErrorType",
+    "doc": "Type of the last error."
+   },
+   {
+    "name": "code",
+    "type": "number",
+    "doc": "Code of the last error. The same as @error."
+   },
+   {
+    "name": "sqlError",
+    "type": "number",
+    "doc": "Contains 0 if the last SQL statement was successful. Otherwise, contains an error code that depends on the database engine. For this purpose, open and close cursor are SQL operations."
+   },
+   {
+    "name": "noRowsReturned",
+    "type": "boolean",
+    "doc": "True if the last SQL select or fetch cursor action did not return any row."
+   },
+   {
+    "name": "message",
+    "type": "text",
+    "doc": "The message of the last error."
+   }
+  ]
+ },
+ {
+  "name": "@instant_messaging_info",
+  "type": "InstantMessagingInfo",
+  "doc": "Returns the state of the current instant messaging interaction.",
+  "url": "ref/expr/instant-messaging-info.html",
+  "fields": [
+   {
+    "name": "state",
+    "type": "InstantMessagingState",
+    "doc": "Current state of the instant messaging interaction."
+   },
+   {
+    "name": "mediaName",
+    "type": "text"
+   },
+   {
+    "name": "dnis",
+    "type": "text",
+    "doc": "Number dialed by the client."
+   },
+   {
+    "name": "callKey",
+    "type": "text",
+    "doc": "Identifier of the current instant messaging interaction on the Altitude uCI Server database."
+   },
+   {
+    "name": "externalData",
+    "type": "bytestream",
+    "doc": "External data received with the instant messaging interaction."
+   },
+   {
+    "name": "enqueued",
+    "type": "boolean",
+    "doc": "True if the instant messaging interaction is enqueued."
+   },
+   {
+    "name": "recording",
+    "type": "boolean",
+    "doc": "True if the instant messaging interaction is being recorded."
+   },
+   {
+    "name": "primaryConnectionParties",
+    "type": "InteractionParties",
+    "doc": "List of participants of the instant messaging interaction."
+   },
+   {
+    "name": "secondaryConnectionParties",
+    "type": "InteractionParties",
+    "doc": "List of participants of the extended instant messaging interaction."
+   }
+  ]
+ },
+ {
+  "name": "@interaction_info",
+  "type": "InteractionInfo",
+  "doc": "Returns the types of media of the current activity.",
+  "url": "ref/expr/interaction-info.html",
+  "fields": [
+   {
+    "name": "withPhoneInteraction",
+    "type": "boolean",
+    "doc": "True if the script is handling a telephony interaction."
+   },
+   {
+    "name": "withEmailInteraction",
+    "type": "boolean",
+    "doc": "True if the script is handling an email interaction."
+   },
+   {
+    "name": "withInstantMessagingInteraction",
+    "type": "boolean",
+    "doc": "True if the script is handling an instant messaging interaction."
+   },
+   {
+    "name": "withWorkflowInteraction",
+    "type": "boolean",
+    "doc": "True if the script is handling a workflow task."
+   }
+  ]
+ },
+ {
+  "name": "@login_info",
+  "type": "LoginInfo",
+  "doc": "Returns login information on the Altitude uCI Server of the agent handling the current session.",
+  "url": "ref/expr/login-info.html",
+  "fields": [
+   {
+    "name": "name",
+    "type": "text",
+    "doc": "Short name of the agent. For example, John."
+   },
+   {
+    "name": "fullName",
+    "type": "text",
+    "doc": "Full name of the agent. For example, John Smith."
+   },
+   {
+    "name": "password",
+    "type": "text",
+    "doc": "Password of the agent, in plain text."
+   },
+   {
+    "name": "extension",
+    "type": "text",
+    "doc": "Number of the agent extension, or empty if the agent does not have an extension."
+   },
+   {
+    "name": "instanceAddress",
+    "type": "text",
+    "doc": "Hostname and port of the Altitude uCI Server. For example, ccserver:1500."
+   },
+   {
+    "name": "instanceName",
+    "type": "text",
+    "doc": "Name of the Altitude uCI Server. For example, ContactCenter."
+   },
+   {
+    "name": "site",
+    "type": "text",
+    "doc": "Site of the extension of the agent."
+   },
+   {
+    "name": "team",
+    "type": "text",
+    "doc": "Team of the agent."
+   },
+   {
+    "name": "target",
+    "type": "TargetType",
+    "doc": "Type of uAgent that runs the script."
+   },
+   {
+    "name": "switchAgentId",
+    "type": "text",
+    "doc": "Identifier of the agent in the telephony switch."
+   },
+   {
+    "name": "loginGroup",
+    "type": "text",
+    "doc": "Login group where the agent is logged."
+   }
+  ]
+ },
+ {
+  "name": "@phone_info",
+  "type": "PhoneInfo",
+  "doc": "Returns the state of the current telephony interaction.",
+  "url": "ref/expr/phone-info.html",
+  "fields": [
+   {
+    "name": "state",
+    "type": "PhoneState",
+    "doc": "Current state of the phone interaction."
+   },
+   {
+    "name": "mediaName",
+    "type": "text"
+   },
+   {
+    "name": "phone",
+    "type": "text",
+    "doc": "Phone number of the contact. For an outbound call, it is the number of the remote phone, as stored on the Altitude uCI Server database. For an inbound call, it is the number signaled by the ANI service (automatic number identification), if known."
+   },
+   {
+    "name": "dialedPhone",
+    "type": "text",
+    "doc": "For an outbound call, the number dialed by the telephony gateway. Empty for inbound calls."
+   },
+   {
+    "name": "acd",
+    "type": "text",
+    "doc": "Number of the ACD (automatic call distribution) queue that delivered the call to the agent."
+   },
+   {
+    "name": "dnis",
+    "type": "text",
+    "doc": "For an inbound call, the number dialed, if known by the switch, as signaled by the DNIS (dialed number identification service)."
+   },
+   {
+    "name": "callKey",
+    "type": "text",
+    "doc": "Identifier of the current phone call on the Altitude uCI Server database, used to identify recordings."
+   },
+   {
+    "name": "trunk",
+    "type": "text",
+    "doc": "Trunk used by the current phone call."
+   },
+   {
+    "name": "ucid",
+    "type": "text",
+    "doc": "The Avaya UCID used by the current phone call."
+   },
+   {
+    "name": "externalData",
+    "type": "bytestream",
+    "doc": "External data received with the phone interaction."
+   },
+   {
+    "name": "enqueued",
+    "type": "boolean",
+    "doc": "True if the call is enqueued."
+   },
+   {
+    "name": "recording",
+    "type": "boolean",
+    "doc": "True if the call is being recorded."
+   },
+   {
+    "name": "supervisedTransfer",
+    "type": "boolean",
+    "doc": "If true, an agent transferred the call. If the agent transfers the call to a contact, the attribute is set to false."
+   },
+   {
+    "name": "supervisionMode",
+    "type": "SupervisionMode",
+    "doc": "Current type of supervision."
+   },
+   {
+    "name": "primaryConnectionParties",
+    "type": "InteractionParties",
+    "doc": "List of participants on the phone call."
+   },
+   {
+    "name": "secondaryConnectionParties",
+    "type": "InteractionParties",
+    "doc": "List of participants on the extended phone call."
+   }
+  ]
+ },
+ {
+  "name": "@schedule_info",
+  "type": "ScheduleInfo",
+  "doc": "Returns the schedule information of the contact loaded or of the current workflow task.",
+  "url": "ref/expr/schedule-info.html",
+  "fields": [
+   {
+    "name": "agent",
+    "type": "text",
+    "doc": "Short name of the agent that will call the contact or will handle the workflow task."
+   },
+   {
+    "name": "moment",
+    "type": "datetime",
+    "doc": "Date and time after which to place the call to the contact or to start the workflow task."
+   },
+   {
+    "name": "ignoreDoNotCallList",
+    "type": "boolean",
+    "doc": "If true, the number used to reach the contact is not checked against the do not call lists."
+   },
+   {
+    "name": "priority",
+    "type": "number",
+    "doc": "Priority of the contact or of the workflow task, a number between -50 and 50. The default value is 0."
+   },
+   {
+    "name": "outboundRule",
+    "type": "text",
+    "doc": "Name of the outbound rule that defines when and how the Altitude uCI Server will call the contact."
+   },
+   {
+    "name": "reschedulePhone",
+    "type": "text",
+    "doc": "Reschedule phone number of the contact. Each contact can have a separate reschedule phone number."
+   },
+   {
+    "name": "reschedulePhoneScheduleRule",
+    "type": "text",
+    "doc": "Name of the schedule rule for the reschedule phone."
+   },
+   {
+    "name": "manualScheduleTimeLimit",
+    "type": "time",
+    "doc": "Latest time when the Altitude uCI Server can call the contact."
+   },
+   {
+    "name": "skillProfile",
+    "type": "text",
+    "doc": "Required skill profile to call the contact."
+   }
+  ]
+ },
+ {
+  "name": "@script_info",
+  "type": "ScriptInfo",
+  "doc": "Returns static and dynamic attributes of the running script.",
+  "url": "ref/expr/script-info.html",
+  "fields": [
+   {
+    "name": "majorVersion",
+    "type": "number",
+    "doc": "Major version number of the script."
+   },
+   {
+    "name": "minorVersion",
+    "type": "number",
+    "doc": "Minor version number of the script."
+   },
+   {
+    "name": "node",
+    "type": "text",
+    "doc": "Name of the current node."
+   },
+   {
+    "name": "windowId",
+    "type": "number(3,0)",
+    "doc": "Identifier of the window currently active."
+   },
+   {
+    "name": "eventHandlingCount",
+    "type": "number(3,0)",
+    "doc": "Number of times an event has been handled."
+   },
+   {
+    "name": "nameSpace",
+    "type": "text",
+    "doc": "Namespace of the current node."
+   },
+   {
+    "name": "fileName",
+    "type": "text",
+    "doc": "File name of the script."
+   },
+   {
+    "name": "filePath",
+    "type": "text",
+    "doc": "Path name of the script, excluding the file name."
+   },
+   {
+    "name": "scriptDocumentName",
+    "type": "text",
+    "doc": "Identifier of the script document on the Altitude uCI Server, or identifier of the workflow definition, if the script is running for a workflow task. If the script is running in offline mode the value is -1."
+   },
+   {
+    "name": "scriptDocumentRevision",
+    "type": "number",
+    "doc": "Identifier of the version of the script document on the Altitude uCI Server, or identifier of the version of the workflow definition, if the script is running for a workflow task. If the script is running in offline mode the value is -1."
+   }
+  ]
+ },
+ {
+  "name": "@script_session_info",
+  "type": "ScriptSessionInfo",
+  "doc": "Returns the state and some statistics of the current script session.",
+  "url": "ref/expr/script-session-info.html",
+  "fields": [
+   {
+    "name": "sessionId",
+    "type": "number",
+    "doc": "Identifier of the script session."
+   },
+   {
+    "name": "campaign",
+    "type": "text",
+    "doc": "Short name of the campaign associated with the script."
+   },
+   {
+    "name": "campaignId",
+    "type": "number",
+    "doc": "Identifier of the campaign associated with the script."
+   },
+   {
+    "name": "service",
+    "type": "text",
+    "doc": "Name of the service associated with the script."
+   },
+   {
+    "name": "serviceId",
+    "type": "number",
+    "doc": "Identifier of the service associated with the script."
+   },
+   {
+    "name": "contact",
+    "type": "number",
+    "doc": "Identifier of the current loaded contact or -1 if no contact is loaded."
+   },
+   {
+    "name": "contactPreviousState",
+    "type": "InteractionState",
+    "doc": "Previous state of the contact."
+   },
+   {
+    "name": "createdByWorkflow",
+    "type": "boolean",
+    "doc": "True if the session is a workflow."
+   },
+   {
+    "name": "timeZone",
+    "type": "text",
+    "doc": "Name of the time zone associated with the contact."
+   },
+   {
+    "name": "anonymous",
+    "type": "boolean",
+    "doc": "Defines whether the script session is handling sensitive data. Anonymous script sessions do not display contact profile information."
+   },
+   {
+    "name": "language",
+    "type": "text",
+    "doc": "Name of the current default language of the script."
+   },
+   {
+    "name": "directory",
+    "type": "text",
+    "doc": "Name of the current directory associated with the script. When a contact is loaded, it is set to the directory of the contact. The action set current directory changes this field, except if a contact is loaded."
+   },
+   {
+    "name": "contactProfileUniqueId",
+    "type": "text",
+    "doc": "Identifier of the current contact profile associated with the script. On inbound sessions the user can set this field, and later change it with the load contact action, in which case it cannot be changed anymore. On outbound activities, the field is set at the start of the session, when the contact is loaded, and it can not be changed. On workflow activities, the field is set if it is specified in the workflow process and it changes if the load workflow contact profile action is called."
+   },
+   {
+    "name": "transferredDirectory",
+    "type": "text",
+    "doc": "Name of the directory transferred from another script by a blind transfer. The value is constant during each session. There is no directory extension record loaded when the blind transfer occurs. The field can be used to set the session current contact profile directory. The load contact with contact profile or the load workflow contact profile actions use the contents of this field to load the contact."
+   },
+   {
+    "name": "transferredContactProfileUniqueId",
+    "type": "text",
+    "doc": "Identifier of the contact profile transferred from another script by a blind transfer. The value is constant during each session. There is no contact profile loaded when the blind transfer occurs. The field can be used to set the session current contact profile. The load contact with contact profile or the load workflow contact profile actions can be used to load the contact profile and the associated contact, or just use the get contact profile action to query its attributes."
+   },
+   {
+    "name": "availableDirectories",
+    "type": "array of text",
+    "doc": "Array with the names of the directories that can be used by the campaign. The first element of the array is the name of the default directory configured for the service. Actions that require a directory and that omit the directory clause use the default directory."
+   },
+   {
+    "name": "averageAgentDataTransactionDuration",
+    "type": "number",
+    "doc": "Average time, in seconds, of the data transactions handled by the agent running the script."
+   },
+   {
+    "name": "averageCampaignDataTransactionDuration",
+    "type": "number",
+    "doc": "Average time, in seconds, of the data transactions of the current campaign."
+   },
+   {
+    "name": "averageDeliverTime",
+    "type": "number",
+    "doc": "Average delivery time, in seconds, for the current campaign."
+   },
+   {
+    "name": "campaignRescheduleDialRule",
+    "type": "text",
+    "doc": "Name of the reschedule outbound rule of the current campaign."
+   },
+   {
+    "name": "contactReserved",
+    "type": "boolean",
+    "doc": "If true, the agent has the contact reserved."
+   },
+   {
+    "name": "contactReservedBy",
+    "type": "text",
+    "doc": "Name of the agent that has the loaded contact reserved."
+   },
+   {
+    "name": "outboundAddressType",
+    "type": "AddressType",
+    "doc": "Address type of the contact to reach on outbound interactions."
+   },
+   {
+    "name": "additionalPhones",
+    "type": "array[15] of AdditionalPhoneInfo"
+   },
+   {
+    "name": "notReadyReasons",
+    "type": "array of NotReadyReason"
+   }
+  ]
+ },
+ {
+  "name": "@workflow_info",
+  "type": "WorkflowInfo",
+  "doc": "Returns the state of the current workflow task.",
+  "url": "ref/expr/workflow-info.html",
+  "fields": [
+   {
+    "name": "state",
+    "type": "WorkflowState",
+    "doc": "Current state of the workflow task, as an enumeration of type WorkflowState."
+   },
+   {
+    "name": "taskName",
+    "type": "text",
+    "doc": "Name of the workflow task being handled. Useful if the same script runs for multiple workflow tasks."
+   },
+   {
+    "name": "processDefinitionName",
+    "type": "text",
+    "doc": "Name of the workflow definition."
+   },
+   {
+    "name": "processUniqueId",
+    "type": "text",
+    "doc": "Unique identifier of the workflow process of the current task."
+   },
+   {
+    "name": "recovered",
+    "type": "boolean",
+    "doc": "True if the workflow task was recovered from a previous unfinished session."
+   },
+   {
+    "name": "suspended",
+    "type": "boolean",
+    "doc": "True if the workflow task is suspended."
+   },
+   {
+    "name": "notes",
+    "type": "text",
+    "doc": "Notes of the workflow process of the current task."
+   }
+  ]
+ }
+]

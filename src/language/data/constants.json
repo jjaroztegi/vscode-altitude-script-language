@@ -1,0 +1,34 @@
+[
+ {
+  "name": "ERROR_NONE"
+ },
+ {
+  "name": "ERR_ALREADY_IN_STATE",
+  "value": 4065,
+  "doc": "Agent already in request state."
+ },
+ {
+  "name": "ERR_LAAAGENTNEEDED",
+  "value": 4082,
+  "doc": "Last agent availability, the agent cannot be set to not ready state, since there is still an interaction for him."
+ },
+ {
+  "name": "ERR_PBX_ERROR",
+  "value": 4029,
+  "doc": "Switch-specific error."
+ },
+ {
+  "name": "ERR_REQUEST_PENDING",
+  "value": 4064,
+  "doc": "There is already a pending request for this agent."
+ },
+ {
+  "name": "ERR_UNK_REASON",
+  "value": 4061,
+  "doc": "Unknown not ready reason."
+ },
+ {
+  "name": "SESSION_WINDOW_ID",
+  "doc": "Identifier of the main script window."
+ }
+]

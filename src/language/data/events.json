@@ -1,0 +1,624 @@
+[
+ {
+  "words": "event agent ready",
+  "params": "(cp: text)",
+  "doc": "Agent readiness event.",
+  "url": "ref/decl/event-agent.html"
+ },
+ {
+  "words": "event agent not ready",
+  "params": "(cp: text)",
+  "doc": "Agent readiness event.",
+  "url": "ref/decl/event-agent.html"
+ },
+ {
+  "words": "error agent set ready",
+  "params": "(cp: text, err: AgentReadyError)",
+  "doc": "Agent readiness error event.",
+  "url": "ref/decl/event-agent-error.html"
+ },
+ {
+  "words": "error agent set not ready",
+  "params": "(cp: text, err: AgentReadyError)",
+  "doc": "Agent readiness error event.",
+  "url": "ref/decl/event-agent-error.html"
+ },
+ {
+  "words": "event close window button click",
+  "params": "(ref cancel_default_behavior: boolean)",
+  "doc": "The agent clicked the close button of the script window.",
+  "url": "ref/decl/event-close-window.html"
+ },
+ {
+  "words": "event contact loaded",
+  "params": "(contact: number, contact_reserved:boolean, reserved_by:text)",
+  "doc": "Contact event.",
+  "url": "ref/decl/event-contact.html"
+ },
+ {
+  "words": "event contact unloaded",
+  "params": "",
+  "doc": "Contact event.",
+  "url": "ref/decl/event-contact.html"
+ },
+ {
+  "words": "progress contact changed",
+  "params": "(reserved_changed:boolean, reserved:boolean, agent_name:text, attributes_updated:text, attributes:array of Attribute)",
+  "doc": "Contact progress event.",
+  "url": "ref/decl/event-contact-progress.html"
+ },
+ {
+  "words": "event media panel chat before message send",
+  "params": "(ref msg: text, ref cancel_default_behavior: boolean)",
+  "doc": "Media panel chat event.",
+  "url": "ref/decl/event-media-panel.html"
+ },
+ {
+  "words": "event media panel chat loaded",
+  "params": "()",
+  "doc": "Media panel chat event.",
+  "url": "ref/decl/event-media-panel.html"
+ },
+ {
+  "words": "event media panel chat message received",
+  "params": "(msg: text)",
+  "doc": "Media panel chat event.",
+  "url": "ref/decl/event-media-panel.html"
+ },
+ {
+  "words": "event media panel chat message sent",
+  "params": "(msg: text)",
+  "doc": "Media panel chat event.",
+  "url": "ref/decl/event-media-panel.html"
+ },
+ {
+  "words": "event media panel chat save transcript complete",
+  "params": "(transcript_text: text)",
+  "doc": "Media panel chat event.",
+  "url": "ref/decl/event-media-panel.html"
+ },
+ {
+  "words": "event phone preview analysis",
+  "params": "",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone cleared",
+  "params": "",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone held",
+  "params": "",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone preview retry",
+  "params": "",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone connected",
+  "params": "",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone disconnected",
+  "params": "",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone setup",
+  "params": "",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone supervised transfer updated",
+  "params": "",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone dialing",
+  "params": "(num: text)",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone extended",
+  "params": "(user_name: text, num: text)",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone enqueued",
+  "params": "(camp: text)",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone dequeued",
+  "params": "(camp: text, deq_reason: DequeuedEventReason)",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone start recording",
+  "params": "(rec_start_reason: RecordingStartReason)",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "event phone stop recording",
+  "params": "(rec_termination_reason: RecordingTerminationReason)",
+  "doc": "Telephony state change.",
+  "url": "ref/decl/event-phone.html"
+ },
+ {
+  "words": "progress phone conferenced",
+  "params": "",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone remote conferenced",
+  "params": "(secondary_connection: boolean)",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone remote disconnected",
+  "params": "(old_party: InteractionParty, secondary_connection: boolean)",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone transferred",
+  "params": "(new_party: InteractionParty)",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone party changed",
+  "params": "(new_party: InteractionParty, old_party: InteractionParty, secondary_connection: boolean)",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone reservation ended",
+  "params": "",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone routed",
+  "params": "(camp: text, user_name: text)",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress generic service",
+  "params": "(service_id: number, service_data: bytestream)",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone supervision request accepted",
+  "params": "(supervisor: InteractionParty, supervisionMode: SupervisionMode)",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone supervision request canceled",
+  "params": "",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone supervision request pending",
+  "params": "",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "progress phone supervision request stopped",
+  "params": "",
+  "doc": "Telephony progress event (no state change).",
+  "url": "ref/decl/event-phone-progress.html"
+ },
+ {
+  "words": "error phone answer",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone clear",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone conference",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone hang up",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone hold",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone retrieve",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone divert",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone enqueue",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone dequeue",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone stop record",
+  "params": "(err: PhoneError)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone extend",
+  "params": "(err: PhoneError, user_name: text, num: text)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone transfer",
+  "params": "(err: PhoneError, user_name: text, num: text)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone blind transfer",
+  "params": "(err: PhoneError, user_name: text, num: text)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone dial",
+  "params": "( err: PhoneError, num: Text)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "error phone start record",
+  "params": "(rec_start_reason: RecordingTerminationReason, auto: boolean)",
+  "doc": "A telephony operation failed.",
+  "url": "ref/decl/event-phone-error.html"
+ },
+ {
+  "words": "event instant messaging cleared",
+  "params": "",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html"
+ },
+ {
+  "words": "event instant messaging connected",
+  "params": "",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html"
+ },
+ {
+  "words": "event instant messaging disconnected",
+  "params": "",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html"
+ },
+ {
+  "words": "event instant messaging starting",
+  "params": "(dest: text)",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html"
+ },
+ {
+  "words": "event instant messaging extended",
+  "params": "(ag: text)",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "event instant message sent",
+  "params": "(msg: text, part: text, extdlg: boolean)",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html"
+ },
+ {
+  "words": "event instant messaging enqueued",
+  "params": "(camp: text)",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html"
+ },
+ {
+  "words": "event instant messaging dequeued",
+  "params": "(camp: text, deq_reason: DequeuedEventReason)",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html"
+ },
+ {
+  "words": "event instant messaging start recording",
+  "params": "(rec_start_reason: RecordingStartReason)",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "event instant messaging stop recording",
+  "params": "(rec_document_id: number, rec_termination_reason: RecordingTerminationReason)",
+  "doc": "Instant messaging state change.",
+  "url": "ref/decl/event-im.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "progress instant messaging conferenced",
+  "params": "",
+  "doc": "Instant messaging progress event.",
+  "url": "ref/decl/event-im-progress.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "progress instant messaging remote conferenced",
+  "params": "(secondary_connection: boolean)",
+  "doc": "Instant messaging progress event.",
+  "url": "ref/decl/event-im-progress.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "progress instant messaging transferred",
+  "params": "(new_party: InteractionParty)",
+  "doc": "Instant messaging progress event.",
+  "url": "ref/decl/event-im-progress.html"
+ },
+ {
+  "words": "progress instant messaging routed",
+  "params": "(camp: text, user_name: text)",
+  "doc": "Instant messaging progress event.",
+  "url": "ref/decl/event-im-progress.html"
+ },
+ {
+  "words": "error instant messaging answer",
+  "params": "(err: InstantMessagingError)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html"
+ },
+ {
+  "words": "error instant messaging clear",
+  "params": "(err: InstantMessagingError)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html"
+ },
+ {
+  "words": "error instant messaging conference",
+  "params": "(err: InstantMessagingError)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "error instant messaging disconnect",
+  "params": "(err: InstantMessagingError)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html"
+ },
+ {
+  "words": "error instant messaging retrieve",
+  "params": "(err: InstantMessagingError)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "error instant messaging enqueue",
+  "params": "(err: InstantMessagingError)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html"
+ },
+ {
+  "words": "error instant messaging dequeue",
+  "params": "(err: InstantMessagingError)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html"
+ },
+ {
+  "words": "error instant messaging blind transfer",
+  "params": "(err: InstantMessagingError, ag: text, camp: text)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html"
+ },
+ {
+  "words": "error instant messaging extend",
+  "params": "(err: InstantMessagingError, ag: text, camp: text)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "error instant messaging transfer",
+  "params": "(err: InstantMessagingError, ag: text, camp: text)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "error instant messaging start",
+  "params": "(err: InstantMessagingError, ag: text)",
+  "doc": "An instant messaging operation failed.",
+  "url": "ref/decl/event-im-error.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "event email cleared",
+  "params": "",
+  "doc": "Email interaction event.",
+  "url": "ref/decl/event-email.html"
+ },
+ {
+  "words": "event email handling",
+  "params": "",
+  "doc": "Email interaction event.",
+  "url": "ref/decl/event-email.html"
+ },
+ {
+  "words": "event email preview analysis",
+  "params": "",
+  "doc": "Email interaction event.",
+  "url": "ref/decl/event-email.html"
+ },
+ {
+  "words": "event email sent",
+  "params": "(email_id: number, by_external: boolean)",
+  "doc": "Email interaction event.",
+  "url": "ref/decl/event-email.html"
+ },
+ {
+  "words": "progress email reservation ended",
+  "params": "",
+  "doc": "Email interaction event.",
+  "url": "ref/decl/event-email.html"
+ },
+ {
+  "words": "error email pick up",
+  "params": "",
+  "doc": "Email interaction event.",
+  "url": "ref/decl/event-email.html"
+ },
+ {
+  "words": "event email suspended",
+  "params": "",
+  "doc": "Email interaction event.",
+  "url": "ref/decl/event-email.html"
+ },
+ {
+  "words": "event email resumed",
+  "params": "",
+  "doc": "Email interaction event.",
+  "url": "ref/decl/event-email.html"
+ },
+ {
+  "words": "event workflow handling",
+  "params": "",
+  "doc": "Workflow interaction event.",
+  "url": "ref/decl/event-workflow.html"
+ },
+ {
+  "words": "event workflow suspended",
+  "params": "",
+  "doc": "Workflow interaction event.",
+  "url": "ref/decl/event-workflow.html"
+ },
+ {
+  "words": "event workflow resumed",
+  "params": "",
+  "doc": "Workflow interaction event.",
+  "url": "ref/decl/event-workflow.html"
+ },
+ {
+  "words": "progress workflow reservation ended",
+  "params": "",
+  "doc": "Workflow interaction event.",
+  "url": "ref/decl/event-workflow.html"
+ },
+ {
+  "words": "error workflow pick up",
+  "params": "",
+  "doc": "Workflow interaction event.",
+  "url": "ref/decl/event-workflow.html"
+ },
+ {
+  "words": "event server down",
+  "params": "",
+  "doc": "Communication break event.",
+  "url": "ref/decl/event-commun-break.html"
+ },
+ {
+  "words": "event server up",
+  "params": "",
+  "doc": "Communication break event.",
+  "url": "ref/decl/event-commun-break.html"
+ },
+ {
+  "words": "event forced logout",
+  "params": "",
+  "doc": "Communication break event.",
+  "url": "ref/decl/event-commun-break.html"
+ },
+ {
+  "words": "event ivr shutdown",
+  "params": "",
+  "doc": "Communication break event.",
+  "url": "ref/decl/event-commun-break.html",
+  "ivr": true
+ },
+ {
+  "words": "event gateway down",
+  "params": "",
+  "doc": "Communication break event.",
+  "url": "ref/decl/event-commun-break.html",
+  "ivr": true
+ },
+ {
+  "words": "event stop asynchronous playing",
+  "params": "(play_termination_reason: PlayTerminationReason)",
+  "doc": "Automated Agents event.",
+  "url": "ref/decl/auto-declare.html",
+  "ivr": true
+ },
+ {
+  "words": "progress instant messaging remote disconnected",
+  "params": "(old_party: InteractionParty, secondary_connection: boolean)",
+  "doc": "Instant messaging progress event.",
+  "url": "ref/decl/event-im-progress.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "progress instant messaging party changed",
+  "params": "(new_party: InteractionParty, old_party: InteractionParty, secondary_connection: boolean)",
+  "doc": "Instant messaging progress event.",
+  "url": "ref/decl/event-im-progress.html",
+  "deprecated": "Deprecated. Use the media panel events."
+ },
+ {
+  "words": "event data interaction alerting",
+  "params": "",
+  "doc": "Node event.",
+  "url": "ref/decl/node-event.html",
+  "deprecated": "Dropped: the alerting event is no longer triggered."
+ }
+]

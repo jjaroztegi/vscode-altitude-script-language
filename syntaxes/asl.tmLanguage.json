@@ -1,481 +1,438 @@
 {
     "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-    "name": "Altitude Script",
+    "name": "Altitude ASL",
+    "scopeName": "source.altitude-asl",
     "patterns": [
         {
-            "include": "#comments"
+            "include": "#trailer"
         },
         {
-            "include": "#sql-statements"
+            "include": "#declarations"
         },
         {
-            "include": "#strings"
-        },
-        {
-            "include": "#pathStrings"
-        },
-        {
-            "include": "#stringsWithFiB"
-        },
-        {
-            "include": "#keywords"
-        },
-        {
-            "include": "#keywordsControl"
-        },
-        {
-            "include": "#operators"
-        },
-        {
-            "include": "#functions"
-        },
-        {
-            "include": "#variables"
-        },
-        {
-            "include": "#constants"
-        },
-        {
-            "include": "#booleans"
-        },
-        {
-            "include": "#numbers"
-        },
-        {
-            "include": "#ui-controls"
-        },
-        {
-            "include": "#ui-properties"
-        },
-        {
-            "include": "#ui-values"
-        },
-        {
-            "include": "#identifiers"
+            "include": "#statements"
         }
     ],
     "repository": {
-        "ui-controls": {
+        "trailer": {
+            "comment": "Script Developer appends XML metadata after the last declaration.",
+            "begin": "^(?=<\\?xml)",
+            "end": "(?!\\G)\\z",
+            "name": "meta.embedded.block.xml",
             "patterns": [
                 {
-                    "name": "entity.name.tag.ui.asl",
-                    "match": "\\b(flow view|container|push button|text button|check box|radio button|input|combo box|menu|static text|static box|email editor|chat control|web browser|group|table)\\b"
-                }
-            ]
-        },
-        "ui-properties": {
-             "patterns": [
-                {
-                    "name": "support.type.property.ui.asl",
-                    "match": "\\b(size|at|position|anchor|hidden if|disabled if|read only if|tab order|password|uppercase|multiline|wordwrap|item|tag|level|automatically fill values|drop on demand|allow other values|enhanced style|background( color)?|border|initial block|initial url|persistent|media name|initial email id|unavailable if|input field height|year completion|format|items list|items|formattings|cursor|values column|labels column|sort|default button|flat|tooltip|image|checked if|unchecked if|font|align|columns|column|header|caption|arguments|labels font|inputs font)\\b"
-                }
-             ]
-        },
-        "ui-values": {
-            "patterns": [
-                {
-                    "name": "constant.language.ui.asl",
-                    "match": "\\b(left|top|right|bottom|center|transparent|color|edge|raised|sunken|etched|closest|current|past|future|tile|keep aspect ratio|keep size|commit|rollback|overlay)\\b"
-                }
-            ]
-        },
-        "sql-statements": {
-            "patterns": [
-                {
-                    "name": "meta.sql-declaration.asl",
-                    "begin": "\\b(sql\\s+for)\\s+(['\"])",
-                    "beginCaptures": {
-                        "1": { "name": "keyword.control.sql.asl" },
-                        "2": { "name": "punctuation.definition.string.begin.asl" }
-                    },
-                    "end": "\\2",
-                    "endCaptures": {
-                        "0": { "name": "punctuation.definition.string.end.asl" }
-                    },
-                    "patterns": [
-                        {
-                            "include": "#sql-content"
-                        }
-                    ]
-                }
-            ]
-        },
-        "sql-content": {
-            "patterns": [
-                {
-                    "name": "keyword.other.sql",
-                    "match": "(?i)\\b(SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|ALTER|DROP|INDEX|VIEW|PROCEDURE|FUNCTION|TRIGGER|DATABASE|SCHEMA|EXEC|EXECUTE)\\b"
-                },
-                {
-                    "name": "keyword.other.sql",
-                    "match": "(?i)\\b(INNER|LEFT|RIGHT|FULL|OUTER|JOIN|ON|AS|GROUP|BY|ORDER|HAVING|DISTINCT|TOP|LIMIT|OFFSET|UNION|ALL|EXISTS|IN|LIKE|BETWEEN|IS|NULL|NOT|AND|OR)\\b"
-                },
-                {
-                    "name": "keyword.other.sql",
-                    "match": "(?i)\\b(COUNT|SUM|AVG|MIN|MAX|CAST|CONVERT|CASE|WHEN|THEN|ELSE|END|IF|WHILE|FOR|BEGIN|DECLARE)\\b"
-                },
-                {
-                    "name": "storage.type.sql",
-                    "match": "(?i)\\b(VARCHAR|NVARCHAR|CHAR|NCHAR|TEXT|NTEXT|INT|INTEGER|BIGINT|SMALLINT|TINYINT|DECIMAL|NUMERIC|FLOAT|REAL|MONEY|SMALLMONEY|BIT|DATETIME|DATETIME2|DATE|TIME|TIMESTAMP|UNIQUEIDENTIFIER|XML|BINARY|VARBINARY|IMAGE)\\b"
-                },
-                {
-                    "name": "constant.numeric.sql",
-                    "match": "\\b\\d+(\\.\\d+)?\\b"
-                },
-                {
-                    "name": "string.quoted.single.sql",
-                    "begin": "'",
-                    "end": "'",
-                    "patterns": [
-                        {
-                            "name": "constant.character.escape.sql",
-                            "match": "''"
-                        }
-                    ]
-                },
-                {
-                    "name": "meta.embedded.expression.asl",
-                    "begin": "\\$\\(",
-                    "end": "\\)",
-                    "patterns": [
-                        {
-                            "include": "#variables"
-                        },
-                        {
-                            "include": "#functions"
-                        }
-                    ]
-                },
-                {
-                    "name": "comment.line.double-dash.sql",
-                    "match": "--.*(?=['\"\\n])"
-                },
-                {
-                    "name": "comment.block.sql",
-                    "begin": "/\\*",
-                    "end": "\\*/"
-                },
-                {
-                    "name": "punctuation.separator.sql",
-                    "match": "[,;()]"
-                },
-                {
-                    "name": "keyword.operator.comparison.sql",
-                    "match": "(=|<>|!=|<=|>=|<|>)"
-                }
-            ]
-        },
-        "keywords": {
-            "patterns": [
-                {
-                    "name": "keyword.other.asl",
-                    "match": "\\b(version|file version|modules|import|into namespace|dependencies|image|dll|native|managed|web service|wsdl|openapi|in file|in url|declarations|constants|types|variables|parameters|global|globals|node|block|master|default master|without master|private|exit through|abort script|discard script|end script|restart script|commit|ref|using namespaces|with|into|to|from|variable|record|match by name|absolute|relative|dim|add)\\b"
-                },
-                {
-                    "name": "keyword.other.record.asl",
-                    "match": "\\b(campaign record|contact record|workflow record|transferred record|outcome record|contact profile extensions)\\b"
-                },
-                {
-                    "name": "keyword.other.event.asl",
-                    "match": "\\b(on start|on end|on load|on unload|on first enter|on enter|on exit|on click|on double click|on lose focus|on list selection|on selection change|on sort request|on expand|on leaf selected|on change|on close trigger event|on close|on email loaded|on email sent|on email suspended|on email resumed|on before message send|on before attachment|on before open message attachment|on toolbar|on instant message sent|on save transcript complete|on error|on event|on progress)\\b"
-                }
-            ]
-        },
-        "keywordsControl": {
-            "patterns": [
-                {
-                    "name": "keyword.control.conditional.asl",
-                    "match": "\\b(if|else|elseif|case|when|then|default)\\b"
-                },
-                {
-                    "name": "keyword.control.loop.asl",
-                    "match": "\\b(while|repeat|for|do|break|continue)\\b"
-                },
-                {
-                    "name": "keyword.control.flow.asl",
-                    "match": "\\b(try|catch|finally|throw|goto node|call node|back node|return|exit through|abort script|discard script|end script|restart script|dim|add|get current|update current|reschedule loaded contact)\\b"
-                },
-                {
-                    "name": "keyword.control.sql.asl",
-                    "match": "\\b(sql for|sql select|sql execute|system select|cursor|cursors|open cursor|close cursor|fetch cursor|with|into|variable|record|match by name|absolute|relative|set timer|set timer event|kill timer event|handle pending events)\\b"
-                },
-                {
-                    "name": "storage.type.asl",
-                    "match": "(:\\s*(text|number|boolean|date|time|datetime|bytestream|record|array of|enumeration|sql cursor|system cursor|cursor|void))\\b"
-                }
-            ]
-        },
-        "operators": {
-            "patterns": [
-                {
-                    "name": "keyword.operator.assignment.asl",
-                    "match": "(:=|=|\\+=|-=|\\*=|/=|%=)"
-                },
-                {
-                    "name": "keyword.operator.comparison.asl",
-                    "match": "(==|!=|<>|<=|>=|<|>)"
-                },
-                {
-                    "name": "keyword.operator.logical.asl",
-                    "match": "\\b(and|or|not)\\b"
-                },
-                {
-                    "name": "keyword.operator.arithmetic.asl",
-                    "match": "(\\+|-|\\*|/|%|\\^)"
-                },
-                {
-                    "name": "keyword.operator.reference.asl",
-                    "match": "\\b(ref|into variable|to|from|with)\\b"
-                }
-            ]
-        },
-        "functions": {
-            "patterns": [
-                {
-                    "name": "entity.name.function.asl",
-                    "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*(?=\\s*\\()"
-                },
-                {
-                    "name": "support.function.builtin.asl",
-                    "match": "\\b(number_ceiling|number_floor|number_hex|number_mod|number_round|text_to_upper|text_to_lower|text_length|text_append|text_find_regex|text_find|text_extract|text_replace_regex|text_replace|text_trim|text_split|text_to_bytestream|bytestream_to_text|format|now|today|datetime|date|time|year|month|day|hour|minute|second|week_day|nyears|nmonths|local_to_time_zone|time_zone_to_local|full_node_name|linked_exit_point|number_array|text_array|boolean_array|date_array|time_array|datetime_array|build_sql_contains|file_create|file_open|file_close|file_delete|file_exists|file_datetime|file_split_path|file_make_path|file_seek|file_read_line|file_read|file_write_line|file_write|file_copy|folder_system_path|tmp_filename|lookup|file_browser|soft_phone_volume|rgb_color|current_email_id|selected_cursor_line|clear error|message|open message box|open cursor|close cursor|fetch cursor|sql execute|system select|open window|close window|dial phone|answer phone|hang up phone|hold phone|retrieve phone|transfer call|conference phone|load contact|update contact|unload contact|create contact|set business status|add to outcomes|trigger event|kill timer|set timer|handle pending events|insert html|into body|send email|size)\\b"
-                }
-            ]
-        },
-        "variables": {
-            "patterns": [
-                {
-                    "name": "variable.language.system.asl",
-                    "match": "@(script_start_reason|script_info(\\.(node|windowId|fileName|majorVersion))?|script_session_info(\\.(agent|campaign|contact|sessionUrl))?|login_info|phone_info(\\.(ani|dnis))?|email_info|instant_messaging_info|interaction_info|workflow_info|schedule_info|error|error_info(\\.(sqlError|noRowsReturned))?)\\b"
-                },
-                {
-                    "name": "variable.language.business.asl",
-                    "match": "\\b(campaign|contact|workflow|transferred|outcomes|contact_profile)(?=\\b|\\.)"
-                },
-                {
-                    "name": "variable.other.asl",
-                    "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
-                }
-            ]
-        },
-        "constants": {
-            "patterns": [
-                {
-                    "name": "constant.other.asl",
-                    "match": "\\b[A-Z_][A-Z0-9_]*\\b"
-                },
-                {
-                    "name": "constant.language.null.asl",
-                    "match": "\\b(null|nil|empty)\\b"
-                }
-            ]
-        },
-        "numbers": {
-            "patterns": [
-                {
-                    "name": "constant.numeric.decimal.asl",
-                    "match": "\\b\\d+(\\.\\d+)?([eE][+-]?\\d+)?\\b"
-                },
-                {
-                    "name": "constant.numeric.hexadecimal.asl",
-                    "match": "\\b0[xX][0-9a-fA-F]+\\b"
-                }
-            ]
-        },
-        "strings": {
-            "name": "string.quoted.double.asl",
-            "begin": "\"",
-            "end": "\"",
-            "patterns": [
-                {
-                    "include": "#sql-in-string"
-                },
-                {
-                    "name": "constant.character.escape.asl",
-                    "match": "\\\\[nrt\\\\\"']"
-                }
-            ]
-        },
-        "pathStrings": {
-            "name": "string.quoted.other.path.asl",
-            "begin": "<\"",
-            "end": "\">",
-            "patterns": [
-                {
-                    "name": "string.content.asl",
-                    "match": "."
-                }
-            ]
-        },
-        "stringsWithFiB": {
-            "name": "string.quoted.single.asl",
-            "begin": "'",
-            "end": "'",
-            "patterns": [
-                {
-                    "include": "#sql-in-string"
-                },
-                {
-                    "name": "meta.embedded.expression.asl",
-                    "begin": "\\$\\(",
-                    "end": "\\)",
-                    "patterns": [
-                        {
-                            "include": "#keywords"
-                        },
-                        {
-                            "include": "#operators"
-                        },
-                        {
-                            "include": "#functions"
-                        },
-                        {
-                            "include": "#variables"
-                        },
-                        {
-                            "include": "#numbers"
-                        }
-                    ]
-                },
-                {
-                    "name": "constant.character.escape.asl",
-                    "match": "\\\\[nrt\\\\\"']"
-                }
-            ]
-        },
-        "sql-in-string": {
-            "patterns": [
-                {
-                    "name": "meta.embedded.sql.asl",
-                    "begin": "(?i)\\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|EXEC|EXECUTE)\\b",
-                    "end": "(?=[\\'\\\"\\$])|$",
-                    "patterns": [
-                        {
-                            "name": "keyword.other.sql",
-                            "match": "(?i)\\b(SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|ALTER|DROP|INDEX|VIEW|PROCEDURE|FUNCTION|TRIGGER|DATABASE|SCHEMA)\\b"
-                        },
-                        {
-                            "name": "keyword.other.sql",
-                            "match": "(?i)\\b(INNER|LEFT|RIGHT|FULL|OUTER|JOIN|ON|AS|GROUP|BY|ORDER|HAVING|DISTINCT|TOP|LIMIT|OFFSET|UNION|ALL|EXISTS|IN|LIKE|BETWEEN|IS|NULL|NOT|AND|OR)\\b"
-                        },
-                        {
-                            "name": "keyword.other.sql",
-                            "match": "(?i)\\b(COUNT|SUM|AVG|MIN|MAX|CAST|CONVERT|CASE|WHEN|THEN|ELSE|END|IF|WHILE|FOR|BEGIN|DECLARE|SET)\\b"
-                        },
-                        {
-                            "name": "storage.type.sql",
-                            "match": "(?i)\\b(VARCHAR|NVARCHAR|CHAR|NCHAR|TEXT|NTEXT|INT|INTEGER|BIGINT|SMALLINT|TINYINT|DECIMAL|NUMERIC|FLOAT|REAL|MONEY|SMALLMONEY|BIT|DATETIME|DATETIME2|DATE|TIME|TIMESTAMP|UNIQUEIDENTIFIER|XML|BINARY|VARBINARY|IMAGE)\\b"
-                        },
-                        {
-                            "name": "constant.numeric.sql",
-                            "match": "\\b\\d+(\\.\\d+)?\\b"
-                        },
-                        {
-                            "name": "string.quoted.single.sql",
-                            "begin": "'",
-                            "end": "'",
-                            "patterns": [
-                                {
-                                    "name": "constant.character.escape.sql",
-                                    "match": "''"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "meta.embedded.expression.asl",
-                            "begin": "\\$\\(",
-                            "end": "\\)",
-                            "patterns": [
-                                {
-                                    "include": "#variables"
-                                },
-                                {
-                                    "include": "#functions"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "comment.line.double-dash.sql",
-                            "match": "--.*$"
-                        },
-                        {
-                            "name": "comment.block.sql",
-                            "begin": "/\\*",
-                            "end": "\\*/"
-                        }
-                    ]
-                }
-            ]
-        },
-        "booleans": {
-            "patterns": [
-                {
-                    "name": "constant.language.boolean.asl",
-                    "match": "\\b(true|false)\\b"
+                    "include": "text.xml"
                 }
             ]
         },
         "comments": {
-            "name": "comment.block.asl",
-            "begin": "comment\\s*\\{",
+            "patterns": [
+                {
+                    "name": "comment.block.altitude-asl",
+                    "begin": "\\b(comment)\\s*(\\{)",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.comment.altitude-asl"
+                        },
+                        "2": {
+                            "name": "punctuation.definition.comment.begin.altitude-asl"
+                        }
+                    },
+                    "end": "\\}",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.end.altitude-asl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#comment-braces"
+                        }
+                    ]
+                },
+                {
+                    "name": "comment.line.altitude-asl",
+                    "match": "\\b(comment)\\s+(\"[^\"]*\"|'(?:[^'\\\\]|\\\\.)*')",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.other.comment.altitude-asl"
+                        }
+                    }
+                }
+            ]
+        },
+        "comment-braces": {
+            "begin": "\\{",
             "end": "\\}",
-            "beginCaptures": {
-                "0": { "name": "punctuation.definition.comment.begin.asl" }
-            },
-            "endCaptures": {
-                "0": { "name": "punctuation.definition.comment.end.asl" }
-            },
             "patterns": [
                 {
-                    "name": "comment.block.nested.asl",
-                    "begin": "comment\\s*\\{",
-                    "end": "\\}",
-                    "patterns": [
-                        {
-                            "include": "#comments"
-                        }
-                    ]
-                },
-                {
-                    "name": "comment.content.balanced-braces.asl",
-                    "begin": "\\{",
-                    "end": "\\}",
-                    "patterns": [
-                        {
-                            "include": "#comment-content"
-                        }
-                    ]
-                },
-                {
-                    "include": "#comment-content"
+                    "include": "#comment-braces"
                 }
             ]
         },
-        "comment-content": {
+        "declarations": {
             "patterns": [
                 {
-                    "name": "comment.content.balanced-braces.asl",
-                    "begin": "\\{",
-                    "end": "\\}",
+                    "include": "#comments"
+                },
+                {
+                    "match": "\\b(private\\s+)?(node|block)\\s+(\"[^\"]*\"|'[^']*')",
+                    "captures": {
+                        "1": {
+                            "name": "storage.modifier.altitude-asl"
+                        },
+                        "2": {
+                            "name": "storage.type.node.altitude-asl"
+                        },
+                        "3": {
+                            "name": "entity.name.type.node.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "match": "\\b(private\\s+)?(external\\s+(?:session\\s+)?(?:stdcall\\s+|cdecl\\s+)?)?(subroutine|function)\\s+([\\p{L}_][\\p{L}\\p{N}_]*)",
+                    "captures": {
+                        "1": {
+                            "name": "storage.modifier.altitude-asl"
+                        },
+                        "2": {
+                            "name": "storage.modifier.altitude-asl"
+                        },
+                        "3": {
+                            "name": "storage.type.function.altitude-asl"
+                        },
+                        "4": {
+                            "name": "entity.name.function.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "match": "\\b(on)\\s+(event|error|progress)\\s+((?:[\\p{L}_][\\p{L}\\p{N}_]*)(?:[ \\t]+[\\p{L}_][\\p{L}\\p{N}_]*)*)",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.other.handler.altitude-asl"
+                        },
+                        "2": {
+                            "name": "keyword.other.handler.altitude-asl"
+                        },
+                        "3": {
+                            "name": "entity.name.function.event.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "match": "\\b(on)\\s+(start|end|load|unload|first\\s+enter|enter|exit)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.other.handler.altitude-asl"
+                        },
+                        "2": {
+                            "name": "keyword.other.handler.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "match": "\\b(on)\\s+((?:[a-z]+\\s+)*?[a-z]+)(?=\\s*(?:\\(|\\{|commit\\b|rollback\\b|ignore\\b|$))",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.other.handler.altitude-asl"
+                        },
+                        "2": {
+                            "name": "entity.name.function.event.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "match": "\\b(import)\\s+(<\"[^\"]*\">|\"[^\"]*\")(?:\\s+(into\\s+namespace)\\s+([\\p{L}_][\\p{L}\\p{N}_]*))?",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.control.import.altitude-asl"
+                        },
+                        "2": {
+                            "name": "string.quoted.other.path.altitude-asl"
+                        },
+                        "3": {
+                            "name": "keyword.control.import.altitude-asl"
+                        },
+                        "4": {
+                            "name": "entity.name.namespace.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "name": "storage.type.section.altitude-asl",
+                    "match": "\\b(?:modules|dependencies|constants|types|variables|parameters|cursors|using\\s+namespaces|campaign\\s+record|contact\\s+record|workflow\\s+record|transferred\\s+record|outcome\\s+record|contact\\s+profile\\s+extensions|audio)(?=\\s*\\{)"
+                },
+                {
+                    "name": "keyword.other.declaration.altitude-asl",
+                    "match": "\\b(?:version|file\\s+version|default\\s+font|default\\s+master|without\\s+master|master|exit\\s+point|node\\s+loop|function\\s+key|flow\\s+view|year\\s+completion|(?:date|time|datetime|number)\\s+format|exclude\\s+from\\s+zip|in\\s+file|in\\s+url|of\\s+type|dll\\s+(?:native|managed)|web\\s+service|private|ref|out|record|enumeration|defined\\s+in|array(?:\\s+\\[[^\\]]*\\])?\\s+of|sql\\s+for|file\\s+for|memory\\s+for|enumeration\\s+for|system\\s+for|delimiter|columns|filter|order\\s+by|input|required|check|on\\s+error\\s+show|named|compiler|export\\s+ordinal|as)\\b"
+                },
+                {
+                    "name": "entity.name.tag.element.altitude-asl",
+                    "match": "\\b(?:radio\\s+button|email\\s+editor|chat\\s+control|static\\s+text|push\\s+button|text\\s+button|web\\s+browser|static\\s+box|container|check\\s+box|combo\\s+box|input|table|group|menu)\\b(?=\\s*(?:\"|'|\\{|for\\b))"
+                },
+                {
+                    "include": "#statements"
+                }
+            ]
+        },
+        "statements": {
+            "patterns": [
+                {
+                    "include": "#comments"
+                },
+                {
+                    "include": "#strings"
+                },
+                {
+                    "name": "keyword.control.altitude-asl",
+                    "match": "\\b(?:if|then|else|case|when|do|default|while|repeat|until|for|to|step|break\\s+loop|return\\s+node|return|goto\\s+node|call\\s+node|back\\s+node|exit\\s+through|call)\\b"
+                },
+                {
+                    "name": "keyword.other.var.altitude-asl",
+                    "match": "\\b(?:var|const)\\b"
+                },
+                {
+                    "name": "keyword.operator.word.altitude-asl",
+                    "match": "\\b(?:and|or|xor|not|new)\\b"
+                },
+                {
+                    "name": "constant.language.altitude-asl",
+                    "match": "\\b(?:true|false|null|NULL)\\b"
+                },
+                {
+                    "name": "storage.type.primitive.altitude-asl",
+                    "match": "\\b(?:boolean|number|text|date|time|datetime|bytestream)\\b(?!\\s*\\()"
+                },
+                {
+                    "name": "keyword.other.action.altitude-asl",
+                    "match": "\\b(?:download\\s+instant\\s+messaging\\s+transcript\\s+with\\s+id|load\\s+workflow\\s+contact\\s+profile\\s+with\\s+unique\\s+id|reschedule\\s+loaded\\s+contact\\s+with\\s+failed\\s+reason|load\\s+contact\\s+with\\s+contact\\s+profile\\s+unique\\s+id|set\\s+current\\s+contact\\s+profile\\s+extension\\s+to|upload\\s+new\\s+revision\\s+for\\s+document\\s+with\\s+id|reschedule\\s+contact\\s+with\\s+failed\\s+reason|update\\s+contact\\s+profile\\s+with\\s+unique\\s+id|set\\s+default\\s+lexicon\\s+file\\s+to\\s+content|get\\s+contact\\s+profile\\s+with\\s+unique\\s+id|create\\s+outcome\\s+for\\s+script\\s+session|pick\\s+up\\s+email\\s+interaction\\s+with\\s+id|cancel\\s+phone\\s+supervision\\s+request|blind\\s+transfer\\s+instant\\s+messaging|divert\\s+instant\\s+messaging\\s+to\\s+dnis|media\\s+panel\\s+chat\\s+save\\s+transcript|manual\\s+blind\\s+transfer\\s+phone\\s+to|send\\s+outbound\\s+template\\s+message|upload\\s+new\\s+document\\s+with\\s+name|add\\s+to\\s+do\\s+not\\s+call\\s+list\\s+phone|media\\s+panel\\s+chat\\s+send\\s+message|pick\\s+up\\s+workflow\\s+task\\s+with\\s+id|save\\s+current\\s+contact\\s+profile|send\\s+knowledge\\s+base\\s+document|disconnect\\s+instant\\s+messaging|conference\\s+instant\\s+messaging|start\\s+instant\\s+messaging\\s+with|media\\s+panel\\s+chat\\s+insert\\s+text|set\\s+default\\s+grammar\\s+for\\s+type|load\\s+contact\\s+selected\\s+from|retrieve\\s+instant\\s+messaging|transfer\\s+instant\\s+messaging|start\\s+outbound\\s+interaction|call\\s+master\\s+event\\s+handler|reschedule\\s+loaded\\s+contact|disable\\s+contact\\s+with\\s+code|restart\\s+contact\\s+with\\s+code|download\\s+document\\s+with\\s+id|set\\s+soft\\s+phone\\s+microphone|request\\s+phone\\s+supervision|divert\\s+phone\\s+to\\s+voicemail|set\\s+current\\s+directory\\s+to|set\\s+soft\\s+phone\\s+volume\\s+to|answer\\s+instant\\s+messaging|extend\\s+instant\\s+messaging|end\\s+workflow\\s+reservation|open\\s+web\\s+browser\\s+window|set\\s+default\\s+language\\s+to|blind\\s+transfer\\s+phone\\s+to|clear\\s+instant\\s+messaging|load\\s+contact\\s+with\\s+code|reserve\\s+loaded\\s+contact|set\\s+business\\s+status\\s+to|add\\s+to\\s+outcomes\\s+values|update\\s+outcome\\s+with\\s+id|remove\\s+outcome\\s+with\\s+id|start\\s+workflow\\s+process|set\\s+next\\s+workflow\\s+task|trigger\\s+workflow\\s+event|create\\s+contact\\s+profile|media\\s+panel\\s+chat\\s+clear|stop\\s+asynchronous\\s+play|handle\\s+pending\\s+events|bring\\s+window\\s+to\\s+front|start\\s+error\\s+reporting|set\\s+workflow\\s+notes\\s+to|end\\s+phone\\s+reservation|call\\s+supervisor\\s+phone|end\\s+email\\s+reservation|forward\\s+email\\s+with\\s+id|send\\s+outbound\\s+message|speech\\s+recognize\\s+into|stop\\s+error\\s+reporting|blind\\s+transfer\\s+email|send\\s+instant\\s+message|set\\s+agent\\s+not\\s+ready|kill\\s+timer\\s+with\\s+id|system\\s+select\\s+from|bring\\s+tab\\s+to\\s+front|start\\s+record\\s+phone|system\\s+count\\s+from|stop\\s+record\\s+phone|load\\s+grammar\\s+name|open\\s+message\\s+box|schedule\\s+contact|set\\s+time\\s+zone\\s+to|conference\\s+phone|record\\s+into\\s+file|set\\s+timer\\s+event|set\\s+agent\\s+ready|generic\\s+service|divert\\s+phone\\s+to|save\\s+attachment|answer\\s+workflow|get\\s+digits\\s+into|discard\\s+script|restart\\s+script|unload\\s+contact|create\\s+contact|update\\s+current|retrieve\\s+phone|transfer\\s+phone|trigger\\s+event|hang\\s+up\\s+phone|send\\s+email\\s+to|abort\\s+script|exit\\s+through|close\\s+window|set\\s+timer\\s+to|close\\s+cursor|fetch\\s+cursor|answer\\s+phone|extend\\s+phone|answer\\s+email|clear\\s+digits|clear\\s+error|return\\s+node|open\\s+window|open\\s+cursor|sql\\s+execute|get\\s+current|clear\\s+phone|clear\\s+email|send\\s+digits|end\\s+script|break\\s+loop|kill\\s+timer|sql\\s+select|hold\\s+phone|dial\\s+phone|play\\s+music|input\\s+into|write\\s+log|back\\s+node|set\\s+timer|close\\s+tab|send\\s+data|open\\s+tab|message|enqueue|dequeue|suspend|remove|choose|resume|write|close|bring|reply|open|play|dim|add|set)\\b"
+                },
+                {
+                    "match": "\\b(graphical\\s+element|input|container|web\\s+browser|email\\s+editor|chat\\s+control|menu|table)\\s+(?=['\"]|[\\p{L}_])(?!for\\b|\\{)",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.tag.element.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "name": "keyword.other.modifier.altitude-asl",
+                    "match": "\\b(?:commit|rollback|ignore|overlay|caption|arguments|into|variable|match\\s+by\\s+name|absolute|relative|at|size|with|trigger\\s+event|on\\s+close|values|attribute)\\b"
+                },
+                {
+                    "include": "#expressions"
+                }
+            ]
+        },
+        "expressions": {
+            "patterns": [
+                {
+                    "include": "#strings"
+                },
+                {
+                    "name": "variable.language.attribute.altitude-asl",
+                    "match": "@[\\p{L}_][\\p{L}\\p{N}_]*"
+                },
+                {
+                    "name": "constant.numeric.altitude-asl",
+                    "match": "(?<![\\p{L}\\p{N}_])(?:\\d+(?:\\.\\d+)?|\\.\\d+)(?![\\p{L}\\p{N}_])"
+                },
+                {
+                    "name": "support.class.enum.altitude-asl",
+                    "match": "\\b(?:InteractionTerminationState|RecordingTerminationReason|ScriptExecutionErrorCode|AudioRecordResultType|ContactBusinessStatus|InstantMessagingError|InstantMessagingState|MessageBoxButtonStyle|PlayTerminationReason|ScheduledContactState|WorkflowPriorityClass|DequeueRequestReason|InteractionPartyType|RecordingStartReason|ServerCOMMSErrorCode|WorkflowProcessState|ContactFailedReason|DequeuedEventReason|MessageBoxIconStyle|ServerDOCMErrorCode|SqlContainsOperator|ServerPBXErrorCode|DatabaseErrorCode|InteractionOrigin|RestartScriptMode|ScriptStartReason|ServerAMErrorCode|ServerSSErrorCode|AnnouncementType|BusinessDataType|InteractionState|MessageBoxButton|QueuedEmailState|WorkflowTaskType|AgentReadyError|PendingWorkType|SupervisionMode|AgentErrorCode|AudioErrorCode|BusinessStatus|FileAccessMode|SentEmailState|CampaignState|FileShareMode|WorkflowState|SeekPosition|SystemCursor|SystemFolder|TextEncoding|TrimPosition|AddressType|EmailState|PhoneError|PhoneState|TargetType|AgentType|ErrorType|MediaType|DataType|Gender)(?=::)"
+                },
+                {
+                    "match": "\\b([\\p{L}_][\\p{L}\\p{N}_]*)(::)",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.namespace.altitude-asl"
+                        },
+                        "2": {
+                            "name": "punctuation.separator.namespace.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "name": "support.function.builtin.altitude-asl",
+                    "match": "\\b(?:contact_profile_extension_schema|campaign_agents_media_info|interaction_history_detail|session_outcomes_history|skill_profile_media_info|available_agents_info|selected_cursor_line|phone_schedule_rules|workflow_definitions|campaign_agents_info|text_replace_regex|text_to_bytestream|bytestream_to_text|local_to_time_zone|time_zone_to_local|build_sql_contains|folder_system_path|custom_call_states|skill_profile_info|document_revisions|linked_exit_point|soft_phone_volume|last_called_agent|current_email_id|text_find_regex|file_split_path|file_write_line|GetDayTypeNames|activity_schema|campaign_schema|number_ceiling|full_node_name|datetime_array|file_make_path|file_read_line|outbound_rules|skill_profiles|queue_position|text_to_upper|text_to_lower|boolean_array|file_datetime|skill_profile|email_message|campaign_info|document_info|number_floor|number_round|text_extract|text_replace|number_array|tmp_filename|file_browser|text_length|text_append|file_create|file_delete|file_exists|number_hex|number_mod|text_split|text_array|date_array|time_array|file_close|file_write|time_zones|agent_info|text_find|text_trim|file_open|file_seek|file_read|file_copy|rgb_color|campaigns|ani_lists|datetime|week_day|nmonths|ordinal|format|minute|second|nyears|lookup|agents|medias|today|month|whole|spell|date|time|year|hour|size|now|day|if)(?=\\s*\\()"
+                },
+                {
+                    "name": "variable.language.business.altitude-asl",
+                    "match": "\\b(?:campaign|contact|workflow|transferred|outcomes|contact_profile)\\b(?=\\s*[.\\[])"
+                },
+                {
+                    "match": "\\b([\\p{L}_][\\p{L}\\p{N}_]*)(?=\\s*\\()",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.function.call.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "name": "keyword.operator.assignment.altitude-asl",
+                    "match": ":="
+                },
+                {
+                    "name": "keyword.operator.comparison.altitude-asl",
+                    "match": "<>|<=|>=|=|<|>"
+                },
+                {
+                    "name": "keyword.operator.arithmetic.altitude-asl",
+                    "match": "[+\\-*/]"
+                },
+                {
+                    "name": "punctuation.separator.altitude-asl",
+                    "match": "[,?]"
+                },
+                {
+                    "name": "punctuation.accessor.altitude-asl",
+                    "match": "\\."
+                },
+                {
+                    "begin": "\\(",
+                    "end": "\\)",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.parenthesis.begin.altitude-asl"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.parenthesis.end.altitude-asl"
+                        }
+                    },
                     "patterns": [
                         {
-                            "include": "#comment-content"
+                            "include": "#expressions"
+                        }
+                    ]
+                }
+            ]
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "name": "string.quoted.other.path.altitude-asl",
+                    "begin": "<\"",
+                    "end": "\">",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.begin.altitude-asl"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.end.altitude-asl"
+                        }
+                    }
+                },
+                {
+                    "name": "string.quoted.double.altitude-asl",
+                    "begin": "\"",
+                    "end": "\"|$",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.begin.altitude-asl"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.end.altitude-asl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape.altitude-asl",
+                            "match": "\\\\."
                         }
                     ]
                 },
                 {
-                    "name": "comment.content.asl",
-                    "match": "[^{}]+"
+                    "comment": "Text that starts with a SQL verb: highlight SQL keywords and interpolations.",
+                    "name": "string.quoted.single.sql.altitude-asl",
+                    "begin": "'(?=\\s*(?i:select|insert|update|delete|exec|execute|with|merge)\\b)",
+                    "end": "'|$",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.begin.altitude-asl"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.end.altitude-asl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#fib-content"
+                        },
+                        {
+                            "include": "#sql-keywords"
+                        }
+                    ]
+                },
+                {
+                    "name": "string.quoted.single.altitude-asl",
+                    "begin": "'",
+                    "end": "'|$",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.begin.altitude-asl"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.string.end.altitude-asl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#fib-content"
+                        }
+                    ]
                 }
             ]
         },
-        "identifiers": {
+        "fib-content": {
             "patterns": [
                 {
-                    "name": "entity.name.type.asl",
-                    "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+                    "name": "constant.character.escape.altitude-asl",
+                    "match": "\\\\."
+                },
+                {
+                    "name": "meta.interpolation.altitude-asl",
+                    "begin": "([$%])(\\()",
+                    "end": "\\)",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "punctuation.section.interpolation.begin.altitude-asl"
+                        },
+                        "2": {
+                            "name": "punctuation.section.interpolation.begin.altitude-asl"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.section.interpolation.end.altitude-asl"
+                        }
+                    },
+                    "contentName": "source.altitude-asl.embedded",
+                    "patterns": [
+                        {
+                            "include": "#expressions"
+                        }
+                    ]
+                }
+            ]
+        },
+        "sql-keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.other.sql.altitude-asl",
+                    "match": "(?i)\\b(?:select|from|where|insert|into|values|update|set|delete|join|inner|left|right|outer|on|and|or|not|in|is|null|like|between|group|by|order|having|distinct|top|as|case|when|then|else|end|exec|execute|union|all|exists|with|nolock|asc|desc|count|sum|avg|min|max|convert|cast|isnull|coalesce|getdate)\\b"
                 }
             ]
         }
-    },
-    "scopeName": "source.altitude"
+    }
 }

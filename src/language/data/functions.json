@@ -1,0 +1,1868 @@
+[
+ {
+  "name": "format",
+  "signature": "format(Value: number | date | time | datetime, Format: text): text",
+  "params": [
+   {
+    "name": "Value",
+    "type": "number | date | time | datetime",
+    "doc": "Value to convert."
+   },
+   {
+    "name": "Format",
+    "type": "text",
+    "doc": "Format text; the value is converted according to this format. If omitted, Windows regional settings of the agent workstation are used.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "overloads": [
+   "format(Value: number) : text",
+   "format(Value: date) : text",
+   "format(Value: time) : text",
+   "format(Value: datetime): text",
+   "format(Value: number, Format: text): text",
+   "format(Value: date, Format: text): text",
+   "format(Value: time, Format: text): text",
+   "format(Value: datetime, Format: text): text"
+  ],
+  "doc": "Converts a Value of type number, date, time, or datetime to text according to the Windows regional settings of the agent workstation, or according to the format Format.",
+  "url": "ref/expr/oper.html",
+  "category": "conversion",
+  "webNotes": "ASL Web Edition: the Agent Portal uses the format settings of the web server."
+ },
+ {
+  "name": "number_ceiling",
+  "signature": "number_ceiling(original_number: number): number",
+  "params": [
+   {
+    "name": "original_number",
+    "type": "number"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the smallest integer not less than original_number. For example, number_ceiling(3.4) returns 4.",
+  "url": "ref/expr/function-number.html",
+  "category": "math"
+ },
+ {
+  "name": "number_floor",
+  "signature": "number_floor(original_number: number): number",
+  "params": [
+   {
+    "name": "original_number",
+    "type": "number"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the largest integer not greater than original_number. For example, number_floor(3.4) returns 3.",
+  "url": "ref/expr/function-number.html",
+  "category": "math"
+ },
+ {
+  "name": "number_hex",
+  "signature": "number_hex(original_number: number): text",
+  "params": [
+   {
+    "name": "original_number",
+    "type": "number"
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the hexadecimal representation of original_number. For example, number_hex(10) returns \"A\".",
+  "url": "ref/expr/function-number.html",
+  "category": "math"
+ },
+ {
+  "name": "number_mod",
+  "signature": "number_mod(number_dividend: number, number_divisor: number): number",
+  "params": [
+   {
+    "name": "number_dividend",
+    "type": "number"
+   },
+   {
+    "name": "number_divisor",
+    "type": "number"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the remainder (modulo) of dividing number_dividend by number_divisor. For example, number_mod(7,2) returns 1.",
+  "url": "ref/expr/function-number.html",
+  "category": "math"
+ },
+ {
+  "name": "number_round",
+  "signature": "number_round(original_number: number, nr_decimal_places: number(2,0)): number",
+  "params": [
+   {
+    "name": "original_number",
+    "type": "number"
+   },
+   {
+    "name": "nr_decimal_places",
+    "type": "number(2,0)"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns original_number with nr_decimal_places number of decimal places. For example, number_round(10.26,1) returns 10.3.",
+  "url": "ref/expr/function-number.html",
+  "category": "math"
+ },
+ {
+  "name": "text_to_upper",
+  "signature": "text_to_upper(Text: text): text",
+  "params": [
+   {
+    "name": "Text",
+    "type": "text"
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the textual value Text converted to uppercase.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_to_lower",
+  "signature": "text_to_lower(Text: text): text",
+  "params": [
+   {
+    "name": "Text",
+    "type": "text"
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the textual value Text converted to lowercase.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_length",
+  "signature": "text_length(original_text: text): number",
+  "params": [
+   {
+    "name": "original_text",
+    "type": "text"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the number of characters of the textual parameter. For example, text_length('abc') returns 3.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_append",
+  "signature": "text_append(first_text: text, second_text: text): text",
+  "params": [
+   {
+    "name": "first_text",
+    "type": "text"
+   },
+   {
+    "name": "second_text",
+    "type": "text"
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the concatenation of the textual values first_text and second_text. For example, text_append('abc','cba') returns 'abccba'. Text literals and FIBs placed together are also concatenated.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_find",
+  "signature": "text_find(original_text: text, pattern: text, case_sensitive: boolean, starting_index: number): number",
+  "params": [
+   {
+    "name": "original_text",
+    "type": "text",
+    "doc": "Text to search inside."
+   },
+   {
+    "name": "pattern",
+    "type": "text",
+    "doc": "Pattern text expression to search for."
+   },
+   {
+    "name": "case_sensitive",
+    "type": "boolean",
+    "doc": "Optional. Specifies if pattern search is case sensitive. The default value is true.",
+    "optional": true
+   },
+   {
+    "name": "starting_index",
+    "type": "number",
+    "doc": "Optional. Specifies the starting position for pattern search. The first character has position 1, which is the default value.",
+    "optional": true
+   }
+  ],
+  "returns": "number",
+  "doc": "Searches for a pattern string inside a given text, returning the character position of the first occurrence, or zero if the pattern is not a substring of the text. For example, text_find('abbacacbc','ba') returns 3.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_find_regex",
+  "signature": "text_find_regex(original_text: text, pattern: text, case_sensitive: boolean, starting_index: number): number",
+  "params": [
+   {
+    "name": "original_text",
+    "type": "text",
+    "doc": "Text to search inside."
+   },
+   {
+    "name": "pattern",
+    "type": "text",
+    "doc": "Pattern text expression to search for."
+   },
+   {
+    "name": "case_sensitive",
+    "type": "boolean",
+    "doc": "Optional. Specifies if pattern search is case sensitive. The default value is true.",
+    "optional": true
+   },
+   {
+    "name": "starting_index",
+    "type": "number",
+    "doc": "Optional. Specifies the starting position for pattern search. The first character has position 1, which is the default value.",
+    "optional": true
+   }
+  ],
+  "returns": "number",
+  "doc": "Searches for a regular expression inside a given text, returning the position of the 1st occurrence, or zero if the pattern is not a substring of the text. For example, text_find_regex('abbacacbc','b(.*)c') returns 3.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_extract",
+  "signature": "text_extract(original_text: text, starting_index: number, end_index: number): text",
+  "params": [
+   {
+    "name": "original_text",
+    "type": "text",
+    "doc": "Initial text."
+   },
+   {
+    "name": "starting_index",
+    "type": "number",
+    "doc": "First position of the substring on original_text. The first character has position 1. A non-positive starting position also represents the first character."
+   },
+   {
+    "name": "end_index",
+    "type": "number",
+    "doc": "Optional. Last position of the substring on original_text. The default value is Text length. Every bigger position also represents the last character.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns a text substring. Returns the empty string if the ending position is smaller than the starting position.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_replace",
+  "signature": "text_replace(original_text: text, previous_text: text, new_text: text, case_sensitive: boolean, starting_index: number): text",
+  "params": [
+   {
+    "name": "original_text",
+    "type": "text",
+    "doc": "Text to search inside and replace."
+   },
+   {
+    "name": "previous_text",
+    "type": "text",
+    "doc": "Pattern text expression to replace inside Text."
+   },
+   {
+    "name": "new_text",
+    "type": "text",
+    "doc": "Replacing substring inside Text."
+   },
+   {
+    "name": "case_sensitive",
+    "type": "boolean",
+    "doc": "Optional. Specifies if pattern search is case sensitive. The default value is true.",
+    "optional": true
+   },
+   {
+    "name": "starting_index",
+    "type": "number",
+    "doc": "Optional. Specifies the starting position for pattern search. The first character has position 1, which is the default value. A non-positive starting position also represents the first character.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns a given text with all the occurrences of some substring starting from a specific position replaced by another substring. For example, text_replace('abc','b','g') returns 'agc'.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_replace_regex",
+  "signature": "text_replace_regex(original_text: text, pattern: text, new_text: text, case_sensitive: boolean, starting_index: number): text",
+  "params": [
+   {
+    "name": "original_text",
+    "type": "text",
+    "doc": "Text to search inside and replace."
+   },
+   {
+    "name": "pattern",
+    "type": "text",
+    "doc": "Pattern text expression to replace inside original_text."
+   },
+   {
+    "name": "new_text",
+    "type": "text",
+    "doc": "Replacing substring inside original_text."
+   },
+   {
+    "name": "case_sensitive",
+    "type": "boolean",
+    "doc": "Optional. Specifies if pattern search is case sensitive. The default value is true.",
+    "optional": true
+   },
+   {
+    "name": "starting_index",
+    "type": "number",
+    "doc": "Optional. Specifies the starting position for pattern search. The first character has position 1, which is the default value. A non-positive starting position also represents the first character.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns a given text with all the occurrences of a regular expression starting from a specific position replaced by a substring. For example, text_replace_regex('abcdef','b(.*)d','ggg') returns 'agggef'.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_trim",
+  "signature": "text_trim(original_text: text, position: TrimPosition): text",
+  "params": [
+   {
+    "name": "original_text",
+    "type": "text"
+   },
+   {
+    "name": "position",
+    "type": "TrimPosition",
+    "doc": "Optional. Default is TrimPosition::trimAll.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "doc": "Removes leading or training white spaces from original_text according to the optional position. The default value for the position is TrimPosition::trimAll. For example, text_trim(' aa ') returns 'aa'.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_split",
+  "signature": "text_split(original_text: text, delimiter: text): array of text",
+  "params": [
+   {
+    "name": "original_text",
+    "type": "text"
+   },
+   {
+    "name": "delimiter",
+    "type": "text",
+    "doc": "String used as separator."
+   }
+  ],
+  "returns": "array of text",
+  "doc": "Splits original_text using the string delimiter as separator. For example, text_split('a|b|c','|') returns an array with 'a', 'b' and 'c'.",
+  "url": "ref/expr/function-text.html",
+  "category": "text"
+ },
+ {
+  "name": "text_to_bytestream",
+  "signature": "text_to_bytestream(Text: text, Encoding: TextEncoding): bytestream",
+  "params": [
+   {
+    "name": "Text",
+    "type": "text"
+   },
+   {
+    "name": "Encoding",
+    "type": "TextEncoding"
+   }
+  ],
+  "returns": "bytestream",
+  "doc": "Converts text string Text into a byte stream using the encoding TextEncoding.",
+  "url": "ref/expr/function-text.html",
+  "category": "conversion"
+ },
+ {
+  "name": "bytestream_to_text",
+  "signature": "bytestream_to_text(Bytes: bytestream, Encoding: TextEncoding): text",
+  "params": [
+   {
+    "name": "Bytes",
+    "type": "bytestream"
+   },
+   {
+    "name": "Encoding",
+    "type": "TextEncoding"
+   }
+  ],
+  "returns": "text",
+  "doc": "Converts byte stream Bytes to text using the encoding TextEncoding.",
+  "url": "ref/expr/function-text.html",
+  "category": "conversion"
+ },
+ {
+  "name": "today",
+  "signature": "today(): date",
+  "params": [],
+  "returns": "date",
+  "doc": "Retrieves the current date from the Altitude uCI Server clock.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "now",
+  "signature": "now(): datetime",
+  "params": [],
+  "returns": "datetime",
+  "doc": "Retrieves the current time from the Altitude uCI Server clock.",
+  "url": "ref/expr/function-date.html",
+  "category": "date",
+  "webNotes": "ASL Web Edition (Agent Portal): returns the current date and time on the web server."
+ },
+ {
+  "name": "date",
+  "signature": "date(y: number, m: number, d: number): date",
+  "params": [
+   {
+    "name": "y",
+    "type": "number",
+    "doc": "Year."
+   },
+   {
+    "name": "m",
+    "type": "number",
+    "doc": "Month."
+   },
+   {
+    "name": "d",
+    "type": "number",
+    "doc": "Day."
+   }
+  ],
+  "returns": "date",
+  "doc": "Returns a date value, given the year, month and day.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "time",
+  "signature": "time(h: number, m: number, s: number): time",
+  "params": [
+   {
+    "name": "h",
+    "type": "number",
+    "doc": "Hours."
+   },
+   {
+    "name": "m",
+    "type": "number",
+    "doc": "Minutes."
+   },
+   {
+    "name": "s",
+    "type": "number",
+    "doc": "Optional. Seconds.",
+    "optional": true
+   }
+  ],
+  "returns": "time",
+  "doc": "Returns a time value, given the hours, minutes, and optionally seconds.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "datetime",
+  "signature": "datetime(y: number, M: number, d: number, h: number, m: number, s: number): datetime",
+  "params": [
+   {
+    "name": "y",
+    "type": "number",
+    "doc": "Year."
+   },
+   {
+    "name": "M",
+    "type": "number",
+    "doc": "Month."
+   },
+   {
+    "name": "d",
+    "type": "number",
+    "doc": "Day."
+   },
+   {
+    "name": "h",
+    "type": "number",
+    "doc": "Optional. Hours. Default 0.",
+    "optional": true
+   },
+   {
+    "name": "m",
+    "type": "number",
+    "doc": "Optional. Minutes. Default 0.",
+    "optional": true
+   },
+   {
+    "name": "s",
+    "type": "number",
+    "doc": "Optional. Seconds. Default 0.",
+    "optional": true
+   }
+  ],
+  "returns": "datetime",
+  "doc": "Returns a datetime value given the year, month, day, and optionally hours, minutes and seconds. The default value of the optional parameters is 0.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "year",
+  "signature": "year(dt: datetime): number",
+  "params": [
+   {
+    "name": "dt",
+    "type": "datetime"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the year (0...9999) of the datetime dt.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "month",
+  "signature": "month(dt: datetime): number",
+  "params": [
+   {
+    "name": "dt",
+    "type": "datetime"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the month (1...12) of the datetime dt.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "day",
+  "signature": "day(dt: datetime): number",
+  "params": [
+   {
+    "name": "dt",
+    "type": "datetime"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the day (1...31) of the datetime dt.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "hour",
+  "signature": "hour(tm: time): number",
+  "params": [
+   {
+    "name": "tm",
+    "type": "time"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the hours (0...23) of the time value tm.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "minute",
+  "signature": "minute(tm: time): number",
+  "params": [
+   {
+    "name": "tm",
+    "type": "time"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the minutes (0...59) of the time value tm.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "second",
+  "signature": "second(tm: time): number",
+  "params": [
+   {
+    "name": "tm",
+    "type": "time"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the seconds (0...59) of the time value tm.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "week_day",
+  "signature": "week_day(Date: date): text",
+  "params": [
+   {
+    "name": "Date",
+    "type": "date"
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the week day of the date Date as a text value, according to the Windows regional settings. English uses the values Monday, Tuesday, ...",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "nyears",
+  "signature": "nyears(dt1: date, dt2: date): number",
+  "params": [
+   {
+    "name": "dt1",
+    "type": "date"
+   },
+   {
+    "name": "dt2",
+    "type": "date"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the number of years between the two dates. If the first date is later than the second, the returned number is negative.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "nmonths",
+  "signature": "nmonths(dt1: date, dt2: date): number",
+  "params": [
+   {
+    "name": "dt1",
+    "type": "date"
+   },
+   {
+    "name": "dt2",
+    "type": "date"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the number of months between the two dates. If the first date is later than the second, the returned number is negative.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "local_to_time_zone",
+  "signature": "local_to_time_zone(Datetime: datetime, Timezone: text): datetime",
+  "params": [
+   {
+    "name": "Datetime",
+    "type": "datetime"
+   },
+   {
+    "name": "Timezone",
+    "type": "text",
+    "doc": "Timezone name defined in Management Portal."
+   }
+  ],
+  "returns": "datetime",
+  "doc": "Returns a datetime converted from the contact center timezone to a given timezone. Timezones are defined in Management Portal.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "time_zone_to_local",
+  "signature": "time_zone_to_local(Datetime: datetime, Timezone: text): datetime",
+  "params": [
+   {
+    "name": "Datetime",
+    "type": "datetime"
+   },
+   {
+    "name": "Timezone",
+    "type": "text",
+    "doc": "Timezone name defined in Management Portal."
+   }
+  ],
+  "returns": "datetime",
+  "doc": "Returns a datetime converted from a given timezone to the contact center timezone. Timezones are defined in Management Portal.",
+  "url": "ref/expr/function-date.html",
+  "category": "date"
+ },
+ {
+  "name": "if",
+  "signature": "if(Cond: boolean, Then: Type, Else: Type): Type",
+  "params": [
+   {
+    "name": "Cond",
+    "type": "boolean"
+   },
+   {
+    "name": "Then",
+    "type": "Type",
+    "doc": "Returned if Cond is true."
+   },
+   {
+    "name": "Else",
+    "type": "Type",
+    "doc": "Returned otherwise. Must have the same type as Then."
+   }
+  ],
+  "returns": "Type",
+  "doc": "If the condition Cond is true, returns Then. Otherwise, returns Else. Only the selected branch is evaluated, so the other cannot raise errors (e.g. division by zero).",
+  "url": "ref/expr/function-misc.html",
+  "category": "generic"
+ },
+ {
+  "name": "full_node_name",
+  "signature": "full_node_name(NodeName: text, NameSpace: text): text",
+  "params": [
+   {
+    "name": "NodeName",
+    "type": "text"
+   },
+   {
+    "name": "NameSpace",
+    "type": "text",
+    "doc": "Optional. Namespace the path is relative to.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the namespace path of node NodeName on the current namespace, or optionally the path relative to the given namespace NameSpace.",
+  "url": "ref/expr/function-misc.html",
+  "category": "generic"
+ },
+ {
+  "name": "linked_exit_point",
+  "signature": "linked_exit_point(ExitPointName: text): boolean",
+  "params": [
+   {
+    "name": "ExitPointName",
+    "type": "text"
+   }
+  ],
+  "returns": "boolean",
+  "doc": "Returns true if the exit point ExitPointName of a node template is linked to another node on the flow editor.",
+  "url": "ref/expr/function-misc.html",
+  "category": "generic"
+ },
+ {
+  "name": "size",
+  "signature": "size(Array: array of Type): number",
+  "params": [
+   {
+    "name": "Array",
+    "type": "array of Type"
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the current number of elements in the array Array.",
+  "url": "ref/expr/function-misc.html",
+  "category": "array"
+ },
+ {
+  "name": "number_array",
+  "signature": "number_array(Number: number,...): array of number",
+  "params": [
+   {
+    "name": "Number",
+    "type": "number",
+    "doc": "Values passed as arguments (one or more, comma separated)."
+   }
+  ],
+  "returns": "array of number",
+  "variadic": true,
+  "doc": "Returns an array of the number values passed as arguments. For example, number_array(1,3,5) returns an array with the three numbers 1, 3 and 5.",
+  "url": "ref/expr/function-misc.html",
+  "category": "array"
+ },
+ {
+  "name": "text_array",
+  "signature": "text_array(Text: text,...): array of text",
+  "params": [
+   {
+    "name": "Text",
+    "type": "text",
+    "doc": "Values passed as arguments (one or more, comma separated)."
+   }
+  ],
+  "returns": "array of text",
+  "variadic": true,
+  "doc": "Returns an array of the text values passed as arguments.",
+  "url": "ref/expr/function-misc.html",
+  "category": "array"
+ },
+ {
+  "name": "boolean_array",
+  "signature": "boolean_array(Boolean: boolean,...): array of boolean",
+  "params": [
+   {
+    "name": "Boolean",
+    "type": "boolean",
+    "doc": "Values passed as arguments (one or more, comma separated)."
+   }
+  ],
+  "returns": "array of boolean",
+  "variadic": true,
+  "doc": "Returns an array of the boolean values passed as arguments.",
+  "url": "ref/expr/function-misc.html",
+  "category": "array"
+ },
+ {
+  "name": "date_array",
+  "signature": "date_array(Date: date,...): array of date",
+  "params": [
+   {
+    "name": "Date",
+    "type": "date",
+    "doc": "Values passed as arguments (one or more, comma separated)."
+   }
+  ],
+  "returns": "array of date",
+  "variadic": true,
+  "doc": "Returns an array of the date values passed as arguments.",
+  "url": "ref/expr/function-misc.html",
+  "category": "array"
+ },
+ {
+  "name": "time_array",
+  "signature": "time_array(Time: time,...): array of time",
+  "params": [
+   {
+    "name": "Time",
+    "type": "time",
+    "doc": "Values passed as arguments (one or more, comma separated)."
+   }
+  ],
+  "returns": "array of time",
+  "variadic": true,
+  "doc": "Returns an array of the time values passed as arguments.",
+  "url": "ref/expr/function-misc.html",
+  "category": "array"
+ },
+ {
+  "name": "datetime_array",
+  "signature": "datetime_array(Datetime: datetime,...): array of datetime",
+  "params": [
+   {
+    "name": "Datetime",
+    "type": "datetime",
+    "doc": "Values passed as arguments (one or more, comma separated)."
+   }
+  ],
+  "returns": "array of datetime",
+  "variadic": true,
+  "doc": "Returns an array of the datetime values passed as arguments.",
+  "url": "ref/expr/function-misc.html",
+  "category": "array"
+ },
+ {
+  "name": "build_sql_contains",
+  "signature": "build_sql_contains(Column: text, Operator: SqlContainsOperator, FilterText: TEXT): text",
+  "params": [
+   {
+    "name": "Column",
+    "type": "text",
+    "doc": "Name of the database table column where the textual search will be performed. The specified column must full-text indexed."
+   },
+   {
+    "name": "Operator",
+    "type": "SqlContainsOperator",
+    "doc": "Specifies an exact match query, or a boolean operator to combine the search terms of the filter text: allWords, anyWord or exactMatch."
+   },
+   {
+    "name": "FilterText",
+    "type": "text",
+    "doc": "Text expression to search for, or multiple terms that will be combined using a boolean operator."
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns a textual value containing a SQL CONTAINS predicate to build full-text database queries.",
+  "url": "ref/expr/function-misc.html",
+  "category": "database"
+ },
+ {
+  "name": "file_create",
+  "signature": "file_create(filename: text, permission_mode: FileAccessMode, share_mode: FileShareMode): number",
+  "params": [
+   {
+    "name": "filename",
+    "type": "text",
+    "doc": "Path name of the new file."
+   },
+   {
+    "name": "permission_mode",
+    "type": "FileAccessMode",
+    "doc": "Access permissions of the script over the file."
+   },
+   {
+    "name": "share_mode",
+    "type": "FileShareMode",
+    "doc": "Access permissions of other applications over the file while it is open on the script."
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns a file handle for a new text file that is created and open. Sets @error if the file already exists.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_open",
+  "signature": "file_open(filename: text, permission_mode: FileAccessMode, share_mode: FileShareMode): number",
+  "params": [
+   {
+    "name": "filename",
+    "type": "text",
+    "doc": "Path name of the file."
+   },
+   {
+    "name": "permission_mode",
+    "type": "FileAccessMode",
+    "doc": "Access permissions of the script over the file."
+   },
+   {
+    "name": "share_mode",
+    "type": "FileShareMode",
+    "doc": "Access permissions of other applications over the file while it is open on the script."
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns a file handle for a specified file that is open. Sets @error if the file does not exist.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_delete",
+  "signature": "file_delete(filename: text): boolean",
+  "params": [
+   {
+    "name": "filename",
+    "type": "text"
+   }
+  ],
+  "returns": "boolean",
+  "doc": "Returns true if the file with path name filename is deleted. Sets @error if the file does not exist.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_exists",
+  "signature": "file_exists(filename: text): boolean",
+  "params": [
+   {
+    "name": "filename",
+    "type": "text"
+   }
+  ],
+  "returns": "boolean",
+  "doc": "Returns true if the file with path name filename exists on disk.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_datetime",
+  "signature": "file_datetime(filename: text): datetime",
+  "params": [
+   {
+    "name": "filename",
+    "type": "text"
+   }
+  ],
+  "returns": "datetime",
+  "doc": "Returns the date and time of the last modification of the file with path name filename.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_split_path",
+  "signature": "file_split_path(file_path: text): Path",
+  "params": [
+   {
+    "name": "file_path",
+    "type": "text"
+   }
+  ],
+  "returns": "Path",
+  "doc": "Returns a record with the drive letter, directory path, file name and file extension of the file file_path.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_make_path",
+  "signature": "file_make_path(file_path: Path): text",
+  "params": [
+   {
+    "name": "file_path",
+    "type": "Path",
+    "doc": "Record with fields driveLetter, dirPath, fileName, fileExtension (all text)."
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns a textual representation of the path name file_path.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_close",
+  "signature": "file_close(file_handle: number): boolean",
+  "params": [
+   {
+    "name": "file_handle",
+    "type": "number"
+   }
+  ],
+  "returns": "boolean",
+  "doc": "Returns true if the file with file handle file_handle is closed. Sets @error if the file handle is invalid.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_seek",
+  "signature": "file_seek(file_handle: number, offset: number, position: SeekPosition): number",
+  "params": [
+   {
+    "name": "file_handle",
+    "type": "number",
+    "doc": "File handle of the file."
+   },
+   {
+    "name": "offset",
+    "type": "number",
+    "doc": "Number of characters to move the cursor. Negative numbers move the current position back, and positive numbers move the current position forward."
+   },
+   {
+    "name": "position",
+    "type": "SeekPosition",
+    "doc": "Optional. Absolute position in the file to add the offset. The default is SeekPosition::current.",
+    "optional": true
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the new cursor position of a specified file, given an offset and a starting position. Sets @error if file_handle is not valid.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_read_line",
+  "signature": "file_read_line(file_handle: number): text",
+  "params": [
+   {
+    "name": "file_handle",
+    "type": "number"
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the sequence of characters read from the file with file handle file_handle until finding end of line characters. Sets @error if the file handle is invalid, the file is not open for reading, or the end of the file is found.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_read",
+  "signature": "file_read(file_handle: number, number_chars: number): text",
+  "params": [
+   {
+    "name": "file_handle",
+    "type": "number",
+    "doc": "File handle of the file."
+   },
+   {
+    "name": "number_chars",
+    "type": "number",
+    "doc": "Optional. Number of characters to read from the file. The default is to read the entire file.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns characters read from the file with the file handle file_handle until finding the end of file, or optionally a specified number of characters. Sets @error if the file handle is invalid, the file is not open for reading, or the end of the file is found.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_write",
+  "signature": "file_write(file_handle: number, buffer: text, number_chars: number): number",
+  "params": [
+   {
+    "name": "file_handle",
+    "type": "number",
+    "doc": "Numeric file handle of the file."
+   },
+   {
+    "name": "buffer",
+    "type": "text",
+    "doc": "Text to write to the file."
+   },
+   {
+    "name": "number_chars",
+    "type": "number",
+    "doc": "Optional. Number of characters from the buffer to write to the file. The default is to write the entire buffer.",
+    "optional": true
+   }
+  ],
+  "returns": "number",
+  "doc": "Returns the number of characters written to a file. Sets @error if the file handle is invalid, the file is not open for writing, or there is not enough space on disk.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_write_line",
+  "signature": "file_write_line(file_handle: number, buffer: text): boolean",
+  "params": [
+   {
+    "name": "file_handle",
+    "type": "number",
+    "doc": "File handle of the file."
+   },
+   {
+    "name": "buffer",
+    "type": "text",
+    "doc": "Text to write to the file."
+   }
+  ],
+  "returns": "boolean",
+  "doc": "Returns true if the operation of writing text to a file succeeds. End-of-line characters are added to the file. Sets @error if the file handle is invalid, the file is not open for writing, or there is not enough space on disk.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "file_copy",
+  "signature": "file_copy(source_filename: text, destination_filename: text, overwrite: boolean): boolean",
+  "params": [
+   {
+    "name": "source_filename",
+    "type": "text",
+    "doc": "Path name of the file to copy."
+   },
+   {
+    "name": "destination_filename",
+    "type": "text",
+    "doc": "Path name of the destination file. Creates the file if it does not exist."
+   },
+   {
+    "name": "overwrite",
+    "type": "boolean",
+    "doc": "If true, the destination file is overwritten if it already exists."
+   }
+  ],
+  "returns": "boolean",
+  "doc": "Returns true if a file contents is copied to another file. Sets @error if the source file does not exist.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "folder_system_path",
+  "signature": "folder_system_path(system_folder: SystemFolder): text",
+  "params": [
+   {
+    "name": "system_folder",
+    "type": "SystemFolder",
+    "doc": "The system folder to look up."
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the path of a system folder.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: listed among the built-ins executed on the web server with NETWORK_SERVICE security settings."
+ },
+ {
+  "name": "tmp_filename",
+  "signature": "tmp_filename(Directory: text, Prefix: text): text",
+  "params": [
+   {
+    "name": "Directory",
+    "type": "text",
+    "doc": "Optional. The directory where the temporary file is searched for. The default value is the current working directory of uAgent Web or Automated Agents.",
+    "optional": true
+   },
+   {
+    "name": "Prefix",
+    "type": "text",
+    "doc": "Optional. Prefix of the name of the temporary file. The default is the empty string.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "overloads": [
+   "tmp_filename() : text",
+   "tmp_filename(Directory: text, Prefix: text): text"
+  ],
+  "doc": "Returns the name of a temporary file.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "lookup",
+  "signature": "lookup(File: text, Key: text, Value_col: number, Key_col: number, Separator: text): text",
+  "params": [
+   {
+    "name": "File",
+    "type": "text",
+    "doc": "Path name of the file."
+   },
+   {
+    "name": "Key",
+    "type": "text",
+    "doc": "Key value to look up for."
+   },
+   {
+    "name": "Value_col",
+    "type": "number",
+    "doc": "Optional. Number of the column to return on a match. By default, the second column.",
+    "optional": true
+   },
+   {
+    "name": "Key_col",
+    "type": "number",
+    "doc": "Optional. Number of the column with the keys. By default, the first column.",
+    "optional": true
+   },
+   {
+    "name": "Separator",
+    "type": "text",
+    "doc": "Optional. Character used as separator for the columns. By default, the vertical bar.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "doc": "Searches in a column of a table format text file for a key value and returns the cell contents on the same row and another column.",
+  "url": "ref/expr/function-file.html",
+  "category": "file",
+  "webNotes": "ASL Web Edition: the Agent Portal uses NETWORK_SERVICE security settings to execute file built-ins on the web server."
+ },
+ {
+  "name": "current_email_id",
+  "signature": "current_email_id(EmailEditorName: text, WindowId: number): text",
+  "params": [
+   {
+    "name": "EmailEditorName",
+    "type": "text"
+   },
+   {
+    "name": "WindowId",
+    "type": "number",
+    "doc": "Optional per docs wording ('optionally in the window WindowId').",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "doc": "Only for uAgent scripts. Returns the email identifier of the email displayed on the email editor named EmailEditorName, optionally in the window WindowId.",
+  "url": "ref/expr/function-graphic-webasl.html",
+  "category": "uagent"
+ },
+ {
+  "name": "selected_cursor_line",
+  "signature": "selected_cursor_line(TableName: text, WindowId: number): number",
+  "params": [
+   {
+    "name": "TableName",
+    "type": "text"
+   },
+   {
+    "name": "WindowId",
+    "type": "number",
+    "doc": "Optional per docs wording ('optionally in the window WindowId').",
+    "optional": true
+   }
+  ],
+  "returns": "number",
+  "doc": "Only for uAgent scripts. Returns the cursor position selected on the table named TableName, optionally in the window WindowId, or -1 if the table is empty.",
+  "url": "ref/expr/function-graphic-webasl.html",
+  "category": "uagent"
+ },
+ {
+  "name": "rgb_color",
+  "signature": "rgb_color(Red: number, Green: number, Blue: number): RGBColor",
+  "params": [
+   {
+    "name": "ColorName",
+    "type": "text",
+    "doc": "Name of the color (e.g. \"Red\", \"AliceBlue\"), or name of a component in the current Windows appearance scheme, like Active Border, Desktop or Menu Bar. Single-argument overload."
+   },
+   {
+    "name": "Red",
+    "type": "number",
+    "doc": "Red component, integer between 0 and 255. Three-argument overload."
+   },
+   {
+    "name": "Green",
+    "type": "number",
+    "doc": "Green component, integer between 0 and 255."
+   },
+   {
+    "name": "Blue",
+    "type": "number",
+    "doc": "Blue component, integer between 0 and 255."
+   }
+  ],
+  "returns": "RGBColor",
+  "overloads": [
+   "rgb_color(ColorName: text) : RGBColor",
+   "rgb_color(Red: number, Green: number, Blue: number): RGBColor"
+  ],
+  "doc": "Only for uAgent scripts. Returns the color with the name ColorName or with the three RGB color components.",
+  "url": "ref/expr/function-graphic-webasl.html",
+  "category": "uagent"
+ },
+ {
+  "name": "soft_phone_volume",
+  "signature": "soft_phone_volume(): number",
+  "params": [],
+  "returns": "number",
+  "doc": "Only for uAgent scripts. Returns the current soft phone volume.",
+  "url": "ref/expr/function-graphic-webasl.html",
+  "category": "uagent"
+ },
+ {
+  "name": "file_browser",
+  "signature": "file_browser(initial_folder: text, extensions: text, dialog_title: text): text",
+  "params": [
+   {
+    "name": "initial_folder",
+    "type": "text",
+    "doc": "Optional. Initial directory of the browser window.",
+    "optional": true
+   },
+   {
+    "name": "extensions",
+    "type": "text",
+    "doc": "Optional. List of valid file extensions separated by semicolons (;). The default is all files.",
+    "optional": true
+   },
+   {
+    "name": "dialog_title",
+    "type": "text",
+    "doc": "Optional. Dialog title. The default is the system default.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "overloads": [
+   "file_browser() : text",
+   "file_browser(initial_folder: text, extensions: text, dialog_title: text): text"
+  ],
+  "doc": "For uAgent scripts. Returns a fake path. For example, c:\\fakepath\\<filename>.",
+  "url": "ref/expr/function-graphic-webasl.html",
+  "category": "uagent",
+  "webNotes": "ASL Web Edition: the Agent Portal returns a fake path."
+ },
+ {
+  "name": "agents",
+  "signature": "agents(Campaign: text): array of text",
+  "params": [
+   {
+    "name": "Campaign",
+    "type": "text",
+    "doc": "Optional. Only agents assigned to this campaign.",
+    "optional": true
+   }
+  ],
+  "returns": "array of text",
+  "overloads": [
+   "agents() : array of text",
+   "agents(Campaign: text): array of text"
+  ],
+  "doc": "Returns the list of names of the agents configured on the Altitude uCI Server, or optionally only the agents that are assigned to the specified campaign.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "campaigns",
+  "signature": "campaigns(): array of text",
+  "params": [],
+  "returns": "array of text",
+  "doc": "Returns the list of campaign names of a session service.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "custom_call_states",
+  "signature": "custom_call_states(): array of CustomCallState",
+  "params": [],
+  "returns": "array of CustomCallState",
+  "doc": "Returns the list of custom call states defined in Management Portal.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "GetDayTypeNames",
+  "signature": "session.Instance.GetDayTypeNames(\"2018-12-31\" : date)",
+  "params": [
+   {
+    "name": "date",
+    "type": "date",
+    "doc": "Optional. Date to find day types for; the docs show a call without arguments too.",
+    "optional": true
+   }
+  ],
+  "returns": "System::String[]",
+  "overloads": [
+   "session.Instance.GetDayTypeNames(\"2018-12-31\" : date)",
+   "session.Instance.GetDayTypeNames()"
+  ],
+  "doc": "Returns the list of day types that include a given date. Documented as a .NET-style method call on session.Instance, assigned to `var dayTypes: System::String[]`.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "last_called_agent",
+  "signature": "last_called_agent(uniqueId: text): text",
+  "params": [
+   {
+    "name": "uniqueId",
+    "type": "text",
+    "doc": "Contact profile unique id."
+   }
+  ],
+  "returns": "text",
+  "doc": "Returns the user name of the agent that handled the last interaction of the specified contact profile unique id.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "medias",
+  "signature": "medias(): array of MediaInfo",
+  "params": [],
+  "returns": "array of MediaInfo",
+  "doc": "Returns the list of the medias configured on the Altitude uCI Server.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "outbound_rules",
+  "signature": "outbound_rules(): array of text",
+  "params": [],
+  "returns": "array of text",
+  "doc": "Returns the list of outbound rule names.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "phone_schedule_rules",
+  "signature": "phone_schedule_rules(): array of text",
+  "params": [],
+  "returns": "array of text",
+  "doc": "Returns the list of phone schedule rule names.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "session_outcomes_history",
+  "signature": "session_outcomes_history(ScriptSession: number): array of PreviousOutcome",
+  "params": [
+   {
+    "name": "ScriptSession",
+    "type": "number"
+   }
+  ],
+  "returns": "array of PreviousOutcome",
+  "doc": "Returns the outcomes of a previous script session.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "skill_profile",
+  "signature": "skill_profile(Name: text): SkillProfile",
+  "params": [
+   {
+    "name": "Name",
+    "type": "text"
+   }
+  ],
+  "returns": "SkillProfile",
+  "doc": "Returns the skill profile with the name Name (an array of SkillProfileEntry).",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "skill_profile_info",
+  "signature": "skill_profile_info(Campaign: text, SkillName: text): SkillProfileInfo",
+  "params": [
+   {
+    "name": "Campaign",
+    "type": "text"
+   },
+   {
+    "name": "SkillName",
+    "type": "text"
+   }
+  ],
+  "returns": "SkillProfileInfo",
+  "doc": "For IVR and routing scripts. Returns the information about agents working with skill profile SkillName in the campaign Campaign.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "skill_profile_media_info",
+  "signature": "skill_profile_media_info(Campaign: text, SkillName: text, MediaName: text): SkillProfileInfo",
+  "params": [
+   {
+    "name": "Campaign",
+    "type": "text"
+   },
+   {
+    "name": "SkillName",
+    "type": "text"
+   },
+   {
+    "name": "MediaName",
+    "type": "text",
+    "doc": "Media type name."
+   }
+  ],
+  "returns": "SkillProfileInfo",
+  "doc": "For IVR and routing scripts. Returns the information about agents working with skill profile SkillName in the campaign Campaign, for the media type MediaName.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "skill_profiles",
+  "signature": "skill_profiles(): array of text",
+  "params": [],
+  "returns": "array of text",
+  "doc": "Returns the list of skill profile names.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "time_zones",
+  "signature": "time_zones(): array of text",
+  "params": [],
+  "returns": "array of text",
+  "doc": "Returns the list of time zone names.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "workflow_definitions",
+  "signature": "workflow_definitions(Service: text): array of text",
+  "params": [
+   {
+    "name": "Service",
+    "type": "text",
+    "doc": "Optional. Service name; default is the current service.",
+    "optional": true
+   }
+  ],
+  "returns": "array of text",
+  "overloads": [
+   "workflow_definitions() : array of text",
+   "workflow_definitions(Service: text): array of text"
+  ],
+  "doc": "Returns the list of all the workflow definition names for the current service, or optionally for the specified service.",
+  "url": "ref/expr/server.html",
+  "category": "server"
+ },
+ {
+  "name": "queue_position",
+  "signature": "queue_position(): QueuePosition",
+  "params": [],
+  "returns": "QueuePosition",
+  "doc": "Returns a value of type QueuePosition with routing information about the current interaction. Only applies to phone and instant messaging interactions.",
+  "url": "ref/expr/auto-function.html",
+  "category": "automated-agents"
+ },
+ {
+  "name": "whole",
+  "signature": "whole(Exp: text, Format: text): text",
+  "params": [
+   {
+    "name": "Exp",
+    "type": "text"
+   },
+   {
+    "name": "Format",
+    "type": "text",
+    "doc": "Optional. Auxiliary information for the DLL function, such as language, genre, or number.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "overloads": [
+   "whole(Exp: text) : text",
+   "whole(Exp: text, Format: text): text"
+  ],
+  "doc": "Returns the text that corresponds to reading out Exp as usual. For example, 11 may become eleven. Returns null if Exp cannot be converted to speech.",
+  "url": "ref/expr/auto-function.html",
+  "category": "automated-agents"
+ },
+ {
+  "name": "spell",
+  "signature": "spell(Exp: text, Format: text): text",
+  "params": [
+   {
+    "name": "Exp",
+    "type": "text"
+   },
+   {
+    "name": "Format",
+    "type": "text",
+    "doc": "Optional. Auxiliary information for the DLL function, such as language, genre, or number.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "overloads": [
+   "spell(Exp: text) : text",
+   "spell(Exp: text, Format: text): text"
+  ],
+  "doc": "Returns the text that corresponds to spelling out Exp. For example, 11 may become one one. Returns null if Exp cannot be converted to speech.",
+  "url": "ref/expr/auto-function.html",
+  "category": "automated-agents"
+ },
+ {
+  "name": "ordinal",
+  "signature": "ordinal(Exp: text, Format: text): text",
+  "params": [
+   {
+    "name": "Exp",
+    "type": "text"
+   },
+   {
+    "name": "Format",
+    "type": "text",
+    "doc": "Optional. Auxiliary information for the DLL function, such as language, genre, or number.",
+    "optional": true
+   }
+  ],
+  "returns": "text",
+  "overloads": [
+   "ordinal(Exp: text) : text",
+   "ordinal(Exp: text, Format: text): text"
+  ],
+  "doc": "Returns the text that corresponds to reading Exp as an ordinal. For example, 11 may become eleventh. Returns null if Exp cannot be converted to speech.",
+  "url": "ref/expr/auto-function.html",
+  "category": "automated-agents"
+ },
+ {
+  "name": "activity_schema",
+  "signature": "activity_schema(): array of TableSchemaColumn",
+  "params": [],
+  "returns": "array of TableSchemaColumn",
+  "doc": "Returns the attribute declaration for the activity table schema of the current campaign.",
+  "url": "ref/expr/activity-schema.html",
+  "category": "server"
+ },
+ {
+  "name": "contact_profile_extension_schema",
+  "signature": "contact_profile_extension_schema(Name: text): array of TableSchemaColumn",
+  "params": [
+   {
+    "name": "Name",
+    "type": "text"
+   }
+  ],
+  "returns": "array of TableSchemaColumn",
+  "doc": "Returns the attribute declaration for the extension of the specified directory.",
+  "url": "ref/expr/contact-profile-extension-schema.html",
+  "category": "server"
+ },
+ {
+  "name": "agent_info",
+  "signature": "agent_info(Agent: text): AgentInfo",
+  "params": [
+   {
+    "name": "Agent",
+    "type": "text"
+   }
+  ],
+  "returns": "AgentInfo",
+  "doc": "Returns the state, skills, and interactions queued for the agent with short name Agent.",
+  "url": "ref/expr/agent-info.html",
+  "category": "server"
+ },
+ {
+  "name": "ani_lists",
+  "signature": "ani_lists(service: text): array of text",
+  "params": [
+   {
+    "name": "service",
+    "type": "text",
+    "doc": "If set, returns a list of names of Service ANI Lists for the specified service. Otherwise, returns a list of names of Service ANI Lists for the service of the campaign where the current session is running."
+   }
+  ],
+  "returns": "array of text",
+  "doc": "Returns a list of names of Service ANI Lists for the specified service.",
+  "url": "ref/expr/ani-lists.html",
+  "category": "server"
+ },
+ {
+  "name": "available_agents_info",
+  "signature": "available_agents_info(logged: boolean, withExtension: boolean, userNameFilter: text, fullNameFilter: text, campaignsReady: array of text): array of AvailableAgentInfo",
+  "params": [
+   {
+    "name": "logged",
+    "type": "boolean",
+    "doc": "Optional. If true, the function only returns the information of logged agents. The default is true.",
+    "optional": true
+   },
+   {
+    "name": "withExtension",
+    "type": "boolean",
+    "doc": "Optional. If true, the function only returns the information of agents with an extension. The default is true.",
+    "optional": true
+   },
+   {
+    "name": "userNameFilter",
+    "type": "text",
+    "doc": "Optional. Text to search in the user names of the agents. The function only returns the information of agents that contain the text in the user name. The default is the empty string.",
+    "optional": true
+   },
+   {
+    "name": "fullNameFilter",
+    "type": "text",
+    "doc": "Optional. Text to search in the full names of the agents. The function only returns the information of agents that contain the text in the full name. The default is the empty string.",
+    "optional": true
+   },
+   {
+    "name": "campaignsReady",
+    "type": "array of text",
+    "doc": "Optional. Array containing names of campaigns. The function only returns the information of agents ready in all the specified campaigns. The default is an empty array.",
+    "optional": true
+   }
+  ],
+  "returns": "array of AvailableAgentInfo",
+  "doc": "Returns the state of the agents working in the contact center.",
+  "url": "ref/expr/available-agents-info.html",
+  "category": "server"
+ },
+ {
+  "name": "email_message",
+  "signature": "email_message(Email: number): EmailMessage",
+  "params": [
+   {
+    "name": "Email",
+    "type": "number"
+   }
+  ],
+  "returns": "EmailMessage",
+  "doc": "Returns the fields of an email stored in the document manager, as specified by the numeric identifier Email.",
+  "url": "ref/expr/email-message.html",
+  "category": "server"
+ },
+ {
+  "name": "campaign_agents_info",
+  "signature": "campaign_agents_info(Campaign: text): array of CampaignAgentInfo",
+  "params": [
+   {
+    "name": "Campaign",
+    "type": "text"
+   }
+  ],
+  "returns": "array of CampaignAgentInfo",
+  "doc": "Returns the state of the agents in the campaign with the name Campaign. The agents must have the campaign open.",
+  "url": "ref/expr/campaign-agent-info.html",
+  "category": "server"
+ },
+ {
+  "name": "campaign_agents_media_info",
+  "signature": "campaign_agents_media_info(Campaign: text, MediaName: text): array of CampaignAgentMediaInfo",
+  "params": [
+   {
+    "name": "Campaign",
+    "type": "text"
+   },
+   {
+    "name": "MediaName",
+    "type": "text"
+   }
+  ],
+  "returns": "array of CampaignAgentMediaInfo",
+  "doc": "Returns information about all medias of all agents, for a given campaign and media name.",
+  "url": "ref/expr/campaign-agent-media-info.html",
+  "category": "server"
+ },
+ {
+  "name": "campaign_info",
+  "signature": "campaign_info(Campaign: text): CampaignInfo",
+  "params": [
+   {
+    "name": "Campaign",
+    "type": "text"
+   }
+  ],
+  "returns": "CampaignInfo",
+  "doc": "Returns the number of agents and interactions in the campaign with the short name Campaign. In environments with a large usage of the function, consider using the built-in skill_profile_media_info.",
+  "url": "ref/expr/campaign-info.html",
+  "category": "server"
+ },
+ {
+  "name": "campaign_schema",
+  "signature": "campaign_schema(): array of TableSchemaColumn",
+  "params": [],
+  "returns": "array of TableSchemaColumn",
+  "doc": "Returns the attribute declaration for the campaign table schema of the current campaign.",
+  "url": "ref/expr/campaign-schema.html",
+  "category": "server"
+ },
+ {
+  "name": "document_info",
+  "signature": "document_info(doc_id: DocumentId, rev_nr: number): DocumentInfo",
+  "params": [
+   {
+    "name": "doc_id",
+    "type": "DocumentId"
+   },
+   {
+    "name": "rev_nr",
+    "type": "number",
+    "optional": true
+   }
+  ],
+  "returns": "DocumentInfo",
+  "overloads": [
+   "document_info(doc_id: DocumentId) : DocumentInfo",
+   "document_info(doc_id: DocumentId, rev_nr: number): DocumentInfo"
+  ],
+  "doc": "Returns information about the active revision of the document doc_id on the document manager. Optionally, specify a specific revision number rev_nr.",
+  "url": "ref/expr/document-info.html",
+  "category": "server"
+ },
+ {
+  "name": "document_revisions",
+  "signature": "document_revisions(doc_id: DocumentId): array of DocumentRevisionInfo",
+  "params": [
+   {
+    "name": "doc_id",
+    "type": "DocumentId"
+   }
+  ],
+  "returns": "array of DocumentRevisionInfo",
+  "doc": "Returns the list of revisions of the document doc_id on the document manager.",
+  "url": "ref/expr/document-revision.html",
+  "category": "server"
+ },
+ {
+  "name": "interaction_history_detail",
+  "signature": "interaction_history_detail(interactionId: number): InteractionHistoryDetail",
+  "params": [
+   {
+    "name": "interactionId",
+    "type": "number"
+   }
+  ],
+  "returns": "InteractionHistoryDetail",
+  "doc": "Returns information about an interaction with the ID interactionId returned by the system cursors contactProfileInteractionsHistory and contactProfileInteractionsWithOutcomesHistory.",
+  "url": "ref/expr/interaction-history-detail.html",
+  "category": "server"
+ }
+]

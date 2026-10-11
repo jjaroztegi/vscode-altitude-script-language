@@ -1,0 +1,1892 @@
+[
+ {
+  "name": "set timer",
+  "section": "Event actions",
+  "syntax": [
+   "set timer to Expression trigger event ID [into IntegerVAR]",
+   "set timer event ID [( )] to Expression [into IntegerVAR]",
+   "set timer to Expression trigger event ID [( )] [id] [into IntegerVAR]"
+  ],
+  "defs": {},
+  "doc": "Invokes a user-defined timer event after a specified time.",
+  "url": "ref/action/timer.html"
+ },
+ {
+  "name": "trigger event",
+  "section": "Event actions",
+  "syntax": [
+   "trigger event ID [into IntegerVAR]",
+   "trigger event ID ( [Expression,...] ) [into IntegerVAR]"
+  ],
+  "defs": {},
+  "doc": "Triggers an event.",
+  "url": "ref/action/timer.html"
+ },
+ {
+  "name": "kill timer",
+  "section": "Event actions",
+  "syntax": [
+   "kill timer with id ID",
+   "kill timer [event] [with id] Expression"
+  ],
+  "defs": {},
+  "doc": "Stops the timer with the specified numeric identifier, killing the timer event invocation.",
+  "url": "ref/action/timer.html"
+ },
+ {
+  "name": "handle pending events",
+  "section": "Event actions",
+  "syntax": [
+   "handle pending events"
+  ],
+  "defs": {},
+  "doc": "Explicitly processes pending events if the developer wants to process events outside the session window message for uAgent scripts and node loop for Automated Agents s...",
+  "url": "ref/action/timer.html"
+ },
+ {
+  "name": "call master event handler",
+  "section": "Event actions",
+  "syntax": [
+   "call master event handler"
+  ],
+  "defs": {},
+  "doc": "Called inside an event handler calls the master overridden event handler instead of the local event handler.",
+  "url": "ref/action/timer.html"
+ },
+ {
+  "name": "open cursor",
+  "section": "Cursor and database actions",
+  "syntax": [
+   "open cursor ID"
+  ],
+  "defs": {},
+  "doc": "Opens the cursor named ID, as declared in the node.",
+  "url": "ref/action/cursor-sql.html"
+ },
+ {
+  "name": "close cursor",
+  "section": "Cursor and database actions",
+  "syntax": [
+   "close cursor ID"
+  ],
+  "defs": {},
+  "doc": "Closes the cursor ID.",
+  "url": "ref/action/cursor-sql.html"
+ },
+ {
+  "name": "fetch cursor",
+  "section": "Cursor and database actions",
+  "syntax": [
+   "fetch cursor ID [[absolute | relative] Number] [into TARGET,...]"
+  ],
+  "defs": {
+   "TARGET": "variable VAR [match by name] | record VAR [match by name] | ?"
+  },
+  "doc": "Retrieves a row from a cursor.",
+  "url": "ref/action/cursor-sql.html"
+ },
+ {
+  "name": "sql select",
+  "section": "Cursor and database actions",
+  "syntax": [
+   "sql select Text [into TARGET,...]"
+  ],
+  "defs": {
+   "TARGET": "variable VAR [match by name] | record VAR [match by name] | ?"
+  },
+  "doc": "Retrieves a single row from an SQL database, by executing an SQL select statement.",
+  "url": "ref/action/cursor-sql.html"
+ },
+ {
+  "name": "sql execute",
+  "section": "Cursor and database actions",
+  "syntax": [
+   "sql execute Text [id into VAR]"
+  ],
+  "defs": {},
+  "doc": "Executes the SQL generic statement Text, which cannot be a select statement. Assigns to VAR the SQL status variable lastserial.",
+  "url": "ref/action/cursor-sql.html"
+ },
+ {
+  "name": "system select",
+  "section": "Cursor and database actions",
+  "syntax": [
+   "system select from SYSTEM-CURSOR [columns STRING,...] [filter Sql] into TARGET,..."
+  ],
+  "defs": {
+   "TARGET": "variable VAR [match by name] | record VAR [match by name] | ?",
+   "SYSTEM-CURSOR": "SystemCursor::contacts | SystemCursor::contactProfiles with directory Text | SystemCursor::contactProfileInteractionsHistory with directory Text and contact profile unique id Text | SystemCursor::contactProfileInteractionsWithOutcomesHistory with directory Text and contact profile unique id Text [service Text|campaign Text] | SystemCursor::contactProfileQueuedEmails with directory Text and contact profile unique id Text | SystemCursor::contactProfileInProgressWorkflowProcessTasks with directory Text and contact profile unique id Text | SystemCursor::contactProfileScheduledContacts with directory Text and contact profile unique id Text | SystemCursor::queuedEmails [[with service Text|with campaign Text]] [only pickable by agent if Boolean] [include closed campaigns if Boolean] | SystemCursor::queuedAgentPickUpTasks [[with service Text|with campaign Text]] [only pickable by agent if Boolean] [include closed campaigns if Boolean] | SystemCursor::sentEmails [[with service Text|with campaign Text]] [include closed campaigns if Boolean] | SystemCursor::pendingWork [with agent Text] [and contact profile unique id Text] [[with service Text|with campaign Text]] [include closed campaigns if Boolean] [only activities with agent if Boolean] | SystemCursor::contactProfileInteractionThreadsHistory with [directory Text and] contact profile unique id Text | SystemCursor::contactInteractionThreadsHistory with contact Text | SystemCursor::gdprConsents | SystemCursor::gdprRequests"
+  },
+  "doc": "Retrieves a single row from a system cursor.",
+  "url": "ref/action/cursor-sql.html"
+ },
+ {
+  "name": "system count",
+  "section": "Cursor and database actions",
+  "syntax": [
+   "system count from SYSTEM-CURSOR [filter Sql] into VAR"
+  ],
+  "defs": {
+   "SYSTEM-CURSOR": "SystemCursor::contacts | SystemCursor::contactProfiles with directory Text | SystemCursor::contactProfileInteractionsHistory with directory Text and contact profile unique id Text | SystemCursor::contactProfileInteractionsWithOutcomesHistory with directory Text and contact profile unique id Text [service Text|campaign Text] | SystemCursor::contactProfileQueuedEmails with directory Text and contact profile unique id Text | SystemCursor::contactProfileInProgressWorkflowProcessTasks with directory Text and contact profile unique id Text | SystemCursor::contactProfileScheduledContacts with directory Text and contact profile unique id Text | SystemCursor::queuedEmails [[with service Text|with campaign Text]] [only pickable by agent if Boolean] [include closed campaigns if Boolean] | SystemCursor::queuedAgentPickUpTasks [[with service Text|with campaign Text]] [only pickable by agent if Boolean] [include closed campaigns if Boolean] | SystemCursor::sentEmails [[with service Text|with campaign Text]] [include closed campaigns if Boolean] | SystemCursor::pendingWork [with agent Text] [and contact profile unique id Text] [[with service Text|with campaign Text]] [include closed campaigns if Boolean] [only activities with agent if Boolean] | SystemCursor::contactProfileInteractionThreadsHistory with [directory Text and] contact profile unique id Text | SystemCursor::contactInteractionThreadsHistory with contact Text | SystemCursor::gdprConsents | SystemCursor::gdprRequests"
+  },
+  "doc": "Retrieves the number of rows from a system cursor.",
+  "url": "ref/action/cursor-sql.html"
+ },
+ {
+  "name": "set focus",
+  "section": "Graphical element actions",
+  "syntax": [
+   "graphical element Text [in window Integer] set focus"
+  ],
+  "defs": {},
+  "doc": "Sets the focus to the graphical element Text.",
+  "url": "ref/action/elem.html"
+ },
+ {
+  "name": "set background color",
+  "section": "Graphical element actions",
+  "syntax": [
+   "graphical element Text [in window Integer] set background color to RGBColor"
+  ],
+  "defs": {},
+  "doc": "Not available for Web browsers. Changes the background color of the graphical element Text to RGBColor.",
+  "url": "ref/action/elem.html"
+ },
+ {
+  "name": "set font",
+  "section": "Graphical element actions",
+  "syntax": [
+   "graphical element Text [in window Integer] set FONT"
+  ],
+  "defs": {},
+  "doc": "Not available for Web browsers and the chat control. Changes individual font properties of the text of the graphical element Text.",
+  "url": "ref/action/elem.html"
+ },
+ {
+  "name": "insert text",
+  "section": "Input element actions",
+  "syntax": [
+   "input Text [in window Integer] insert text Text"
+  ],
+  "defs": {},
+  "doc": "Inserts text on the input element Text, replacing the current selection.",
+  "url": "ref/action/elem-input.html"
+ },
+ {
+  "name": "set selection",
+  "section": "Input element actions",
+  "syntax": [
+   "input Text [in window Integer] set selection start to Integer [end to Integer]"
+  ],
+  "defs": {},
+  "doc": "Selects text on the input element Text between the two numeric positions. If the end position is omitted, sets the cursor position to the start position.",
+  "url": "ref/action/elem-input.html"
+ },
+ {
+  "name": "get selection",
+  "section": "Input element actions",
+  "syntax": [
+   "input Text [in window Integer] get selection start into IntegerVAR end into IntegerVAR"
+  ],
+  "defs": {},
+  "doc": "Assigns the start and end positions of the current selection of the input element Text to the two numeric variables.",
+  "url": "ref/action/elem-input.html"
+ },
+ {
+  "name": "set current block",
+  "section": "Container actions",
+  "syntax": [
+   "container Text [in window Integer] set current block Text"
+  ],
+  "defs": {},
+  "doc": "Sets the current block on the container element Text, replacing the current graphical element block.",
+  "url": "ref/action/elem-container.html"
+ },
+ {
+  "name": "goto url",
+  "section": "Web browser element actions",
+  "syntax": [
+   "web browser Text [in window Integer] goto url Text"
+  ],
+  "defs": {},
+  "doc": "The Web browser Text navigates to the URL Text.",
+  "url": "ref/action/elem-web-browser.html"
+ },
+ {
+  "name": "open document",
+  "section": "Web browser element actions",
+  "syntax": [
+   "web browser Text [in window Integer] open document [with id INT [revision INT]]"
+  ],
+  "defs": {},
+  "doc": "The Web browser opens a document stored in Altitude uCI server.",
+  "url": "ref/action/elem-web-browser.html"
+ },
+ {
+  "name": "open web browser window",
+  "section": "Web browser element actions",
+  "syntax": [
+   "open web browser window [Text] [at Integer , Integer] [size Integer , Integer] [name Text] [configuration Text] [with url Text] [with document id Integer [revision Integer]]"
+  ],
+  "defs": {},
+  "doc": "Opens a web browser in a new window outside the main script window.",
+  "url": "ref/action/elem-web-browser.html"
+ },
+ {
+  "name": "add attachment",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] add attachment [file Text | email id Integer | document [Number | DocumentRevisionId]]"
+  ],
+  "defs": {},
+  "records": "DocumentRevisionId: record { documentId : DocumentId revisionNumber : number }",
+  "doc": "Adds a file, an email, or a document as an attachment on the email editor Text. Invokes the email editor specific event before add attachment.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "save attachment",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] save attachment Integer to Text"
+  ],
+  "defs": {},
+  "doc": "Saves the email attachment number Integer on the email editor Text to file Text. The first attachment has index 1. Invokes the email editor specific event before save ...",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "remove attachment",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] remove attachment Integer"
+  ],
+  "defs": {},
+  "doc": "Removes the email attachment number Integer on the email editor Text. The first attachment has index 1. Invokes the email editor specific event before remove attachment.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "open attachment",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] open attachment Integer"
+  ],
+  "defs": {},
+  "doc": "Opens the attachment number Integer on the email editor Text. The first attachment has index 1. Invokes the email editor specific event before open message attachment.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "get attachments info",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] get attachments info into AttachmentsInfoVAR"
+  ],
+  "defs": {},
+  "records": "AttachmentsInfo: array of AttachmentInfo ; AttachmentInfo: record { name : text size : number contentType : text }",
+  "doc": "Assigns information about the attachments on the email editor Text on a variable AttachmentsInfoVAR.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "set focus",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] set focus on [HEADER | body] input"
+  ],
+  "defs": {
+   "HEADER": "from | to | cc | bcc | subject"
+  },
+  "doc": "Sets the focus on the blind carbon copy (bcc), the carbon copy (cc), the body, the to, the from and the subject fields of the email editor Text.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "get field",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] get [HEADER | html body | text body] field into TextVAR"
+  ],
+  "defs": {
+   "HEADER": "from | to | cc | bcc | subject"
+  },
+  "doc": "Assigns to the variable TextVAR the fields bcc, cc, to, from, subject, the body as HTML, or the body as plain text of the email editor Text.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "set field",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] set [HEADER | html body | text body] field to Text"
+  ],
+  "defs": {
+   "HEADER": "from | to | cc | bcc | subject"
+  },
+  "doc": "Changes the fields bcc, cc, to, from, subject, the body as HTML, or the body as plain text, to the expression Text.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "set background color",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] set [labels | inputs] background color to RGBColor"
+  ],
+  "defs": {},
+  "doc": "Sets the background color of the labels or the inputs of the email editor fields to color RGBColor.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "set font",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] set [labels | inputs] FONT"
+  ],
+  "defs": {},
+  "doc": "Changes individual font properties of the labels or input fields of the email editor Text.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "insert into body",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] insert [text | html] into body Text"
+  ],
+  "defs": {},
+  "doc": "Inserts plain or HTML text Text on the body field of the email editor Text, replacing the current selection.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "insert knowledge base document",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] insert knowledge base document Integer"
+  ],
+  "defs": {},
+  "doc": "Inserts the Knowledge Base document with identifier Integer on the body field of the email editor Text, replacing the current selection.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "set body selection",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] set body selection to OPTION"
+  ],
+  "defs": {
+   "OPTION": "start | end | all"
+  },
+  "doc": "Selects text on the body of the email editor Text to one of the following options:",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "get body selection",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] get body selection into VAR"
+  ],
+  "defs": {},
+  "doc": "Assigns the selected text on the body of the email editor Text into the variable VAR.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "load email id",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] load LOAD"
+  ],
+  "defs": {
+   "LOAD": "email with id Integer | new copy of email with id Integer | new reply to email with id Integer | new reply all to email with id Integer | new forward of email with id Integer to Text"
+  },
+  "doc": "Loads the email with the identifier Integer into the email editor Text. However, the clause email id at the graphical element overrides an on enter action.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "store email id",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] store email id into IntegerVAR"
+  ],
+  "defs": {},
+  "doc": "Stores on the document manager a new email with the contents of the email editor Text. Assigns the identifier of the new email to the variable IntegerVAR.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "send",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] send [id into IntegerVAR]"
+  ],
+  "defs": {},
+  "doc": "Sends the contents of the email editor Text as a new email. Assigns the numerical identifier of the email sent to the variable IntegerVAR. Invokes the email editor spe...",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "reply",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] reply [all] [into email editor Text [in window Integer]]"
+  ],
+  "defs": {},
+  "doc": "Starts to compose a new email in the email editor Text as a reply to the email displayed.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "forward",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] forward [to Text] [into email editor Text [in window Integer]]"
+  ],
+  "defs": {},
+  "doc": "Starts to compose a new email in the email editor Text as a forward email to the email displayed. The agent typically edits the contents of the email editor before sen...",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "clear",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] clear"
+  ],
+  "defs": {},
+  "doc": "Clears the contents of the email editor Text, creating a blank email.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "print",
+  "section": "Email editor element actions",
+  "syntax": [
+   "email editor Text [in window Integer] print [body only]"
+  ],
+  "defs": {},
+  "doc": "Prints the contents of the email editor Text, including the HTML body.",
+  "url": "ref/action/elem-email-editor.html"
+ },
+ {
+  "name": "clear",
+  "section": "Chat control element actions",
+  "syntax": [
+   "chat control Text [in window Integer] clear"
+  ],
+  "defs": {},
+  "doc": "Clears the contents of the windows of the chat control.",
+  "url": "ref/action/elem-chat-control-actions.html"
+ },
+ {
+  "name": "insert text",
+  "section": "Chat control element actions",
+  "syntax": [
+   "chat control Text [in window Integer] insert text Text"
+  ],
+  "defs": {},
+  "doc": "Inserts text in the input field of the chat control Text.",
+  "url": "ref/action/elem-chat-control-actions.html"
+ },
+ {
+  "name": "save transcript",
+  "section": "Chat control element actions",
+  "syntax": [
+   "chat control Text [in window Integer] save transcript"
+  ],
+  "defs": {},
+  "doc": "Saves the conversation transcript between the agent and the customer.",
+  "url": "ref/action/elem-chat-control-actions.html"
+ },
+ {
+  "name": "set selection",
+  "section": "Menu element actions",
+  "syntax": [
+   "menu Text [in window Integer] set selection [tag into TextVAR] [label into TextVAR]"
+  ],
+  "defs": {},
+  "doc": "Selects the first item in the menu element Text that matches the tag and label specified by the variables TextVAR.",
+  "url": "ref/action/elem-menu.html"
+ },
+ {
+  "name": "get selection",
+  "section": "Menu element actions",
+  "syntax": [
+   "menu Text [in window Integer] get selection [tag into TextVAR] [label into TextVAR]"
+  ],
+  "defs": {},
+  "doc": "Assigns the tag and label of the item currently selected in the menu element Text to two textual variables.",
+  "url": "ref/action/elem-menu.html"
+ },
+ {
+  "name": "set background color",
+  "section": "Table element actions",
+  "syntax": [
+   "table Text [in window Integer] set background color to RGBColor [at [line Integer] [column Integer]]"
+  ],
+  "defs": {},
+  "doc": "Changes the background color of the table element Text to RGBColor.",
+  "url": "ref/action/elem-table.html"
+ },
+ {
+  "name": "set font",
+  "section": "Table element actions",
+  "syntax": [
+   "table Text [in window Integer] set FONT [at [line Integer] [column Integer]]"
+  ],
+  "defs": {},
+  "doc": "Changes individual font properties of the text of the table element Text.",
+  "url": "ref/action/elem-table.html"
+ },
+ {
+  "name": "open window",
+  "section": "Multiple windows and tabs actions",
+  "syntax": [
+   "open window Text [at Integer , Integer] [size Integer , Integer] [caption Text] [overlay] [on close [event trigger | trigger event] ID] [with close button] [id into IntegerVAR] [arguments Expression,...]"
+  ],
+  "defs": {},
+  "doc": "Opens a new window to display the graphical elements of the node Text, without interrupting the current sequence of actions. The new window and the main script window ...",
+  "url": "ref/action/window-tab.html"
+ },
+ {
+  "name": "close window",
+  "section": "Multiple windows and tabs actions",
+  "syntax": [
+   "close window [with id Integer]"
+  ],
+  "defs": {},
+  "doc": "Closes a window. The script cannot close the first script window.",
+  "url": "ref/action/window-tab.html"
+ },
+ {
+  "name": "bring window to front",
+  "section": "Multiple windows and tabs actions",
+  "syntax": [
+   "bring window to front [with id Integer]"
+  ],
+  "defs": {},
+  "doc": "Brings a window to the front of all the other open windows.",
+  "url": "ref/action/window-tab.html"
+ },
+ {
+  "name": "open predefined tab",
+  "section": "Multiple windows and tabs actions",
+  "syntax": [
+   "open TAB tab [with focus]"
+  ],
+  "defs": {
+   "TAB": "email | contact | knowledge base | instant messaging"
+  },
+  "doc": "Opens a new predefined tab.",
+  "url": "ref/action/window-tab.html"
+ },
+ {
+  "name": "open tab",
+  "section": "Multiple windows and tabs actions",
+  "syntax": [
+   "open tab [node Text | control Text from Text] [caption Text] [with focus] [window id into IntegerVAR] [arguments Expression,...]"
+  ],
+  "defs": {},
+  "doc": "Opens a new tab, which can be a node or a Microsoft .NET control.",
+  "url": "ref/action/window-tab.html"
+ },
+ {
+  "name": "close tab",
+  "section": "Multiple windows and tabs actions",
+  "syntax": [
+   "close TAB tab",
+   "close tab [with id Integer]"
+  ],
+  "defs": {
+   "TAB": "email | contact | knowledge base | instant messaging"
+  },
+  "doc": "Closes an existing tab.",
+  "url": "ref/action/window-tab.html"
+ },
+ {
+  "name": "bring tab to front",
+  "section": "Multiple windows and tabs actions",
+  "syntax": [
+   "bring TAB tab to front",
+   "bring tab to front [with id Integer]"
+  ],
+  "defs": {
+   "TAB": "email | contact | knowledge base | instant messaging"
+  },
+  "doc": "Gives focus to an existing tab. By default, it applies to the current tab.",
+  "url": "ref/action/window-tab.html"
+ },
+ {
+  "name": "open message box",
+  "section": "Multiple windows and tabs actions",
+  "syntax": [
+   "open message box Text [caption Text] [button style Expression] [icon style Expression] [default button Expression] [on close trigger event ID]"
+  ],
+  "defs": {
+   "EVENT": "on event STRING(VARNAME: MessageBoxButton) { (...) }"
+  },
+  "doc": "For uAgent scripts only. Opens a window with a title and a message. You can also specify which buttons and icons are displayed, and which is the default button for the...",
+  "url": "ref/action/window-tab.html"
+ },
+ {
+  "name": "start error reporting",
+  "section": "Error reporting actions",
+  "syntax": [
+   "start error reporting"
+  ],
+  "defs": {},
+  "doc": "For uAgent scripts. Starts displaying script error messages to the agent. The built-in attribute @error_info.reporting becomes true.",
+  "url": "ref/action/error.html"
+ },
+ {
+  "name": "stop error reporting",
+  "section": "Error reporting actions",
+  "syntax": [
+   "stop error reporting"
+  ],
+  "defs": {},
+  "doc": "For uAgent scripts. Stops displaying script error messages to the agent. The attribute @error_info.reporting becomes false. The script becomes responsible for detecti...",
+  "url": "ref/action/error.html"
+ },
+ {
+  "name": "message",
+  "section": "Error reporting actions",
+  "syntax": [
+   "message Text"
+  ],
+  "defs": {},
+  "doc": "For uAgent scripts. Displays Text on the message window, without interrupting the current sequence of actions, even if @error_info.reporting is false.",
+  "url": "ref/action/error.html"
+ },
+ {
+  "name": "load contact with code",
+  "section": "Load contact information",
+  "syntax": [
+   "load contact with code Integer"
+  ],
+  "defs": {},
+  "doc": "The action load contact with code retrieves the contact with code Integer and associated contact profile from the database. If the loaded contact is a rescheduled cont...",
+  "url": "ref/action/contact-load.html"
+ },
+ {
+  "name": "unload contact",
+  "section": "Load contact information",
+  "syntax": [
+   "unload contact"
+  ],
+  "defs": {},
+  "doc": "The action unload contact unloads the contact profile and contact and clears variables contact_profile and contact. The action sets @script_session_info.directory t...",
+  "url": "ref/action/contact-load.html"
+ },
+ {
+  "name": "load contact with contact profile",
+  "section": "Load contact information",
+  "syntax": [
+   "load contact with contact profile unique id Text [from directory Text]"
+  ],
+  "defs": {},
+  "doc": "Searches on the database for some contact. The contact and contact profile records are loaded from the database. The loaded contact may be a reschedule, and the inform...",
+  "url": "ref/action/contact-load.html"
+ },
+ {
+  "name": "load contact selected from",
+  "section": "Load contact information",
+  "syntax": [
+   "load contact selected from SystemCursor [with directory Text] [filter Text]"
+  ],
+  "defs": {},
+  "doc": "Searches on the database for some contact. The contact and contact profile records are loaded from the database. The loaded contact may be a reschedule, and the inform...",
+  "url": "ref/action/contact-load.html"
+ },
+ {
+  "name": "reserve loaded contact",
+  "section": "Load contact information",
+  "syntax": [
+   "reserve loaded contact"
+  ],
+  "defs": {},
+  "doc": "If another agent does not have the loaded contact reserved, reserves the loaded contact. Only agents with reserved contacts can change the schedule moment of the loade...",
+  "url": "ref/action/contact-load.html"
+ },
+ {
+  "name": "load workflow contact profile",
+  "section": "Load contact information",
+  "syntax": [
+   "load workflow contact profile with unique id Text [from directory Text]"
+  ],
+  "defs": {},
+  "doc": "Loads a contact profile in the context of a workflow session. The action load contact is not allowed on a workflow context.",
+  "url": "ref/action/contact-load.html"
+ },
+ {
+  "name": "create contact",
+  "section": "Create and update contacts",
+  "syntax": [
+   "create contact [for contact profile unique id Text] [for directory Text] [campaign Text] [time zone Text] [reschedule phone Text] [schedule rule Text] [contact list Text] [ani list Text] [code into IntegerVAR] [contact values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Creates a new contact in a campaign.",
+  "url": "ref/action/contact.html"
+ },
+ {
+  "name": "schedule contact",
+  "section": "Create and update contacts",
+  "syntax": [
+   "schedule contact [for contact profile unique id Text] [for directory Text] [[SCHEDULE | with reschedule info ScheduleInfo]] [campaign Text] [time zone Text] [contact list Text] [ani list Text] [code into IntegerVAR] [contact values ATTRIBUTE,...]"
+  ],
+  "defs": {
+   "SCHEDULE": "[at Date[,Time]] [until Time] [agent Text] [outbound rule Text] [priority Integer] [reschedule phone Text] [schedule rule Text] [skill profile [name Text | array SkillProfile]] [ignore do not call list]"
+  },
+  "records": "SkillProfile: array of SkillProfileEntry ; SkillProfileEntry: record { skill : text(32) minimum : number(2,0) weight : number(5,4) }",
+  "doc": "Schedules a call for a contact profile. If the contact profile does not have an associated contact in the campaign, the action creates a new contact.",
+  "url": "ref/action/contact.html"
+ },
+ {
+  "name": "reschedule loaded contact",
+  "section": "Create and update contacts",
+  "syntax": [
+   "reschedule loaded contact [[SCHEDULE | with info ScheduleInfo]]"
+  ],
+  "defs": {
+   "SCHEDULE": "[at Date[,Time]] [until Time] [agent Text] [outbound rule Text] [priority Integer] [reschedule phone Text] [schedule rule Text] [skill profile [name Text | array SkillProfile]] [ignore do not call list]"
+  },
+  "records": "SkillProfile: array of SkillProfileEntry ; SkillProfileEntry: record { skill : text(32) minimum : number(2,0) weight : number(5,4) }",
+  "doc": "Reschedules the loaded contact.",
+  "url": "ref/action/contact.html"
+ },
+ {
+  "name": "reschedule loaded contact with failed reason",
+  "section": "Create and update contacts",
+  "syntax": [
+   "reschedule loaded contact with failed reason ContactFailedReason",
+   "reschedule contact with failed reason Expression"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Reschedules a failed outbound contact with reason ContactFailedReason.",
+  "url": "ref/action/contact.html"
+ },
+ {
+  "name": "disable contact",
+  "section": "Create and update contacts",
+  "syntax": [
+   "disable contact with code Integer"
+  ],
+  "defs": {},
+  "doc": "Disables the contact with the specified contact code, in the current campaign. The state of the contact is Disabled.",
+  "url": "ref/action/contact.html"
+ },
+ {
+  "name": "restart contact",
+  "section": "Create and update contacts",
+  "syntax": [
+   "restart contact with code Integer"
+  ],
+  "defs": {},
+  "doc": "Restarts the contact with the specified contact code, in the current campaign. The state of the contact is Started.",
+  "url": "ref/action/contact.html"
+ },
+ {
+  "name": "end script",
+  "section": "Update contact information",
+  "syntax": [
+   "end script"
+  ],
+  "defs": {},
+  "doc": "Terminates the script and updates the contact or the workflow record, depending on the type of interaction. It also updates the outcomes record, the contact profile ex...",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "abort script",
+  "section": "Update contact information",
+  "syntax": [
+   "abort script"
+  ],
+  "defs": {},
+  "doc": "Terminates the script and updates the contact or the workflow record, depending on the type of interaction. It also updates the outcomes record, the contact profile ex...",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "discard script",
+  "section": "Update contact information",
+  "syntax": [
+   "discard script"
+  ],
+  "defs": {},
+  "doc": "Terminates the script without saving the script record variables on the Altitude uCI Server database. The state of the contact is set to Started.",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "restart script",
+  "section": "Update contact information",
+  "syntax": [
+   "restart script [with mode RestartScriptMode] [campaign Text] [transfer values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Ends the current script with one of the modes in RestartScriptMode, and starts a new script session, reassigning the script variables. The value of the attribute @scri...",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "set time zone",
+  "section": "Update contact information",
+  "syntax": [
+   "set time zone to Text"
+  ],
+  "defs": {},
+  "doc": "Sets the field @script_session_info.timezone of the current session to Text. For Altitude Scripting Language, time zones are names defined by the contact center admi...",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "set business status",
+  "section": "Update contact information",
+  "syntax": [
+   "set business status to BusinessStatus"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Sets the business status to Business, which must be a value of the enumerated type BusinessStatus.",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "add to outcomes",
+  "section": "Update contact information",
+  "syntax": [
+   "add to outcomes values ATTRIBUTE,..."
+  ],
+  "defs": {},
+  "doc": "Adds a new value to the ASL array outcomes of elements of type OutcomeRecord, as defined by the script. The outcomes array contains the result of a contact, in order t...",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "create outcome",
+  "section": "Update contact information",
+  "syntax": [
+   "create outcome for script session Integer [id into IntegerVAR] values ATTRIBUTE,..."
+  ],
+  "defs": {},
+  "doc": "Adds an activity outcome to a previous script session. Use the system cursor SystemCursor::contactProfileInteractionsWithOutcomesHistory to obtain the identifiers of t...",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "update outcome",
+  "section": "Update contact information",
+  "syntax": [
+   "update outcome with id Integer values ATTRIBUTE,..."
+  ],
+  "defs": {},
+  "doc": "Updates an activity outcome from a previous script session. Use the system cursor SystemCursor::contactProfileInteractionsWithOutcomesHistory to obtain the identifiers...",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "remove outcome",
+  "section": "Update contact information",
+  "syntax": [
+   "remove outcome with id Integer"
+  ],
+  "defs": {},
+  "doc": "Removes an activity outcome from a previous script session. Use the system cursor SystemCursor::contactProfileInteractionsWithOutcomesHistory to obtain the identifiers...",
+  "url": "ref/action/contact-update.html"
+ },
+ {
+  "name": "get current",
+  "section": "Get and update business data",
+  "syntax": [
+   "get current SCHEMA into array AttributeArray"
+  ],
+  "defs": {
+   "SCHEMA": "campaign data | contact profile extension | contact data | workflow data | transferred data"
+  },
+  "doc": "Obtains the current data attributes of the specified business schema without the need to declare the corresponding business record. The action only obtains the attribu...",
+  "url": "ref/action/business.html"
+ },
+ {
+  "name": "update current",
+  "section": "Get and update business data",
+  "syntax": [
+   "update current SCHEMA with array AttributeArray"
+  ],
+  "defs": {
+   "SCHEMA": "contact profile extension | contact data | workflow data"
+  },
+  "doc": "Updates the data attributes of the specified business schema without the need to declare the corresponding business record.",
+  "url": "ref/action/business.html"
+ },
+ {
+  "name": "send data",
+  "section": "Send data to another script",
+  "syntax": [
+   "send data [to agent Text] [campaign Text] [transfer values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Sends data to another script, starting a new script session. The value of the attribute @script_start_reason is ScriptStartReason::sendData.",
+  "url": "ref/action/send-data.html"
+ },
+ {
+  "name": "start workflow process",
+  "section": "Workflow process actions",
+  "syntax": [
+   "start workflow process Text [with priority class WorkflowPriorityClass] [process contact profile unique id Text [process directory Text]] [at Date[,Time]] [priority Integer] [agent Text] [campaign Text] [skill profile [name Text | array SkillProfile]] [contact profile unique id Text [directory Text]] [notes Text] [CONTACT] [unique id into TextVAR] [workflow values ATTRIBUTE,...]"
+  ],
+  "defs": {
+   "CONTACT": "[outbound rule Text] [time zone Text] [reschedule [phone Text] [until Time]] [ignore do not call list]"
+  },
+  "records": "SkillProfile: array of SkillProfileEntry ; SkillProfileEntry: record { skill : text(32) minimum : number(2,0) weight : number(5,4) }",
+  "doc": "Starts a workflow process, setting all the values for the first task and returning the identifier of the new workflow process.",
+  "url": "ref/action/workflow-action.html"
+ },
+ {
+  "name": "set next workflow task",
+  "section": "Workflow process actions",
+  "syntax": [
+   "set next workflow task [at Date[,Time]] [priority Integer] [agent Text] [campaign Text] [[directory Text] contact profile unique id Text] [skill profile [name Text | array SkillProfile]] [CONTACT]"
+  ],
+  "defs": {
+   "CONTACT": "[outbound rule Text] [time zone Text] [reschedule [phone Text] [until Time]] [ignore do not call list]"
+  },
+  "records": "SkillProfile: array of SkillProfileEntry ; SkillProfileEntry: record { skill : text(32) minimum : number(2,0) weight : number(5,4) }",
+  "doc": "Sets the attributes of the next workflow task.",
+  "url": "ref/action/workflow-action.html"
+ },
+ {
+  "name": "trigger workflow event",
+  "section": "Workflow process actions",
+  "syntax": [
+   "trigger workflow event Text [in process with unique id Text] [with next task at Date[,Time]] [priority Integer] [agent Text] [campaign Text] [contact profile unique id Text [directory Text]] [skill profile [name Text | array SkillProfile]] [workflow values ATTRIBUTE,...] [CONTACT]"
+  ],
+  "defs": {
+   "CONTACT": "[outbound rule Text] [time zone Text] [reschedule [phone Text] [until Time]] [ignore do not call list]"
+  },
+  "records": "SkillProfile: array of SkillProfileEntry ; SkillProfileEntry: record { skill : text(32) minimum : number(2,0) weight : number(5,4) }",
+  "doc": "Triggers a Wait event workflow task.",
+  "url": "ref/action/workflow-action.html"
+ },
+ {
+  "name": "set workflow notes",
+  "section": "Workflow process actions",
+  "syntax": [
+   "set workflow notes to Text [in process with unique id Text] [append]"
+  ],
+  "defs": {},
+  "doc": "Sets the notes of a workflow process.",
+  "url": "ref/action/workflow-action.html"
+ },
+ {
+  "name": "set current directory",
+  "section": "Contact profile actions",
+  "syntax": [
+   "set current directory to Text"
+  ],
+  "defs": {},
+  "doc": "Sets the current directory to Text, by assigning the value to the field @script_session_info.directory,except if a contact is already loaded. The field contains the ...",
+  "url": "ref/action/contact-profile.html"
+ },
+ {
+  "name": "set current contact profile extension",
+  "section": "Contact profile actions",
+  "syntax": [
+   "set current contact profile extension to Text"
+  ],
+  "defs": {},
+  "doc": "Sets the current contact profile extension to Text, which is also the name of the contact profile extension variable for the session. Text should be a generic director...",
+  "url": "ref/action/contact-profile.html"
+ },
+ {
+  "name": "save current contact profile",
+  "section": "Contact profile actions",
+  "syntax": [
+   "save current contact profile"
+  ],
+  "defs": {},
+  "doc": "Saves the current contact profile. If there is no loaded contact, the action also creates and loads a contact in the current campaign associated with the saved contact...",
+  "url": "ref/action/contact-profile.html"
+ },
+ {
+  "name": "create contact profile",
+  "section": "Contact profile actions",
+  "syntax": [
+   "create contact profile [for directory Text] [with record ContactProfileRecord] [with extension values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Creates a new contact profile.",
+  "url": "ref/action/contact-profile.html"
+ },
+ {
+  "name": "get contact profile",
+  "section": "Contact profile actions",
+  "syntax": [
+   "get contact profile with unique id Text [from directory Text] [record into ContactProfileRecord] [extension into TARGET,...]"
+  ],
+  "defs": {
+   "TARGET": "variable VAR [match by name] | record VAR [match by name] | ?"
+  },
+  "doc": "Gets a contact profile from a specific directory.",
+  "url": "ref/action/contact-profile.html"
+ },
+ {
+  "name": "update contact profile",
+  "section": "Contact profile actions",
+  "syntax": [
+   "update contact profile with unique id Text [for directory Text] [with record DirectoryRecord] [with extension values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Updates the information of a contact profile.",
+  "url": "ref/action/contact-profile.html"
+ },
+ {
+  "name": "download document",
+  "section": "Document actions",
+  "syntax": [
+   "download document with id Integer [revision Integer] to filename Text"
+  ],
+  "defs": {},
+  "doc": "Retrieves a document from the document database.",
+  "url": "ref/action/document.html"
+ },
+ {
+  "name": "upload new document",
+  "section": "Document actions",
+  "syntax": [
+   "upload new document with name Text from file Text [description Text] [comments Text] [with id into IntegerVAR]"
+  ],
+  "defs": {},
+  "doc": "Creates a new document of type User defined document.",
+  "url": "ref/action/document.html"
+ },
+ {
+  "name": "upload new revision",
+  "section": "Document actions",
+  "syntax": [
+   "upload new revision for document with id Integer from file Text [comments Text]"
+  ],
+  "defs": {},
+  "doc": "Uploads a new version for an existing document. The new version becomes active.",
+  "url": "ref/action/document.html"
+ },
+ {
+  "name": "set agent ready",
+  "section": "Agent readiness actions",
+  "syntax": [
+   "set agent ready [in campaign [Text | array TextArray]]"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Sets the agent ready to work on one or more assigned campaigns.",
+  "url": "ref/action/ready.html"
+ },
+ {
+  "name": "set agent not ready",
+  "section": "Agent readiness actions",
+  "syntax": [
+   "set agent not ready [in campaign [Text | array TextArray]] [reason Text]"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Sets the agent not ready to work on one or more assigned campaigns.",
+  "url": "ref/action/ready.html"
+ },
+ {
+  "name": "set default language",
+  "section": "Language actions",
+  "syntax": [
+   "set default language to Text"
+  ],
+  "defs": {},
+  "doc": "Sets @script_session_info.language with the default language of an IVR script.",
+  "url": "ref/action/language.html"
+ },
+ {
+  "name": "Answer phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "answer phone [wait for connected]"
+  ],
+  "defs": {},
+  "doc": "Answers an alerting call. If successful, it changes the state from alerting to connected, or from previewAlerting to previewAnalysing.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Clear phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "clear phone"
+  ],
+  "defs": {},
+  "doc": "Ends the wrap-up time. If successful, the state changes from wrapUp to cleared.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "End phone reservation",
+  "section": "Telephony actions",
+  "syntax": [
+   "end phone reservation"
+  ],
+  "defs": {},
+  "doc": "Ends the reservation of the agent for preview phone interactions. Valid only on state previewAnalysis.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Conference phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "conference phone"
+  ],
+  "defs": {},
+  "doc": "Establishes a conference with the contact and the extended call. If successful, the state changes from extended to connected.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Hang up phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "hang up phone [with fallback]"
+  ],
+  "defs": {},
+  "doc": "Hangs up a connected or a dialing call. If the operation succeeds, the state changes from connected or dialing to wrapUp.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Hold phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "hold phone"
+  ],
+  "defs": {},
+  "doc": "Puts the contact on hold. If successful, the agent state changes from connected to held.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Retrieve phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "retrieve phone"
+  ],
+  "defs": {},
+  "doc": "Retrieves an held or extended call. The state changes from held or extended to connected, if the operation is successful. For calls extended in alternate mode, switche...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Transfer phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "transfer phone"
+  ],
+  "defs": {},
+  "doc": "Transfers an extended call. If successful, the state changes from extended to wrapUp. Otherwise, the state remains unchanged.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Manual blind transfer",
+  "section": "Telephony actions",
+  "syntax": [
+   "manual blind transfer phone to Text [single step]"
+  ],
+  "defs": {},
+  "doc": "For IVR scripts. Transfers a connected call to agent with extension Text. If successful, the state changes from connected to held (on most switches, the call appears a...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Generic service",
+  "section": "Telephony actions",
+  "syntax": [
+   "generic service Number [external data Bytestream]"
+  ],
+  "defs": {},
+  "doc": "Asks the telephony gateway to execute a service, identified through a Number, optionally taking binary data as argument. The result of the service depends on the telep...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "add to do not call list",
+  "section": "Telephony actions",
+  "syntax": [
+   "add to do not call list phone Text [contact profile unique id ID with expiry date Date]"
+  ],
+  "defs": {},
+  "doc": "Adds a phone number to the do not call list (DNCL) of the service of campaign. The DNCL contains the list of phone numbers that cannot be dialed by the contact center....",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "set soft phone volume",
+  "section": "Telephony actions",
+  "syntax": [
+   "set soft phone volume to Number"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Sets the soft phone volume.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "set soft phone microphone",
+  "section": "Telephony actions",
+  "syntax": [
+   "set soft phone microphone [on | off]"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Sets the soft phone microphone on or off.",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Blind transfer phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "blind transfer phone to [agent Text] [extension Text] [single step] [campaign Text] [directory Text] [contact profile unique id Text] [remote instance] [transfer values ATTRIBUTE,...]",
+   "blind transfer phone to [agent Text] [extension Text] [external data Bytestream]"
+  ],
+  "defs": {},
+  "doc": "Transfers a connected call specifying an agent or an extension. If successful, the state changes from connected to held (on most switches, the call appears as held unt...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Dial phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "dial phone [agent Text] [number Text] [ignore do not call list] [media name Text] [campaign Text] [remote instance] [transfer values ATTRIBUTE,...]",
+   "dial phone [agent Text] [number Text] [external data Bytestream]"
+  ],
+  "defs": {},
+  "doc": "Dials a number. If successful, it changes the state from cleared to dialing, until the call is answered and the agent state changes to connected. If the attempt to dia...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Extend phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "extend phone [CISCO] to [agent Text] [extension Text] [campaign Text] [directory Text] [contact profile unique id Text] [remote instance] [transfer values ATTRIBUTE,...]",
+   "extend phone [CISCO | VBOX] to [agent Text] [extension Text] [external data Bytestream]"
+  ],
+  "defs": {
+   "CISCO": "for transfer | for conference",
+   "VBOX": "for transfer | for conference | for alternate"
+  },
+  "doc": "Extends a connected call to an agent or to an extension. If successful, the state changes from connected to held, and then to extended, when the third party answers. I...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Call supervisor phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "call supervisor phone [media name Text] [campaign Text] [directory Text] [contact profile unique id Text] [transfer values ATTRIBUTE,...]",
+   "call supervisor phone [external data Bytestream]"
+  ],
+  "defs": {},
+  "doc": "For uAgent scripts. Dials or extends a connected call to the supervisor, depending on which telephony operation was used to implement the action. If successful, the ag...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Request phone supervision",
+  "section": "Telephony actions",
+  "syntax": [
+   "request phone supervision"
+  ],
+  "defs": {},
+  "doc": "The action request phone supervision requests for the help of a an available supervisor. If an available supervisor accepts the request, the script receives an event p...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Cancel phone supervision request",
+  "section": "Telephony actions",
+  "syntax": [
+   "cancel phone supervision request"
+  ],
+  "defs": {},
+  "doc": "The action cancel phone supervision request cancels a previous request phone supervision action. The script receives an event progress phone supervision request cancel...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Divert phone",
+  "section": "Telephony actions",
+  "syntax": [
+   "divert phone to [agent Text] [extension Text] [campaign Text] [directory Text] [contact profile unique id Text] [remote instance] [transfer values ATTRIBUTE,...]",
+   "divert phone to [agent Text] [extension Text] [external data Bytestream]",
+   "divert phone to voicemail Text"
+  ],
+  "defs": {},
+  "doc": "For routing scripts. Diverts a routing call to a directory number, typically an ACD group. It is similar to a blind transfer. If successful, changes the state from rou...",
+  "url": "ref/action/phone.html"
+ },
+ {
+  "name": "Answer email",
+  "section": "Email actions",
+  "syntax": [
+   "answer email"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Answers the email interaction. Changes the state from alerting to handling or from previewAlerting to previewAnalysing. IVR and routing script...",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Clear email",
+  "section": "Email actions",
+  "syntax": [
+   "clear email"
+  ],
+  "defs": {},
+  "doc": "Clears the email interaction. Changes the state from handling to cleared. Not valid on preview email interactions.",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "End email reservation",
+  "section": "Email actions",
+  "syntax": [
+   "end email reservation"
+  ],
+  "defs": {},
+  "doc": "Cancels the reservation state of the agent for the email interaction. Valid on states handling and previewAnalysing.",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Pick up email interaction",
+  "section": "Email actions",
+  "syntax": [
+   "pick up email interaction with id Integer"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Removes the email interaction with number Integer from the queue and delivers the email interaction to the agent as a new session.",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Blind transfer email",
+  "section": "Email actions",
+  "syntax": [
+   "blind transfer email [to agent Text] [to campaign Text] [to remote email address Text] [directory Text] [contact profile unique id Text] [priority Integer] [skill profile [name Text | array SkillProfile]] [transfer values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "records": "SkillProfile: array of SkillProfileEntry ; SkillProfileEntry: record { skill : text(32) minimum : number(2,0) weight : number(5,4) }",
+  "doc": "Blind transfers the email interaction. Changes the state from handling to cleared. Not valid on preview email interactions.",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Send email",
+  "section": "Email actions",
+  "syntax": [
+   "send email to Text [from Text] [cc Text] [bcc Text] [subject Text] [media name Text] [text body Text| html body Text] [id into IntegerVAR] [attachments ATTACHMENT,...]"
+  ],
+  "defs": {},
+  "doc": "Sends an outbound email. If the email is sent while handling a preview email interaction in the state previewAnalysing, changes the state to cleared.",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Send knowledge base document",
+  "section": "Email actions",
+  "syntax": [
+   "send knowledge base document Integer to Text [from Text] [cc Text] [bcc Text] [subject Text] [media name Text] [id into IntegerVAR] [attachments ATTACHMENT,...]"
+  ],
+  "defs": {},
+  "doc": "Sends an outbound email with a knowledge base document as the body. If the email is sent while handling a preview email interaction in the state previewAnalysing, chan...",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Reply to email",
+  "section": "Email actions",
+  "syntax": [
+   "reply [all] to email with id FileOrEmailId [to Text] [from Text] [cc Text] [bcc Text] [subject Text] [media name Text] [BODY] [id into IntegerVAR] [attachments ATTACHMENT,...]"
+  ],
+  "defs": {
+   "BODY": "text body Text | html body Text | knowledge base document Integer"
+  },
+  "doc": "Replies to an email.",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Forward email",
+  "section": "Email actions",
+  "syntax": [
+   "forward email with id FileOrEmailId to Text [from Text] [cc Text] [bcc Text] [subject Text] [media name Text] [BODY] [id into IntegerVAR] [attachments ATTACHMENT,...]"
+  ],
+  "defs": {
+   "BODY": "text body Text | html body Text | knowledge base document Integer"
+  },
+  "doc": "Sends a forward email.",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Save attachment",
+  "section": "Email actions",
+  "syntax": [
+   "save attachment Integer from email [id Integer | file Text] to Text"
+  ],
+  "defs": {},
+  "doc": "Saves an email attachment to a file.",
+  "url": "ref/action/email.html"
+ },
+ {
+  "name": "Answer instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "answer instant messaging"
+  ],
+  "defs": {},
+  "doc": "Answers the instant message interaction. If it succeeds, the state changes from alerting to connected.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Clear instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "clear instant messaging"
+  ],
+  "defs": {},
+  "doc": "Clears the instant message interaction. If it succeeds, the state changes from wrapUp to cleared.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Disconnect instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "disconnect instant messaging"
+  ],
+  "defs": {},
+  "doc": "Ends the instant messaging interaction. If it succeeds, the state changes from connected to wrapUp.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Retrieve instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "retrieve instant messaging"
+  ],
+  "defs": {},
+  "doc": "Retrieves a held or extended instant messaging interaction. If it succeeds, the state changes from held or extended to connected.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Transfer instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "transfer instant messaging"
+  ],
+  "defs": {},
+  "doc": "Transfers an extended instant messaging interaction. If it succeeds, the state changes from extended to cleared.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Conference instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "conference instant messaging"
+  ],
+  "defs": {},
+  "doc": "Establishes an instant messaging conference with the contact and the extended call. If it succeeds, the state changes from extended to connected.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Blind transfer instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "blind transfer instant messaging [to agent Text] [to campaign Text] [directory Text] [contact profile unique id Text] [transfer values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Transfers a connected instant messaging interaction. If successful, the agent state changes from connected to cleared.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Extend instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "extend instant messaging [to agent Text] [to campaign Text] [directory Text] [contact profile unique id Text] [transfer values ATTRIBUTE,...]",
+   "extend instant messaging [to agent Text] [to campaign Text] [external data Bytestream]"
+  ],
+  "defs": {},
+  "doc": "Extends a connected instant messaging interaction. If successful, the state changes from connected to held and then to extended when the third party answers.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Divert instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "divert instant messaging to dnis Integer [directory Text] [contact profile unique id Text] [transfer values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Diverts an instant messaging to another campaign.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Start instant messaging",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "start instant messaging with [agent Text] [campaign Text] [media name Text] [transfer values ATTRIBUTE,...]",
+   "start instant messaging with [agent Text] [campaign Text] [external data Bytestream]"
+  ],
+  "defs": {},
+  "doc": "Creates a new instant messaging interaction with an agent.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Send instant message",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "send instant message Text [to extend connection]"
+  ],
+  "defs": {},
+  "doc": "Sends an instant message in the context of the current conversation. Only possible when the instant messaging interaction is connected.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Download instant messaging transcript",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "download instant messaging transcript with id Integer to file Text"
+  ],
+  "defs": {},
+  "doc": "Downloads the document (in XML format) that contains all conversations involved in an instant messaging interaction, that is, between the customer and the agents, and ...",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Start outbound interaction",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "start outbound interaction [media name Text] from Text to Text"
+  ],
+  "defs": {},
+  "doc": "Starts an outbound instant messaging interaction with a customer.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Send outbound message",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "send outbound message [media name Text] from Text to Text message Text [key into TextVAR]"
+  ],
+  "defs": {},
+  "doc": "Sends an outbound instant message to a customer.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Send outbound template message",
+  "section": "Instant messaging actions",
+  "syntax": [
+   "send outbound template message [media name Text] from Text to Text namespace Text name Text language Text [key into TextVAR] [header template values ATTRIBUTE,...] [body template values ATTRIBUTE,...] [footer template values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Sends an outbound instant message to a customer using a template.",
+  "url": "ref/action/im.html"
+ },
+ {
+  "name": "Clear",
+  "section": "Media panel actions",
+  "syntax": [
+   "media panel chat clear"
+  ],
+  "defs": {},
+  "doc": "Clears the contents of the windows of the media panel chat control.",
+  "url": "ref/action/media-panel.html"
+ },
+ {
+  "name": "Insert text",
+  "section": "Media panel actions",
+  "syntax": [
+   "media panel chat insert text Text"
+  ],
+  "defs": {},
+  "doc": "Inserts text in the input field of the media panel.",
+  "url": "ref/action/media-panel.html"
+ },
+ {
+  "name": "Save transcript",
+  "section": "Media panel actions",
+  "syntax": [
+   "media panel chat save transcript"
+  ],
+  "defs": {},
+  "doc": "Saves the conversation transcript between the agent and the customer.",
+  "url": "ref/action/media-panel.html"
+ },
+ {
+  "name": "Send message",
+  "section": "Media panel actions",
+  "syntax": [
+   "media panel chat send message Text"
+  ],
+  "defs": {},
+  "doc": "Sends a message in the context of the current conversation. Only possible on state connected.",
+  "url": "ref/action/media-panel.html"
+ },
+ {
+  "name": "Answer workflow",
+  "section": "Workflow task actions",
+  "syntax": [
+   "answer workflow"
+  ],
+  "defs": {},
+  "doc": "Only for human agent scripts. Answers a workflow interaction. Routing scripts automatically answer workflow interactions. The action does not work with IVR agents.",
+  "url": "ref/action/workflow.html"
+ },
+ {
+  "name": "End workflow reservation",
+  "section": "Workflow task actions",
+  "syntax": [
+   "end workflow reservation"
+  ],
+  "defs": {},
+  "doc": "Cancels the reservation state for the current workflow interaction.",
+  "url": "ref/action/workflow.html"
+ },
+ {
+  "name": "Pick up workflow task",
+  "section": "Workflow task actions",
+  "syntax": [
+   "pick up workflow task with id Integer"
+  ],
+  "defs": {},
+  "doc": "Only for human agent scripts. Picks up the workflow task with identifier Integer from the queue.",
+  "url": "ref/action/workflow.html"
+ },
+ {
+  "name": "start record phone",
+  "section": "Voice recording",
+  "syntax": [
+   "start record phone [with screen capture]"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Starts recording the current call, optionally with screen capture.",
+  "url": "ref/action/recorder.html"
+ },
+ {
+  "name": "stop record phone",
+  "section": "Voice recording",
+  "syntax": [
+   "stop record phone"
+  ],
+  "defs": {},
+  "doc": "Only for uAgent scripts. Stops recording the current call.",
+  "url": "ref/action/recorder.html"
+ },
+ {
+  "name": "send digits",
+  "section": "Send digits action",
+  "syntax": [
+   "send digits Text"
+  ],
+  "defs": {},
+  "doc": "Dials DTMF digits on a connected call.",
+  "url": "ref/action/send-digit.html"
+ },
+ {
+  "name": "get digits",
+  "section": "Audio actions",
+  "syntax": [
+   "get digits into TextVAR { [input mode trailer Text] [input mode size Number] [play [ignore barge in] { PLAY* }] [on digits do { ACTION* }] [on timeout do { ACTION* }] [on error do { ACTION* }] }"
+  ],
+  "defs": {
+   "PLAY": "file [Text | array TextArray] | tts [Text | array TextArray] [with mime type MimeType] | audio resource file Text value [Text | array TextArray] | expression Text | announcement for { ANNOUNCEMENT-TYPE Text} [ignore barge in]",
+   "ANNOUNCEMENT-TYPE": "AnnouncementType::prompt | AnnouncementType::digits | AnnouncementType::expectedWaitingTime | AnnouncementType::queuePosition"
+  },
+  "doc": "Gets a sequence of digits from the customer.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "choose",
+  "section": "Audio actions",
+  "syntax": [
+   "choose { for each option play [ignore barge in] [default tts message | { PLAY* }] [on [dtmf Text] [speech Text] do { ACTION* }]* [on array [dtmf TextArray] [speech TextArray] [index into IntegerVAR] do { ACTION* }]* [on no match [into TextVAR] do { ACTION* }] [on timeout do { ACTION* }] [on error do { ACTION* }] }"
+  ],
+  "defs": {
+   "PLAY": "file [Text | array TextArray] | tts [Text | array TextArray] [with mime type MimeType] | audio resource file Text value [Text | array TextArray] | expression Text | announcement for { ANNOUNCEMENT-TYPE Text } [ignore barge in]",
+   "ANNOUNCEMENT-TYPE": "AnnouncementType::prompt | AnnouncementType::digits | AnnouncementType::expectedWaitingTime | AnnouncementType::queuePosition"
+  },
+  "doc": "Simplifies implementation of IVR menus with a number of alternatives. Combines speech recognition and TTS with DTMF input.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "speech recognize",
+  "section": "Audio actions",
+  "syntax": [
+   "speech recognize into SpeechRecognitionVAR { [stop on digits] [grammars Grammar,...] [on match do { ACTION* }] [on no match do { ACTION* }] [on digits do { ACTION* }] [on timeout do { ACTION* }] [on error do { ACTION* }] }"
+  ],
+  "defs": {},
+  "records": "SpeechRecognition: record { ; entries : array of SpeechRecognitionEntry recordingUri : text rawEcmaXml : text rawNluResult : text channelId : text terminationReasonCode : number(3,0) } ; SpeechRecognitionEntry: record { ; results : array of TokenEntry confidence : number(3,2) grammar : text utterance : text } ; TokenEntry: record { token : text value : text }",
+  "doc": "Recognizes speech using a third-party speech engine and an engine-specific grammar.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "speech recognize value",
+  "section": "Audio actions",
+  "syntax": [
+   "speech recognize into VAR { [stop on digits] [grammar Text] [on match do { ACTION* }] [on no match do { ACTION* }] [on digits do { ACTION* }] [on timeout do { ACTION* }] [on error do { ACTION* }] }"
+  ],
+  "defs": {},
+  "doc": "Recognizes speech using a third-party speech engine for simple grammars, that depends on the type of the variable.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "play",
+  "section": "Audio actions",
+  "syntax": [
+   "play [asynchronously [in loop]] [ignore barge in] { PLAY* }"
+  ],
+  "defs": {
+   "PLAY": "file [Text | array TextArray] | tts [Text | array TextArray] [with mime type MimeType] | audio resource file Text value [Text | array TextArray] | expression Text | announcement for { ANNOUNCEMENT-TYPE Text } [ignore barge in]",
+   "ANNOUNCEMENT-TYPE": "AnnouncementType::prompt | AnnouncementType::digits | AnnouncementType::expectedWaitingTime | AnnouncementType::queuePosition"
+  },
+  "doc": "Plays the concatenation of the audio pieces or speaks the text in the textual expression Audio. The customer can interrupt the playing with a DTMF tone if the clause i...",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "play music",
+  "section": "Audio actions",
+  "syntax": [
+   "play music Text"
+  ],
+  "defs": {},
+  "doc": "Performs an asynchronous play.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "stop asynchronous play",
+  "section": "Audio actions",
+  "syntax": [
+   "stop asynchronous play"
+  ],
+  "defs": {},
+  "doc": "Stops an asynchronous play started by one of the actions:",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "record",
+  "section": "Audio actions",
+  "syntax": [
+   "record into file Text { [input timeout Integer] [initial silence timeout Integer] [silence timeout Integer] [file size Integer] [play tone] [stop on digits [Text | with size Integer]] [result into AudioRecordResultVAR] }"
+  ],
+  "defs": {},
+  "records": "AudioRecordResult: record { type : AudioRecordResultType file : text duration : number size : number }",
+  "doc": "Records the voice of the customer.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "send digits",
+  "section": "Audio actions",
+  "syntax": [
+   "send digits Text"
+  ],
+  "defs": {},
+  "doc": "Dials dual tone multiple frequency (DTMF) digits on a connected call.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "clear digits",
+  "section": "Audio actions",
+  "syntax": [
+   "clear digits"
+  ],
+  "defs": {},
+  "doc": "Flushes the customer input buffer.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "set audio",
+  "section": "Audio actions",
+  "syntax": [
+   "set [node] audio [all digits timeout to Integer] [inter digit timeout to Integer] [first digit timeout to Integer] [dll to Text]"
+  ],
+  "defs": {},
+  "doc": "Sets different types of timeouts and the external Windows DLL that implements the built-in functions whole, spell, and ordinal to Expression.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "set tts",
+  "section": "Audio actions",
+  "syntax": [
+   "set [node] tts [engine Text] [speaker { [name Text] [gender Gender] [language Text] }] [configuration ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Sets the text-to-speech (TTS) engine.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "set speech recognition",
+  "section": "Audio actions",
+  "syntax": [
+   "set [node] speech recognition [engine Text] [language Text] [number of results Integer] [minimum confidence Decimal] [input timeout Integer] [grammar format to [abnf|xml]] [configuration ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "doc": "Sets the speech recognition engine and some specific values for the speech recognition action.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "set default lexicon file",
+  "section": "Audio actions",
+  "syntax": [
+   "set default lexicon file to content Text"
+  ],
+  "defs": {},
+  "doc": "Instructs the text-to-speech engine on how to say the words.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "set default grammar",
+  "section": "Audio actions",
+  "syntax": [
+   "set default grammar for type [number | boolean | date | time] GRAMMAR"
+  ],
+  "defs": {
+   "GRAMMAR": "content Text mime type MIME [language Text] | to Text",
+   "MIME": "'application/srgs' | 'application/srgs+xml' | 'application/x-jsgf-flx' | 'text/uri-list'"
+  },
+  "doc": "Sets the script default grammar for the speech recognition of the specified type. The grammar can be defined directly in the action or specified by the name of a previ...",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "load grammar",
+  "section": "Audio actions",
+  "syntax": [
+   "load grammar name Text content Text mime type MIME [language Text]"
+  ],
+  "defs": {
+   "MIME": "'application/srgs' | 'application/srgs+xml' | 'application/x-jsgf-flx' | 'text/uri-list'"
+  },
+  "doc": "Loads a grammar.",
+  "url": "ref/action/auto-audio.html"
+ },
+ {
+  "name": "enqueue",
+  "section": "Routing queue actions",
+  "syntax": [
+   "enqueue [instant messaging | phone] into [agent [Text | array Agents]] campaign Text [directory Text] [contact profile unique id Text] [skill profile [name Text | array SkillProfile]] [handicap Number] [priority Integer] [maximum expected waiting time Integer] [only if agent available] [external data Bytestream] [transfer values ATTRIBUTE,...]"
+  ],
+  "defs": {},
+  "records": "Agents: array of Text ; SkillProfile: array of SkillProfileEntry ; SkillProfileEntry: record { skill : text(32) minimum : number(2,0) weight : number(5,4) }",
+  "doc": "For telephony and instant messaging interactions. Asks the Altitude uCI Server to deliver the interaction to an agent or a campaign through the universal queue. If suc...",
+  "url": "ref/action/auto-enqueue.html"
+ },
+ {
+  "name": "dequeue",
+  "section": "Routing queue actions",
+  "syntax": [
+   "dequeue [instant messaging | phone] [reason DequeueRequestReason]"
+  ],
+  "defs": {},
+  "doc": "For telephony and instant messaging interactions. Cancels the pending request to deliver the interaction to a campaign by removing the enqueued interaction from the un...",
+  "url": "ref/action/auto-enqueue.html"
+ },
+ {
+  "name": "suspend",
+  "section": "Routing queue actions",
+  "syntax": [
+   "suspend [instant messaging | phone] queue"
+  ],
+  "defs": {},
+  "doc": "For telephony and instant messaging interactions. If the interaction is the first interaction in the queue, delays the deliver of the current interaction.",
+  "url": "ref/action/auto-enqueue.html"
+ },
+ {
+  "name": "resume",
+  "section": "Routing queue actions",
+  "syntax": [
+   "resume [instant messaging | phone] queue"
+  ],
+  "defs": {},
+  "doc": "For telephony and instant messaging interactions. resumes the deliver of the current interaction.",
+  "url": "ref/action/auto-enqueue.html"
+ },
+ {
+  "name": "input",
+  "section": "Debug actions",
+  "syntax": [
+   "input into VAR,..."
+  ],
+  "defs": {},
+  "doc": "Stops the script until the operator enters text in the console. Assigns each line of text sequentially to the variables.",
+  "url": "ref/action/auto-debug.html"
+ },
+ {
+  "name": "write",
+  "section": "Debug actions",
+  "syntax": [
+   "write Text"
+  ],
+  "defs": {},
+  "doc": "Writes the text Text on the console, and on the log file.",
+  "url": "ref/action/auto-debug.html"
+ },
+ {
+  "name": "write log",
+  "section": "Debug actions",
+  "syntax": [
+   "write log Text"
+  ],
+  "defs": {},
+  "doc": "Writes the text only on the log file. The default path of the log file is the default logs folder of Automated Agents. For example, C:\\\\ProgramData\\\\Altitude\\\\Altitude...",
+  "url": "ref/action/auto-debug.html"
+ }
+]
