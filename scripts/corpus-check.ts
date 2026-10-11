@@ -10,6 +10,7 @@ import { LineMap } from "../src/language/lexer";
 import { fileKindOf, parse } from "../src/language/parser";
 import { URI } from "vscode-uri";
 import { Workspace } from "../src/language/workspace";
+import { findAslFiles } from "../src/node/files";
 
 const args = process.argv.slice(2);
 const root = args.find((a) => !a.startsWith("--"));
@@ -21,18 +22,7 @@ const show = Number(args.find((a) => a.startsWith("--show="))?.slice(7) ?? 3);
 const onlyCode = args.find((a) => a.startsWith("--code="))?.slice(7);
 const parseOnly = args.includes("--parse-only");
 
-const files: string[] = [];
-const walk = (dir: string): void => {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-        const full = path.join(dir, entry.name);
-        if (entry.isDirectory()) {
-            if (entry.name !== ".git" && entry.name !== "node_modules") walk(full);
-        } else if (/\.(ags|agm|gem|irs|irm)$/i.test(entry.name) && !/_port_/i.test(entry.name)) {
-            files.push(full);
-        }
-    }
-};
-walk(path.resolve(root));
+const files = findAslFiles(path.resolve(root));
 
 const byMessage = new Map<string, { count: number; samples: string[] }>();
 let total = 0;
