@@ -25,8 +25,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Validate extension
-        run: npm run compile
+      - name: Type-check and bundle
+        run: npm run package
+
+      - name: Unit tests
+        run: npm test
 
       - name: Azure login
         uses: azure/login@v3

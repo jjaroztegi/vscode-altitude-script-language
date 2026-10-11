@@ -1,0 +1,8 @@
+* text=auto eol=lf
+# ASL fixtures keep their exact bytes, as Script Developer files do (UTF-8 with BOM, CRLF in real projects).
+*.ags -text
+*.agm -text
+*.gem -text
+*.irs -text
+*.irm -text
+*.png binary

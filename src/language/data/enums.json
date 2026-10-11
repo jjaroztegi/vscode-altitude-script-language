@@ -1,0 +1,5671 @@
+[
+ {
+  "name": "AddressType",
+  "url": "ref/expr/script-session-info.html",
+  "members": [
+   {
+    "name": "noValue",
+    "value": 1
+   },
+   {
+    "name": "invalid",
+    "value": 2
+   },
+   {
+    "name": "homePhone",
+    "value": 3
+   },
+   {
+    "name": "businessPhone",
+    "value": 4
+   },
+   {
+    "name": "mobilePhone",
+    "value": 5
+   },
+   {
+    "name": "otherPhone",
+    "value": 6
+   },
+   {
+    "name": "reschedule",
+    "value": 7
+   },
+   {
+    "name": "additionalPhone1",
+    "value": 8
+   },
+   {
+    "name": "additionalPhone2",
+    "value": 9
+   },
+   {
+    "name": "additionalPhone3",
+    "value": 10
+   },
+   {
+    "name": "additionalPhone4",
+    "value": 11
+   },
+   {
+    "name": "additionalPhone5",
+    "value": 12
+   },
+   {
+    "name": "additionalPhone6",
+    "value": 13
+   },
+   {
+    "name": "additionalPhone7",
+    "value": 14
+   },
+   {
+    "name": "additionalPhone8",
+    "value": 15
+   },
+   {
+    "name": "additionalPhone9",
+    "value": 16
+   },
+   {
+    "name": "additionalPhone10",
+    "value": 17
+   },
+   {
+    "name": "additionalPhone11",
+    "value": 18
+   },
+   {
+    "name": "additionalPhone12",
+    "value": 19
+   },
+   {
+    "name": "additionalPhone13",
+    "value": 20
+   },
+   {
+    "name": "additionalPhone14",
+    "value": 21
+   },
+   {
+    "name": "additionalPhone15",
+    "value": 22
+   },
+   {
+    "name": "email1",
+    "value": 23
+   },
+   {
+    "name": "email2",
+    "value": 24
+   },
+   {
+    "name": "email3",
+    "value": 25
+   },
+   {
+    "name": "homeFax",
+    "value": 26
+   },
+   {
+    "name": "businessFax",
+    "value": 27
+   },
+   {
+    "name": "instantMessaging1",
+    "value": 28
+   },
+   {
+    "name": "instantMessaging2",
+    "value": 29
+   },
+   {
+    "name": "instantMessaging3",
+    "value": 30
+   }
+  ]
+ },
+ {
+  "name": "AgentErrorCode",
+  "url": "ref/expr/error-agent.html",
+  "members": [
+   {
+    "name": "systemException",
+    "value": 1
+   },
+   {
+    "name": "invalidOperation",
+    "value": 10
+   },
+   {
+    "name": "generalError",
+    "value": 11
+   },
+   {
+    "name": "noActiveMailDataInteration",
+    "value": 12
+   },
+   {
+    "name": "offlineMode",
+    "value": 13
+   },
+   {
+    "name": "docmNoLogin",
+    "value": 14
+   },
+   {
+    "name": "maxEmailSizeExceeded",
+    "value": 15
+   },
+   {
+    "name": "emailFileReadError",
+    "value": 16
+   },
+   {
+    "name": "cannotEndDataEmailsOpened",
+    "value": 17
+   },
+   {
+    "name": "cannotEndDataOutcomesNotSet",
+    "value": 18
+   },
+   {
+    "name": "cannotEndDataArticlesOpened",
+    "value": 19
+   },
+   {
+    "name": "assertionFailed",
+    "value": 20
+   },
+   {
+    "name": "unexpectedValue",
+    "value": 21
+   },
+   {
+    "name": "operationFailed",
+    "value": 22
+   },
+   {
+    "name": "accessDenied",
+    "value": 23
+   },
+   {
+    "name": "notLoggedInIntegrationServer",
+    "value": 24
+   },
+   {
+    "name": "entityDisposed",
+    "value": 25
+   },
+   {
+    "name": "unknownCategory",
+    "value": 26
+   },
+   {
+    "name": "categoryAlreadyExists",
+    "value": 27
+   },
+   {
+    "name": "unknownParentCategory",
+    "value": 28
+   },
+   {
+    "name": "unknownArticle",
+    "value": 29
+   },
+   {
+    "name": "unknownArticleNote",
+    "value": 30
+   },
+   {
+    "name": "unknownAttribute",
+    "value": 31
+   },
+   {
+    "name": "requiredAttribute",
+    "value": 32
+   },
+   {
+    "name": "duplicatedAttribute",
+    "value": 33
+   },
+   {
+    "name": "unknownPhoneType",
+    "value": 34
+   },
+   {
+    "name": "duplicatedPhoneType",
+    "value": 35
+   },
+   {
+    "name": "unknownService",
+    "value": 36
+   },
+   {
+    "name": "unknownCursor",
+    "value": 37
+   },
+   {
+    "name": "unknownDocument",
+    "value": 38
+   },
+   {
+    "name": "handlingTimeEnded",
+    "value": 40
+   },
+   {
+    "name": "unknownDocumentRevision",
+    "value": 43
+   },
+   {
+    "name": "unknownDirectory",
+    "value": 44
+   },
+   {
+    "name": "unknownMedia",
+    "value": 45
+   },
+   {
+    "name": "unknownWorkflowProcess",
+    "value": 46
+   },
+   {
+    "name": "unknownWorkflowDefinition",
+    "value": 47
+   },
+   {
+    "name": "unknownWorkflowDefinitionVersion",
+    "value": 48
+   },
+   {
+    "name": "unknownWorkflowTaskDefinition",
+    "value": 49
+   },
+   {
+    "name": "unknownWorkflowTaskDefinitionVersion",
+    "value": 50
+   },
+   {
+    "name": "unknownRole",
+    "value": 51
+   },
+   {
+    "name": "unknownQueuedEmail",
+    "value": 52
+   },
+   {
+    "name": "unknownQueuedAgentPickUpTask",
+    "value": 53
+   },
+   {
+    "name": "unknownSentEmail",
+    "value": 54
+   },
+   {
+    "name": "unknownSite",
+    "value": 55
+   },
+   {
+    "name": "unknownContactProfile",
+    "value": 56
+   },
+   {
+    "name": "unknownScheduledInteraction",
+    "value": 57
+   },
+   {
+    "name": "unknownWorkflowTask",
+    "value": 58
+   },
+   {
+    "name": "unknownInteraction",
+    "value": 59
+   },
+   {
+    "name": "invalidSortField",
+    "value": 60
+   },
+   {
+    "name": "unknownDataTransaction",
+    "value": 61
+   },
+   {
+    "name": "incorrectSyntax",
+    "value": 62
+   },
+   {
+    "name": "invalidEmailFromAddress",
+    "value": 63
+   },
+   {
+    "name": "unknownEnumerate",
+    "value": 65
+   },
+   {
+    "name": "unknownEnumeratedField",
+    "value": 66
+   },
+   {
+    "name": "unknownInProgressWorkflowProcessTask",
+    "value": 67
+   },
+   {
+    "name": "parameterRequired",
+    "value": 68
+   },
+   {
+    "name": "unknownRecording",
+    "value": 69
+   },
+   {
+    "name": "unknownContact",
+    "value": 70
+   },
+   {
+    "name": "unknownGateway",
+    "value": 71
+   },
+   {
+    "name": "unknownContactList",
+    "value": 72
+   },
+   {
+    "name": "unknownEmailAddress",
+    "value": 73
+   },
+   {
+    "name": "unknownDoNotCallList",
+    "value": 74
+   },
+   {
+    "name": "unknownDoNotCallListEntry",
+    "value": 75
+   },
+   {
+    "name": "unexpectedAgentType",
+    "value": 76
+   },
+   {
+    "name": "unexpectedContactCreateStatus",
+    "value": 77
+   },
+   {
+    "name": "unexpectedContactPriority",
+    "value": 78
+   },
+   {
+    "name": "unexpectedKBDocumentType",
+    "value": 80
+   },
+   {
+    "name": "invalidQueryColumn",
+    "value": 81
+   },
+   {
+    "name": "unknownPendingWork",
+    "value": 82
+   },
+   {
+    "name": "invalidUpdateColumn",
+    "value": 83
+   },
+   {
+    "name": "operatorNotSupported",
+    "value": 84
+   },
+   {
+    "name": "invalidFetchColumn",
+    "value": 85
+   },
+   {
+    "name": "destinationAddressNotSpecified",
+    "value": 86
+   },
+   {
+    "name": "unknownAccessRuleProfile",
+    "value": 87
+   },
+   {
+    "name": "unknownDnis",
+    "value": 88
+   },
+   {
+    "name": "unknownMonitoredDevice",
+    "value": 89
+   },
+   {
+    "name": "maxCursorFetchRowsExceeded",
+    "value": 90
+   },
+   {
+    "name": "bootFailed",
+    "value": 91
+   },
+   {
+    "name": "shutdownFailed",
+    "value": 92
+   },
+   {
+    "name": "unknownReportTemplate",
+    "value": 93
+   },
+   {
+    "name": "unknownSavedReport",
+    "value": 94
+   },
+   {
+    "name": "reportFormatNotAvailable",
+    "value": 95
+   },
+   {
+    "name": "unknownTableSchemaColumn",
+    "value": 96
+   },
+   {
+    "name": "unknownOutcome",
+    "value": 97
+   },
+   {
+    "name": "unknownRecorderType",
+    "value": 98
+   },
+   {
+    "name": "cannotUpdateTableSchemaAndFields",
+    "value": 99
+   },
+   {
+    "name": "unknownBusinessCounter",
+    "value": 100
+   },
+   {
+    "name": "unknownCubeDimension",
+    "value": 101
+   },
+   {
+    "name": "unknownDashboard",
+    "value": 102
+   },
+   {
+    "name": "unknownProcessTraceConfiguration",
+    "value": 103
+   },
+   {
+    "name": "unknownContactHistoryEntry",
+    "value": 108
+   },
+   {
+    "name": "campaignOrIMGatewayNotFound",
+    "value": 109
+   },
+   {
+    "name": "unknownPrivacyCategory",
+    "value": 110
+   },
+   {
+    "name": "unknownConsent",
+    "value": 111
+   },
+   {
+    "name": "unknownConsentAudit",
+    "value": 112
+   },
+   {
+    "name": "unknownContactProfileGdprRequest",
+    "value": 113
+   },
+   {
+    "name": "unknownContactProfileFieldPrivacy",
+    "value": 114
+   },
+   {
+    "name": "unknownPurpose",
+    "value": 115
+   },
+   {
+    "name": "unknownQueuedSocial",
+    "value": 116
+   },
+   {
+    "name": "unknownSentSocial",
+    "value": 117
+   }
+  ]
+ },
+ {
+  "name": "AgentReadyError",
+  "members": [
+   {
+    "name": "extensionClear",
+    "value": 1
+   },
+   {
+    "name": "lastAgentIsNeeded",
+    "value": 2
+   },
+   {
+    "name": "switchError",
+    "value": 3
+   },
+   {
+    "name": "unknown",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "AgentType",
+  "url": "ref/expr/agent-info.html",
+  "members": [
+   {
+    "name": "human",
+    "value": 1
+   },
+   {
+    "name": "ivr",
+    "value": 2
+   },
+   {
+    "name": "routing",
+    "value": 3
+   },
+   {
+    "name": "other",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "AnnouncementType",
+  "members": [
+   {
+    "name": "prompt",
+    "value": 1
+   },
+   {
+    "name": "digits",
+    "value": 2
+   },
+   {
+    "name": "expectedWaitingTime",
+    "value": 3
+   },
+   {
+    "name": "queuePosition",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "AudioErrorCode",
+  "url": "ref/expr/auto-error.html",
+  "members": [
+   {
+    "name": "noBoardAccess",
+    "value": 16100
+   },
+   {
+    "name": "malformedAudio",
+    "value": 16104
+   },
+   {
+    "name": "unknownAudio",
+    "value": 16107
+   },
+   {
+    "name": "speechAutomationProviderNotFound",
+    "value": 16132
+   },
+   {
+    "name": "speechAutomationProviderNotAvailable",
+    "value": 16133
+   },
+   {
+    "name": "speechAutomationInvalidParameter",
+    "value": 16134
+   },
+   {
+    "name": "speechAutomationGenericError",
+    "value": 16135
+   },
+   {
+    "name": "nullByteStream",
+    "value": 16136
+   },
+   {
+    "name": "speechAutomationNoiseError",
+    "value": 16137
+   },
+   {
+    "name": "speechAutomationRejectionError",
+    "value": 16138
+   },
+   {
+    "name": "speechAutomationNoInputError",
+    "value": 16139
+   },
+   {
+    "name": "speechAutomationSpeechTooEarlyError",
+    "value": 16140
+   },
+   {
+    "name": "speechAutomationTooMuchSpeechError",
+    "value": 16141
+   },
+   {
+    "name": "speechAutomationGrammarNotFoundError",
+    "value": 16142
+   },
+   {
+    "name": "speechAutomationNoLicenseAvailable",
+    "value": 16143
+   },
+   {
+    "name": "speechAutomationURIFailure",
+    "value": 16144
+   },
+   {
+    "name": "speechAutomationGrammarLoadFailure",
+    "value": 16145
+   },
+   {
+    "name": "speechAutomationGrammarCompilationFailure",
+    "value": 16146
+   },
+   {
+    "name": "speechAutomationLanguageUnsupported",
+    "value": 16147
+   },
+   {
+    "name": "speechAutomationSemanticsFailure",
+    "value": 16148
+   },
+   {
+    "name": "speechAutomationGrammarDefinitionFailure",
+    "value": 16149
+   }
+  ]
+ },
+ {
+  "name": "AudioRecordResultType",
+  "members": [
+   {
+    "name": "initialSilenceTimeout",
+    "value": 1
+   },
+   {
+    "name": "silenceTimeout",
+    "value": 2
+   },
+   {
+    "name": "stoppedOnDigits",
+    "value": 3
+   },
+   {
+    "name": "maximumDuration",
+    "value": 4
+   },
+   {
+    "name": "maxSizeReached",
+    "value": 5
+   },
+   {
+    "name": "other",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "BusinessDataType",
+  "members": [
+   {
+    "name": "campaign",
+    "value": 1
+   },
+   {
+    "name": "activity",
+    "value": 2
+   },
+   {
+    "name": "outcomes",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "BusinessStatus",
+  "url": "ref/expr/contact-profile-interaction-history-cursor-row.html",
+  "members": [
+   {
+    "name": "nonQualified",
+    "value": 1
+   },
+   {
+    "name": "qualified",
+    "value": 2
+   },
+   {
+    "name": "successful",
+    "value": 3
+   },
+   {
+    "name": "unsuccessful",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "CampaignState",
+  "url": "ref/expr/campaign-info.html",
+  "members": [
+   {
+    "name": "started",
+    "value": 1
+   },
+   {
+    "name": "stopped",
+    "value": 2
+   },
+   {
+    "name": "suspended",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "ContactBusinessStatus",
+  "url": "ref/expr/contact-cursor-row.html",
+  "members": [
+   {
+    "name": "abortedBeforeConnection",
+    "value": 1
+   },
+   {
+    "name": "automaticallyRescheduled",
+    "value": 2
+   },
+   {
+    "name": "canceledBeforeConnection",
+    "value": 3
+   },
+   {
+    "name": "nonQualifiedAborted",
+    "value": 4
+   },
+   {
+    "name": "nonQualifiedCanceled",
+    "value": 5
+   },
+   {
+    "name": "nonQualifiedDone",
+    "value": 6
+   },
+   {
+    "name": "nonQualifiedScheduled",
+    "value": 7
+   },
+   {
+    "name": "notTouchedDone",
+    "value": 8
+   },
+   {
+    "name": "notTouchedScheduled",
+    "value": 9
+   },
+   {
+    "name": "qualifiedAborted",
+    "value": 10
+   },
+   {
+    "name": "qualifiedCanceled",
+    "value": 11
+   },
+   {
+    "name": "qualifiedDone",
+    "value": 12
+   },
+   {
+    "name": "qualifiedScheduled",
+    "value": 13
+   },
+   {
+    "name": "successAborted",
+    "value": 14
+   },
+   {
+    "name": "successCanceled",
+    "value": 15
+   },
+   {
+    "name": "successDone",
+    "value": 16
+   },
+   {
+    "name": "successScheduled",
+    "value": 17
+   },
+   {
+    "name": "unsuccessfulAborted",
+    "value": 18
+   },
+   {
+    "name": "unsuccessfulCanceled",
+    "value": 19
+   },
+   {
+    "name": "unsuccessfulDone",
+    "value": 20
+   },
+   {
+    "name": "unsuccessfulScheduled",
+    "value": 21
+   }
+  ]
+ },
+ {
+  "name": "ContactFailedReason",
+  "members": [
+   {
+    "name": "busy",
+    "value": 1
+   },
+   {
+    "name": "fax",
+    "value": 2
+   },
+   {
+    "name": "invalidNumber",
+    "value": 3
+   },
+   {
+    "name": "machine",
+    "value": 4
+   },
+   {
+    "name": "modem",
+    "value": 5
+   },
+   {
+    "name": "noAnswer",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "DatabaseErrorCode",
+  "url": "ref/expr/error-database.html",
+  "members": [
+   {
+    "name": "noSpace",
+    "value": 501
+   },
+   {
+    "name": "sqlError",
+    "value": 502
+   },
+   {
+    "name": "cursorNotFound",
+    "value": 503
+   },
+   {
+    "name": "describe",
+    "value": 504
+   },
+   {
+    "name": "noServer",
+    "value": 505
+   },
+   {
+    "name": "rpcError",
+    "value": 506
+   },
+   {
+    "name": "sqlTimeout",
+    "value": 507
+   },
+   {
+    "name": "wrongParameters",
+    "value": 508
+   },
+   {
+    "name": "rpcInvalidBusinessDimensionError",
+    "value": 509
+   },
+   {
+    "name": "singletonSelectWithMoreThan1Row",
+    "value": 510
+   },
+   {
+    "name": "invalidContactProfileRequest",
+    "value": 511
+   },
+   {
+    "name": "customSqlError",
+    "value": 512
+   },
+   {
+    "name": "databaseConnectionError",
+    "value": 513
+   },
+   {
+    "name": "noQuery",
+    "value": 514
+   },
+   {
+    "name": "remoteContactCenterDown",
+    "value": 515
+   },
+   {
+    "name": "dataError",
+    "value": 516
+   },
+   {
+    "name": "invalidFilterError",
+    "value": 517
+   }
+  ]
+ },
+ {
+  "name": "DataType",
+  "url": "ref/expr/activity-schema.html",
+  "members": [
+   {
+    "name": "text",
+    "value": 1
+   },
+   {
+    "name": "textUnicode",
+    "value": 2
+   },
+   {
+    "name": "number",
+    "value": 3
+   },
+   {
+    "name": "boolean",
+    "value": 4
+   },
+   {
+    "name": "date",
+    "value": 5
+   },
+   {
+    "name": "time",
+    "value": 6
+   },
+   {
+    "name": "datetime",
+    "value": 7
+   },
+   {
+    "name": "enumeration",
+    "value": 8
+   },
+   {
+    "name": "email",
+    "value": 9
+   },
+   {
+    "name": "document",
+    "value": 10
+   }
+  ]
+ },
+ {
+  "name": "DequeuedEventReason",
+  "members": [
+   {
+    "name": "none",
+    "value": 1
+   },
+   {
+    "name": "overflow",
+    "value": 2
+   },
+   {
+    "name": "abandon",
+    "value": 3
+   },
+   {
+    "name": "reject",
+    "value": 4
+   },
+   {
+    "name": "agentUnavailable",
+    "value": 5
+   },
+   {
+    "name": "noAgentWithProfile",
+    "value": 6
+   },
+   {
+    "name": "calculatedEwtIsAboveMaxEwt",
+    "value": 7
+   }
+  ]
+ },
+ {
+  "name": "DequeueRequestReason",
+  "members": [
+   {
+    "name": "none",
+    "value": 1
+   },
+   {
+    "name": "overflow",
+    "value": 2
+   },
+   {
+    "name": "abandon",
+    "value": 3
+   },
+   {
+    "name": "reject",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "EmailState",
+  "url": "ref/expr/email-info.html",
+  "members": [
+   {
+    "name": "routing",
+    "value": 1
+   },
+   {
+    "name": "alerting",
+    "value": 2
+   },
+   {
+    "name": "handling",
+    "value": 3
+   },
+   {
+    "name": "cleared",
+    "value": 4
+   },
+   {
+    "name": "previewAlerting",
+    "value": 5
+   },
+   {
+    "name": "previewAnalysing",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "ErrorType",
+  "url": "ref/expr/error-info.html",
+  "members": [
+   {
+    "name": "agent",
+    "value": 1
+   },
+   {
+    "name": "database",
+    "value": 2
+   },
+   {
+    "name": "externalWin32",
+    "value": 3
+   },
+   {
+    "name": "externalCLR",
+    "value": 4
+   },
+   {
+    "name": "scriptExecution",
+    "value": 5
+   },
+   {
+    "name": "serverAM",
+    "value": 6
+   },
+   {
+    "name": "serverCOMMS",
+    "value": 7
+   },
+   {
+    "name": "serverDOCM",
+    "value": 8
+   },
+   {
+    "name": "serverLC",
+    "value": 9
+   },
+   {
+    "name": "serverPBX",
+    "value": 10
+   },
+   {
+    "name": "serverSS",
+    "value": 11
+   }
+  ]
+ },
+ {
+  "name": "FileAccessMode",
+  "url": "ref/expr/function-file.html",
+  "members": [
+   {
+    "name": "fileRead",
+    "value": 1
+   },
+   {
+    "name": "fileWrite",
+    "value": 2
+   },
+   {
+    "name": "fileReadWrite",
+    "value": 3
+   },
+   {
+    "name": "fileAppend",
+    "value": 4
+   },
+   {
+    "name": "fileReadAppend",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "FileShareMode",
+  "url": "ref/expr/function-file.html",
+  "members": [
+   {
+    "name": "fileShareRead",
+    "value": 1
+   },
+   {
+    "name": "fileShareWrite",
+    "value": 2
+   },
+   {
+    "name": "fileNoShare",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "Gender",
+  "url": "ref/expr/script-contact-profile.html",
+  "members": [
+   {
+    "name": "male",
+    "value": 1
+   },
+   {
+    "name": "female",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "InstantMessagingError",
+  "members": [
+   {
+    "name": "unknownFailure",
+    "value": 1
+   },
+   {
+    "name": "switchError",
+    "value": 2
+   },
+   {
+    "name": "lineOverflow",
+    "value": 3
+   },
+   {
+    "name": "busy",
+    "value": 4
+   },
+   {
+    "name": "noAnswer",
+    "value": 5
+   },
+   {
+    "name": "invalidNumber",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "InstantMessagingState",
+  "url": "ref/expr/instant-messaging-info.html",
+  "members": [
+   {
+    "name": "connected",
+    "value": 1
+   },
+   {
+    "name": "held",
+    "value": 2
+   },
+   {
+    "name": "extended",
+    "value": 3
+   },
+   {
+    "name": "alerting",
+    "value": 4
+   },
+   {
+    "name": "starting",
+    "value": 5
+   },
+   {
+    "name": "newPending",
+    "value": 6
+   },
+   {
+    "name": "wrapUp",
+    "value": 7
+   },
+   {
+    "name": "cleared",
+    "value": 8
+   },
+   {
+    "name": "routing",
+    "value": 9
+   }
+  ]
+ },
+ {
+  "name": "InteractionOrigin",
+  "url": "ref/expr/contact-profile-interaction-history-cursor-row.html",
+  "members": [
+   {
+    "name": "inbound",
+    "value": 1
+   },
+   {
+    "name": "outbound",
+    "value": 2
+   },
+   {
+    "name": "workflow",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "InteractionPartyType",
+  "url": "ref/expr/instant-messaging-info.html",
+  "members": [
+   {
+    "name": "agent",
+    "value": 1
+   },
+   {
+    "name": "number",
+    "value": 2
+   },
+   {
+    "name": "supervisor",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "InteractionState",
+  "url": "ref/expr/script-session-info.html",
+  "members": [
+   {
+    "name": "started",
+    "value": 1
+   },
+   {
+    "name": "created",
+    "value": 2
+   },
+   {
+    "name": "executing",
+    "value": 3
+   },
+   {
+    "name": "suspended",
+    "value": 4
+   },
+   {
+    "name": "done",
+    "value": 5
+   },
+   {
+    "name": "stopped",
+    "value": 6
+   },
+   {
+    "name": "aborted",
+    "value": 7
+   },
+   {
+    "name": "rejected",
+    "value": 8
+   },
+   {
+    "name": "invalid",
+    "value": 9
+   },
+   {
+    "name": "canceled",
+    "value": 10
+   }
+  ]
+ },
+ {
+  "name": "InteractionTerminationState",
+  "url": "ref/expr/contact-profile-interaction-history-cursor-row.html",
+  "members": [
+   {
+    "name": "handled",
+    "value": 1
+   },
+   {
+    "name": "busy",
+    "value": 2
+   },
+   {
+    "name": "machine",
+    "value": 3
+   },
+   {
+    "name": "noAnswer",
+    "value": 4
+   },
+   {
+    "name": "nuisance",
+    "value": 5
+   },
+   {
+    "name": "abandoned",
+    "value": 6
+   },
+   {
+    "name": "rejected",
+    "value": 7
+   },
+   {
+    "name": "invalidNumber",
+    "value": 8
+   },
+   {
+    "name": "overflow",
+    "value": 9
+   },
+   {
+    "name": "trunkLineOverflow",
+    "value": 10
+   },
+   {
+    "name": "redirected",
+    "value": 11
+   },
+   {
+    "name": "fax",
+    "value": 12
+   },
+   {
+    "name": "modem",
+    "value": 13
+   },
+   {
+    "name": "discarded",
+    "value": 14
+   },
+   {
+    "name": "routed",
+    "value": 15
+   },
+   {
+    "name": "abortedByAgentLost",
+    "value": 16
+   },
+   {
+    "name": "canceled",
+    "value": 17
+   }
+  ]
+ },
+ {
+  "name": "MediaType",
+  "url": "ref/expr/script-session-info.html",
+  "members": [
+   {
+    "name": "email",
+    "value": 1
+   },
+   {
+    "name": "telephony",
+    "value": 2
+   },
+   {
+    "name": "instantMessaging",
+    "value": 3
+   },
+   {
+    "name": "workflow",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "MessageBoxButton",
+  "members": [
+   {
+    "name": "buttonCancel",
+    "value": 1
+   },
+   {
+    "name": "buttonContinue",
+    "value": 2
+   },
+   {
+    "name": "buttonNo",
+    "value": 3
+   },
+   {
+    "name": "buttonOk",
+    "value": 4
+   },
+   {
+    "name": "buttonRetry",
+    "value": 5
+   },
+   {
+    "name": "buttonYes",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "MessageBoxButtonStyle",
+  "members": [
+   {
+    "name": "buttonOk",
+    "value": 1
+   },
+   {
+    "name": "buttonOkCancel",
+    "value": 2
+   },
+   {
+    "name": "buttonRetryCancel",
+    "value": 3
+   },
+   {
+    "name": "buttonYesNo",
+    "value": 4
+   },
+   {
+    "name": "buttonYesNoCancel",
+    "value": 5
+   },
+   {
+    "name": "buttonRetryContinueCancel",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "MessageBoxIconStyle",
+  "members": [
+   {
+    "name": "none",
+    "value": 1
+   },
+   {
+    "name": "iconInformation",
+    "value": 2
+   },
+   {
+    "name": "iconQuestion",
+    "value": 3
+   },
+   {
+    "name": "iconWarning",
+    "value": 4
+   },
+   {
+    "name": "iconError",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "PendingWorkType",
+  "url": "ref/expr/pending-work-cursor-row.html",
+  "members": [
+   {
+    "name": "contact",
+    "value": 1
+   },
+   {
+    "name": "email",
+    "value": 2
+   },
+   {
+    "name": "workflow",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "PhoneError",
+  "members": [
+   {
+    "name": "unknownFailure",
+    "value": 1
+   },
+   {
+    "name": "switchError",
+    "value": 2
+   },
+   {
+    "name": "lineOverflow",
+    "value": 3
+   },
+   {
+    "name": "busy",
+    "value": 4
+   },
+   {
+    "name": "noAnswer",
+    "value": 5
+   },
+   {
+    "name": "machineAnswered",
+    "value": 6
+   },
+   {
+    "name": "noAgent",
+    "value": 7
+   },
+   {
+    "name": "invalidNumber",
+    "value": 8
+   },
+   {
+    "name": "fax",
+    "value": 9
+   },
+   {
+    "name": "modem",
+    "value": 10
+   }
+  ]
+ },
+ {
+  "name": "PhoneState",
+  "url": "ref/expr/phone-info.html",
+  "members": [
+   {
+    "name": "connected",
+    "value": 1
+   },
+   {
+    "name": "held",
+    "value": 2
+   },
+   {
+    "name": "extended",
+    "value": 3
+   },
+   {
+    "name": "alerting",
+    "value": 4
+   },
+   {
+    "name": "dialing",
+    "value": 5
+   },
+   {
+    "name": "newPending",
+    "value": 6
+   },
+   {
+    "name": "wrapUp",
+    "value": 7
+   },
+   {
+    "name": "setup",
+    "value": 8
+   },
+   {
+    "name": "cleared",
+    "value": 9
+   },
+   {
+    "name": "routing",
+    "value": 10
+   },
+   {
+    "name": "previewAlerting",
+    "value": 11
+   },
+   {
+    "name": "previewAnalysing",
+    "value": 12
+   },
+   {
+    "name": "previewRetry",
+    "value": 13
+   }
+  ]
+ },
+ {
+  "name": "PlayTerminationReason",
+  "members": [
+   {
+    "name": "audioResourceNotFound",
+    "value": 1
+   },
+   {
+    "name": "errorParsingString",
+    "value": 2
+   },
+   {
+    "name": "cantAccessBoard",
+    "value": 3
+   },
+   {
+    "name": "genericError",
+    "value": 4
+   },
+   {
+    "name": "ttsError",
+    "value": 5
+   },
+   {
+    "name": "fileNotFound",
+    "value": 6
+   },
+   {
+    "name": "success",
+    "value": 7
+   }
+  ]
+ },
+ {
+  "name": "QueuedEmailState",
+  "url": "ref/expr/contact-profile-queued-email-cursor-row.html",
+  "members": [
+   {
+    "name": "start",
+    "value": 1
+   },
+   {
+    "name": "executing",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "RecordingStartReason",
+  "members": [
+   {
+    "name": "configuration",
+    "value": 1
+   },
+   {
+    "name": "agent",
+    "value": 2
+   },
+   {
+    "name": "supervisor",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "RecordingTerminationReason",
+  "members": [
+   {
+    "name": "requested",
+    "value": 1
+   },
+   {
+    "name": "restarted",
+    "value": 2
+   },
+   {
+    "name": "silenceDetected",
+    "value": 3
+   },
+   {
+    "name": "connectionLost",
+    "value": 4
+   },
+   {
+    "name": "malfunction",
+    "value": 5
+   },
+   {
+    "name": "lowDiskSpace",
+    "value": 6
+   },
+   {
+    "name": "linkDown",
+    "value": 7
+   },
+   {
+    "name": "fileOperationError",
+    "value": 8
+   },
+   {
+    "name": "hardwareFailure",
+    "value": 9
+   },
+   {
+    "name": "channelNotReady",
+    "value": 10
+   },
+   {
+    "name": "callDisconnected",
+    "value": 11
+   }
+  ]
+ },
+ {
+  "name": "RestartScriptMode",
+  "members": [
+   {
+    "name": "end",
+    "value": 1
+   },
+   {
+    "name": "discard",
+    "value": 2
+   },
+   {
+    "name": "abort",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "ScheduledContactState",
+  "url": "ref/expr/contact-profile-scheduled-contact-cursor-row.html",
+  "members": [
+   {
+    "name": "start",
+    "value": 1
+   },
+   {
+    "name": "cached",
+    "value": 2
+   },
+   {
+    "name": "executing",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "ScriptExecutionErrorCode",
+  "url": "ref/expr/error-script-execution.html",
+  "members": [
+   {
+    "name": "userUnknownError",
+    "value": 16010
+   },
+   {
+    "name": "invalidBooleanNumber",
+    "value": 16011
+   },
+   {
+    "name": "invalidBooleanText",
+    "value": 16012
+   },
+   {
+    "name": "noExternalDll",
+    "value": 16013
+   },
+   {
+    "name": "invalidDate",
+    "value": 16014
+   },
+   {
+    "name": "malformedDate",
+    "value": 16015
+   },
+   {
+    "name": "invalidDateTime",
+    "value": 16016
+   },
+   {
+    "name": "malformedDateTime",
+    "value": 16017
+   },
+   {
+    "name": "numberTooBig",
+    "value": 16019
+   },
+   {
+    "name": "nonCompleteNumber",
+    "value": 16020
+   },
+   {
+    "name": "invalidNumber",
+    "value": 16021
+   },
+   {
+    "name": "divisionByZero",
+    "value": 16022
+   },
+   {
+    "name": "unknownNode",
+    "value": 16024
+   },
+   {
+    "name": "noNodeToBack",
+    "value": 16025
+   },
+   {
+    "name": "noNodeToReturn",
+    "value": 16026
+   },
+   {
+    "name": "invalidExternalCallReturn",
+    "value": 16028
+   },
+   {
+    "name": "invalidExternalCallName",
+    "value": 16029
+   },
+   {
+    "name": "noCurrentNode",
+    "value": 16030
+   },
+   {
+    "name": "progCursorDuplicated",
+    "value": 16031
+   },
+   {
+    "name": "progCursorUnknown",
+    "value": 16032
+   },
+   {
+    "name": "unOpenedProgCursor",
+    "value": 16033
+   },
+   {
+    "name": "negNKeyLookup",
+    "value": 16035
+   },
+   {
+    "name": "nullNodeName",
+    "value": 16036
+   },
+   {
+    "name": "unknownNodeName",
+    "value": 16037
+   },
+   {
+    "name": "nullFetchPosition",
+    "value": 16038
+   },
+   {
+    "name": "nullLoadCode",
+    "value": 16039
+   },
+   {
+    "name": "invalidTime",
+    "value": 16040
+   },
+   {
+    "name": "malformedTime",
+    "value": 16041
+   },
+   {
+    "name": "nullOperands",
+    "value": 16042
+   },
+   {
+    "name": "noExternalFuncs",
+    "value": 16043
+   },
+   {
+    "name": "externalFuncError",
+    "value": 16044
+   },
+   {
+    "name": "mistypedExternalFuncReturn",
+    "value": 16045
+   },
+   {
+    "name": "noExternalProcs",
+    "value": 16046
+   },
+   {
+    "name": "externalProcError",
+    "value": 16047
+   },
+   {
+    "name": "fetchingUnOpenedCursor",
+    "value": 16048
+   },
+   {
+    "name": "nullFormatArg",
+    "value": 16049
+   },
+   {
+    "name": "invalidNumberRange",
+    "value": 16050
+   },
+   {
+    "name": "unrecognizedException",
+    "value": 16051
+   },
+   {
+    "name": "invalidCBoxValue",
+    "value": 16052
+   },
+   {
+    "name": "unknownAttribute",
+    "value": 16053
+   },
+   {
+    "name": "requiredAttribute",
+    "value": 16054
+   },
+   {
+    "name": "invalidAttribute",
+    "value": 16055
+   },
+   {
+    "name": "userError",
+    "value": 16056
+   },
+   {
+    "name": "unimplementedCallback",
+    "value": 16062
+   },
+   {
+    "name": "campaignAlreadySet",
+    "value": 16068
+   },
+   {
+    "name": "cantCreateWindow",
+    "value": 16071
+   },
+   {
+    "name": "contactAlreadySet",
+    "value": 16072
+   },
+   {
+    "name": "externalNullArgument",
+    "value": 16078
+   },
+   {
+    "name": "cantCallNullProc",
+    "value": 16079
+   },
+   {
+    "name": "externalProcCException",
+    "value": 16080
+   },
+   {
+    "name": "cantGlobalAlloc",
+    "value": 16081
+   },
+   {
+    "name": "nullArrayIndex",
+    "value": 16083
+   },
+   {
+    "name": "nullArrayDimension",
+    "value": 16084
+   },
+   {
+    "name": "arrayIndexOutOfBounds",
+    "value": 16085
+   },
+   {
+    "name": "invalidSaveFile",
+    "value": 16086
+   },
+   {
+    "name": "invalidWindow",
+    "value": 16087
+   },
+   {
+    "name": "cantCloseSessionWindow",
+    "value": 16088
+   },
+   {
+    "name": "cantCloseDisabledWindow",
+    "value": 16089
+   },
+   {
+    "name": "invalidTab",
+    "value": 16091
+   },
+   {
+    "name": "invalidTalkFunction",
+    "value": 16092
+   },
+   {
+    "name": "unknownDequeueRequestReason",
+    "value": 16093
+   },
+   {
+    "name": "invalidActionExitingNode",
+    "value": 16094
+   },
+   {
+    "name": "userCantRunApplication",
+    "value": 16097
+   },
+   {
+    "name": "userUnknownRescheduleFailedReason",
+    "value": 16098
+   },
+   {
+    "name": "langFunc",
+    "value": 16103
+   },
+   {
+    "name": "onEndingMode",
+    "value": 16105
+   },
+   {
+    "name": "unknownTimer",
+    "value": 16108
+   },
+   {
+    "name": "invalidIvrFunction",
+    "value": 16109
+   },
+   {
+    "name": "unknownBrowser",
+    "value": 16110
+   },
+   {
+    "name": "invalidActionInBrowserEvent",
+    "value": 16111
+   },
+   {
+    "name": "userInvalidActionLoadingModule",
+    "value": 16112
+   },
+   {
+    "name": "userUnknownEmailEditor",
+    "value": 16113
+   },
+   {
+    "name": "userEmailEditorNoRecipients",
+    "value": 16114
+   },
+   {
+    "name": "userEmailEditorRecipientParsingError",
+    "value": 16115
+   },
+   {
+    "name": "userEmailEditorEmptyFromAddress",
+    "value": 16116
+   },
+   {
+    "name": "userEmailEditorEmptyLoadFailed",
+    "value": 16117
+   },
+   {
+    "name": "userInputException",
+    "value": 16118
+   },
+   {
+    "name": "userUnknownEdit",
+    "value": 16119
+   },
+   {
+    "name": "userInvalidServerText",
+    "value": 16120
+   },
+   {
+    "name": "userInvalidInputText",
+    "value": 16121
+   },
+   {
+    "name": "userCantMakeFromLong",
+    "value": 16122
+   },
+   {
+    "name": "userInvalidCodeText",
+    "value": 16123
+   },
+   {
+    "name": "userNegNValueLookup",
+    "value": 16124
+   },
+   {
+    "name": "userCantTerminateScrMailOpened",
+    "value": 16125
+   },
+   {
+    "name": "userInvalidFormat",
+    "value": 16126
+   },
+   {
+    "name": "userUnknownElement",
+    "value": 16127
+   },
+   {
+    "name": "userElementNotATable",
+    "value": 16128
+   },
+   {
+    "name": "userWebBrowserEventLoop",
+    "value": 16129
+   },
+   {
+    "name": "userTableFetchLoop",
+    "value": 16130
+   },
+   {
+    "name": "userEmailEditorFromParsingError",
+    "value": 16131
+   },
+   {
+    "name": "userEmailEditorEmpty",
+    "value": 16132
+   },
+   {
+    "name": "nullByteStream",
+    "value": 16136
+   },
+   {
+    "name": "userFileAlreadyExists",
+    "value": 16140
+   },
+   {
+    "name": "userInvalidFile",
+    "value": 16141
+   },
+   {
+    "name": "userInvalidHandle",
+    "value": 16142
+   },
+   {
+    "name": "userInvalidAccess",
+    "value": 16143
+   },
+   {
+    "name": "userEndOfFile",
+    "value": 16144
+   },
+   {
+    "name": "userInvalidFolder",
+    "value": 16145
+   },
+   {
+    "name": "userEmailEditorInvalidAttachment",
+    "value": 16150
+   },
+   {
+    "name": "userEmailEditorInvalidHtmlDocument",
+    "value": 16151
+   },
+   {
+    "name": "userUnknownIMControl",
+    "value": 16152
+   },
+   {
+    "name": "userUnknownPlayItemType",
+    "value": 16153
+   },
+   {
+    "name": "userInvalidTTSParameter",
+    "value": 16154
+   },
+   {
+    "name": "userInvalidEnumValue",
+    "value": 16155
+   },
+   {
+    "name": "userInvalidEnumValue",
+    "value": 16156
+   },
+   {
+    "name": "userUnknownMenuControl",
+    "value": 16157
+   },
+   {
+    "name": "invalidInternalVariableUsage",
+    "value": 16158
+   },
+   {
+    "name": "nullDependencyName",
+    "value": 16159
+   },
+   {
+    "name": "unknownDependencyName",
+    "value": 16160
+   },
+   {
+    "name": "enumCastToNumberNotPossible",
+    "value": 16161
+   },
+   {
+    "name": "nodeScopeInvalidUsage",
+    "value": 16162
+   },
+   {
+    "name": "inputNotUpdated",
+    "value": 16163
+   },
+   {
+    "name": "nullDependencyName",
+    "value": 16164
+   },
+   {
+    "name": "unknownDependencyName",
+    "value": 16165
+   },
+   {
+    "name": "enumCastToNumberNotPossible",
+    "value": 16166
+   },
+   {
+    "name": "nodeScopeInvalidUsage",
+    "value": 16167
+   },
+   {
+    "name": "runAppIsInvalid",
+    "value": 16168
+   },
+   {
+    "name": "folderBrowserIsInvalidInWeb",
+    "value": 16169
+   },
+   {
+    "name": "unknownBlockName",
+    "value": 16170
+   },
+   {
+    "name": "setContainerInSelf",
+    "value": 16171
+   },
+   {
+    "name": "actionNotAllowedOnDisabled",
+    "value": 16172
+   },
+   {
+    "name": "actionNotAllowedOnOverlay",
+    "value": 16173
+   },
+   {
+    "name": "actionNotAllowedOnParent",
+    "value": 16174
+   }
+  ]
+ },
+ {
+  "name": "ScriptStartReason",
+  "url": "ref/expr/script-start-reason.html",
+  "members": [
+   {
+    "name": "inboundEmail",
+    "value": 1,
+    "doc": "The interaction is an inbound email."
+   },
+   {
+    "name": "inboundInstantMessaging",
+    "value": 2,
+    "doc": "The interaction is an inbound instant messaging session."
+   },
+   {
+    "name": "inboundPhone",
+    "value": 3,
+    "doc": "The interaction is an inbound telephony interaction."
+   },
+   {
+    "name": "outboundPhone",
+    "value": 4,
+    "doc": "The interaction is an outbound telephony interaction."
+   },
+   {
+    "name": "previewEmail",
+    "value": 5,
+    "doc": "The interaction is a preview email."
+   },
+   {
+    "name": "previewPhone",
+    "value": 6,
+    "doc": "The interaction is a preview telephony interaction."
+   },
+   {
+    "name": "restart",
+    "value": 7,
+    "doc": "The agent restarted the script."
+   },
+   {
+    "name": "routingEmail",
+    "value": 8,
+    "doc": "The interaction is a routing email."
+   },
+   {
+    "name": "routingInstantMessaging",
+    "value": 9,
+    "doc": "The interaction is a routing instant messaging interaction"
+   },
+   {
+    "name": "routingPhone",
+    "value": 10,
+    "doc": "The interaction is a routing telephony interaction"
+   },
+   {
+    "name": "sendData",
+    "value": 11,
+    "doc": "Another script sent data to the agent."
+   },
+   {
+    "name": "startedByAgent",
+    "value": 12,
+    "doc": "The agent started the script manually."
+   },
+   {
+    "name": "workflow",
+    "value": 13,
+    "doc": "The interaction is a workflow agent task."
+   }
+  ]
+ },
+ {
+  "name": "SeekPosition",
+  "url": "ref/expr/function-file.html",
+  "members": [
+   {
+    "name": "current",
+    "value": 1
+   },
+   {
+    "name": "begin",
+    "value": 2
+   },
+   {
+    "name": "end",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "SentEmailState",
+  "url": "ref/expr/sent-email-cursor-row.html",
+  "members": [
+   {
+    "name": "handled",
+    "value": 1
+   },
+   {
+    "name": "rejected",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "ServerAMErrorCode",
+  "url": "ref/expr/error-agent-manager.html",
+  "members": [
+   {
+    "name": "invalidPassword",
+    "value": 4002
+   },
+   {
+    "name": "notFound",
+    "value": 4003
+   },
+   {
+    "name": "alreadyLogged",
+    "value": 4004
+   },
+   {
+    "name": "notAvailable",
+    "value": 4005
+   },
+   {
+    "name": "notReady",
+    "value": 4006
+   },
+   {
+    "name": "extensionOccupied",
+    "value": 4007
+   },
+   {
+    "name": "reachingCall",
+    "value": 4008
+   },
+   {
+    "name": "ready",
+    "value": 4009
+   },
+   {
+    "name": "call",
+    "value": 4010
+   },
+   {
+    "name": "alreadyOpen",
+    "value": 4012
+   },
+   {
+    "name": "noMorePredictiveAllowed",
+    "value": 4013
+   },
+   {
+    "name": "agentInCampaignNotFound",
+    "value": 4014
+   },
+   {
+    "name": "extensionNotSet",
+    "value": 4016
+   },
+   {
+    "name": "noPhoneCall",
+    "value": 4018
+   },
+   {
+    "name": "communicationsError",
+    "value": 4022
+   },
+   {
+    "name": "noLicense",
+    "value": 4025
+   },
+   {
+    "name": "fullField",
+    "value": 4026
+   },
+   {
+    "name": "fullEvent",
+    "value": 4027
+   },
+   {
+    "name": "unknownAction",
+    "value": 4028
+   },
+   {
+    "name": "pbxError",
+    "value": 4029
+   },
+   {
+    "name": "unknownSession",
+    "value": 4030
+   },
+   {
+    "name": "unknownCampaign",
+    "value": 4031
+   },
+   {
+    "name": "nilSessionAgent",
+    "value": 4033
+   },
+   {
+    "name": "endWithPhoneCall",
+    "value": 4034
+   },
+   {
+    "name": "dialWithPhoneUp",
+    "value": 4035
+   },
+   {
+    "name": "noNumber",
+    "value": 4036
+   },
+   {
+    "name": "agentNoDefExtension",
+    "value": 4037
+   },
+   {
+    "name": "queryOverflow",
+    "value": 4038
+   },
+   {
+    "name": "noCall",
+    "value": 4039
+   },
+   {
+    "name": "dbError",
+    "value": 4040
+   },
+   {
+    "name": "alreadyClosed",
+    "value": 4043
+   },
+   {
+    "name": "openedCall",
+    "value": 4044
+   },
+   {
+    "name": "campaignOpen",
+    "value": 4045
+   },
+   {
+    "name": "fatalError",
+    "value": 4046
+   },
+   {
+    "name": "unknownAgent",
+    "value": 4047
+   },
+   {
+    "name": "alreadyWithScript",
+    "value": 4048
+   },
+   {
+    "name": "endWithData",
+    "value": 4049
+   },
+   {
+    "name": "invalidFeature",
+    "value": 4051
+   },
+   {
+    "name": "endUnknownScript",
+    "value": 4052
+   },
+   {
+    "name": "unknownOutboundRule",
+    "value": 4053
+   },
+   {
+    "name": "unknownTimeZone",
+    "value": 4054
+   },
+   {
+    "name": "instanceNotNull",
+    "value": 4055
+   },
+   {
+    "name": "datumSize",
+    "value": 4056
+   },
+   {
+    "name": "invalidAgentType",
+    "value": 4057
+   },
+   {
+    "name": "amError",
+    "value": 4058
+   },
+   {
+    "name": "unknownSupervisor",
+    "value": 4060
+   },
+   {
+    "name": "unknownNotReadyReason",
+    "value": 4061
+   },
+   {
+    "name": "unknownSkillProfile",
+    "value": 4062
+   },
+   {
+    "name": "unknownSkill",
+    "value": 4063
+   },
+   {
+    "name": "amRequestPending",
+    "value": 4064
+   },
+   {
+    "name": "amAlreadyInState",
+    "value": 4065
+   },
+   {
+    "name": "adminMode",
+    "value": 4066
+   },
+   {
+    "name": "amUnknownCampaign",
+    "value": 4067
+   },
+   {
+    "name": "noAgentAvailable",
+    "value": 4068
+   },
+   {
+    "name": "noDataInteraction",
+    "value": 4069
+   },
+   {
+    "name": "unknownEmail",
+    "value": 4070
+   },
+   {
+    "name": "unloggedAgent",
+    "value": 4071
+   },
+   {
+    "name": "unloggedSupervisor",
+    "value": 4072
+   },
+   {
+    "name": "noData",
+    "value": 4073
+   },
+   {
+    "name": "contactAlreadyLoaded",
+    "value": 4074
+   },
+   {
+    "name": "mallocFailed",
+    "value": 4075
+   },
+   {
+    "name": "signedOff",
+    "value": 4078
+   },
+   {
+    "name": "campaignClosed",
+    "value": 4079
+   },
+   {
+    "name": "invalidParameter",
+    "value": 4080
+   },
+   {
+    "name": "invalidState",
+    "value": 4081
+   },
+   {
+    "name": "lastAgentAvailabilityAgentNeeded",
+    "value": 4082
+   },
+   {
+    "name": "invalidStructure",
+    "value": 4083
+   },
+   {
+    "name": "invalidSite",
+    "value": 4084
+   },
+   {
+    "name": "extensionNotInSite",
+    "value": 4085
+   },
+   {
+    "name": "siteNotSet",
+    "value": 4086
+   },
+   {
+    "name": "switchIsDown",
+    "value": 4087
+   },
+   {
+    "name": "cannotOpen",
+    "value": 4088
+   },
+   {
+    "name": "cannotStartScript",
+    "value": 4089
+   },
+   {
+    "name": "featureInvokedPending",
+    "value": 4090
+   },
+   {
+    "name": "unknownEvent",
+    "value": 4091
+   },
+   {
+    "name": "siteAlreadySet",
+    "value": 4092
+   },
+   {
+    "name": "unknownFailedReason",
+    "value": 4093
+   },
+   {
+    "name": "invalidContactRecoveryState",
+    "value": 4094
+   },
+   {
+    "name": "recordRejected",
+    "value": 4095
+   },
+   {
+    "name": "unknownCorderType",
+    "value": 4096
+   },
+   {
+    "name": "invalidEvolution",
+    "value": 4097
+   },
+   {
+    "name": "unknownAMSMEvent",
+    "value": 4098
+   },
+   {
+    "name": "wrongMediaType",
+    "value": 4099
+   },
+   {
+    "name": "invalidContactProfile",
+    "value": 4100
+   },
+   {
+    "name": "unknownEmailGateway",
+    "value": 4101
+   },
+   {
+    "name": "unknownPOP3Server",
+    "value": 4102
+   },
+   {
+    "name": "duplicatedPOP3Id",
+    "value": 4103
+   },
+   {
+    "name": "duplicatedMD5",
+    "value": 4104
+   },
+   {
+    "name": "invalidTeam",
+    "value": 4105
+   },
+   {
+    "name": "unknownWorkflow",
+    "value": 4106
+   },
+   {
+    "name": "noDataFound",
+    "value": 4107
+   },
+   {
+    "name": "multipleActivities",
+    "value": 4108
+   },
+   {
+    "name": "activityNotContact",
+    "value": 4109
+   },
+   {
+    "name": "numberInDoNotCallList",
+    "value": 4110
+   },
+   {
+    "name": "invalidNonConnectedInteractionType",
+    "value": 4111
+   },
+   {
+    "name": "invalidSkillWeight",
+    "value": 4112
+   },
+   {
+    "name": "invalidSkillLevel",
+    "value": 4113
+   },
+   {
+    "name": "invalidAgent",
+    "value": 4114
+   },
+   {
+    "name": "invalidInConnectedState",
+    "value": 4115
+   },
+   {
+    "name": "unknownError",
+    "value": 4150
+   },
+   {
+    "name": "amAlreadyMonitored",
+    "value": 4151
+   },
+   {
+    "name": "amInvalidPriority",
+    "value": 4152
+   },
+   {
+    "name": "amUnknownInteraction",
+    "value": 4153
+   },
+   {
+    "name": "amActivityAlreadyBeingExecuted",
+    "value": 4154
+   },
+   {
+    "name": "amDataPassedWithNoCampaign",
+    "value": 4155
+   },
+   {
+    "name": "amAgentReturnConnectionError",
+    "value": 4156
+   },
+   {
+    "name": "amPickUpInteractionNotAvailableYet",
+    "value": 4157
+   },
+   {
+    "name": "amInvalidForOperation",
+    "value": 4158
+   },
+   {
+    "name": "campaignHasNoGateways",
+    "value": 4159
+   },
+   {
+    "name": "invalidEndStatus",
+    "value": 4160
+   },
+   {
+    "name": "failedToCreateSkillProfile",
+    "value": 4161
+   },
+   {
+    "name": "alreadyInForcedLogin",
+    "value": 4162
+   },
+   {
+    "name": "alreadyInCleanup",
+    "value": 4163
+   },
+   {
+    "name": "incompatibleDataAM",
+    "value": 4164
+   },
+   {
+    "name": "skillProfileNotInCampaign",
+    "value": 4165
+   },
+   {
+    "name": "alreadySignOnMultiSkillProfileCampaign",
+    "value": 4166
+   },
+   {
+    "name": "agentSkillProfileNotMatchCampaign",
+    "value": 4167
+   },
+   {
+    "name": "invalidMoment",
+    "value": 4168
+   },
+   {
+    "name": "workflowOnly",
+    "value": 4169
+   },
+   {
+    "name": "maxUsersInLimitMode",
+    "value": 4170
+   },
+   {
+    "name": "invalidEmailTransferToIvrCampaign",
+    "value": 4171
+   },
+   {
+    "name": "alreadyInRecording",
+    "value": 4172
+   },
+   {
+    "name": "amInvalidContactState",
+    "value": 4173
+   },
+   {
+    "name": "maxEmailReached",
+    "value": 4174
+   },
+   {
+    "name": "dialWithPreviewAlerting",
+    "value": 4175
+   },
+   {
+    "name": "noContactLoaded",
+    "value": 4176
+   },
+   {
+    "name": "duplicatePredictiveSkillProfile",
+    "value": 4177
+   },
+   {
+    "name": "invalidPickupTaskType",
+    "value": 4179
+   },
+   {
+    "name": "invalidPickupTaskState",
+    "value": 4180
+   },
+   {
+    "name": "invalidCampaignAssignmentState",
+    "value": 4181
+   },
+   {
+    "name": "lastAgentInTeamInCampaing",
+    "value": 4182
+   },
+   {
+    "name": "contactLoadedButUnreserved",
+    "value": 4183
+   },
+   {
+    "name": "contactNotReservedForThisOperation",
+    "value": 4184
+   },
+   {
+    "name": "contactInvalidRecoveryReservedState",
+    "value": 4185
+   },
+   {
+    "name": "agentWithGlobalInvokeFeatureInProgress",
+    "value": 4186
+   },
+   {
+    "name": "invalidAuthenticationMode",
+    "value": 4187
+   },
+   {
+    "name": "unknownPhoneScheduleRule",
+    "value": 4188
+   },
+   {
+    "name": "updateSkillProfileOperationPending",
+    "value": 4189
+   },
+   {
+    "name": "agentSkillProfileNotMatchGateway",
+    "value": 4190
+   },
+   {
+    "name": "invalidAccessToken",
+    "value": 4191
+   },
+   {
+    "name": "qrpNotFound",
+    "value": 4192
+   },
+   {
+    "name": "externalAuthenticationFailed",
+    "value": 4193
+   },
+   {
+    "name": "loadSsmMoveFailed",
+    "value": 4194
+   },
+   {
+    "name": "vBoxSwitchNotFound",
+    "value": 4195
+   },
+   {
+    "name": "noAvailableExtensions",
+    "value": 4196
+   }
+  ]
+ },
+ {
+  "name": "ServerCOMMSErrorCode",
+  "url": "ref/expr/error-comms.html",
+  "members": [
+   {
+    "name": "wrongCommunicationsProtocol",
+    "value": 5001
+   },
+   {
+    "name": "communicationsFailure",
+    "value": 5002
+   },
+   {
+    "name": "assistedServerVersionMismatch",
+    "value": 5003
+   },
+   {
+    "name": "unknownHost",
+    "value": 5004
+   },
+   {
+    "name": "assistedServerOfflineOrInvalidPort",
+    "value": 5005
+   },
+   {
+    "name": "genericEbaError",
+    "value": 6000
+   }
+  ]
+ },
+ {
+  "name": "ServerDOCMErrorCode",
+  "url": "ref/expr/error-docs.html",
+  "members": [
+   {
+    "name": "notImplemented",
+    "value": 7001
+   },
+   {
+    "name": "couldNotSave",
+    "value": 7005
+   },
+   {
+    "name": "docIdNotFound",
+    "value": 7006
+   },
+   {
+    "name": "couldNotGet",
+    "value": 7007
+   },
+   {
+    "name": "docNotOpenToSave",
+    "value": 7008
+   },
+   {
+    "name": "couldNotGetPos",
+    "value": 7009
+   },
+   {
+    "name": "couldNotSetPos",
+    "value": 7010
+   },
+   {
+    "name": "docInUse",
+    "value": 7011
+   },
+   {
+    "name": "docLocked",
+    "value": 7012
+   },
+   {
+    "name": "docmDbError",
+    "value": 7013
+   },
+   {
+    "name": "noMoreSockets",
+    "value": 7014
+   },
+   {
+    "name": "couldNotConnect",
+    "value": 7015
+   },
+   {
+    "name": "communications",
+    "value": 7016
+   },
+   {
+    "name": "noOpenSockets",
+    "value": 7017
+   },
+   {
+    "name": "socketNotOpen",
+    "value": 7018
+   },
+   {
+    "name": "notWorkServer",
+    "value": 7019
+   },
+   {
+    "name": "notMemory",
+    "value": 7020
+   },
+   {
+    "name": "invalidCurrDir",
+    "value": 7023
+   },
+   {
+    "name": "couldNotReadFile",
+    "value": 7024
+   },
+   {
+    "name": "nullFilePointer",
+    "value": 7025
+   },
+   {
+    "name": "wrongEmailType",
+    "value": 7026
+   },
+   {
+    "name": "notReadyToRead",
+    "value": 7027
+   },
+   {
+    "name": "openInFile",
+    "value": 7028
+   },
+   {
+    "name": "openOutFile",
+    "value": 7029
+   },
+   {
+    "name": "fileNonExisting",
+    "value": 7030
+   },
+   {
+    "name": "connectingToInit",
+    "value": 7031
+   },
+   {
+    "name": "gettingAddr",
+    "value": 7032
+   },
+   {
+    "name": "allFilesUsed",
+    "value": 7037
+   },
+   {
+    "name": "connectedPartially",
+    "value": 7038
+   },
+   {
+    "name": "noMsgAvailable",
+    "value": 7039
+   },
+   {
+    "name": "invlAgId",
+    "value": 7040
+   },
+   {
+    "name": "socksInUse",
+    "value": 7041
+   },
+   {
+    "name": "notChgStatus",
+    "value": 7042
+   },
+   {
+    "name": "invlFilename",
+    "value": 7045
+   },
+   {
+    "name": "notOpenLocFile",
+    "value": 7046
+   },
+   {
+    "name": "readingLocFile",
+    "value": 7047
+   },
+   {
+    "name": "emailGatewayUnknown",
+    "value": 7050
+   },
+   {
+    "name": "zipFileNotFound",
+    "value": 7051
+   },
+   {
+    "name": "docmUnknownError",
+    "value": 7200
+   },
+   {
+    "name": "couldNotSaveDiskFull",
+    "value": 7201
+   },
+   {
+    "name": "lowStorageSpaceThreshold",
+    "value": 7202
+   }
+  ]
+ },
+ {
+  "name": "ServerPBXErrorCode",
+  "url": "ref/expr/error-pbx.html",
+  "members": [
+   {
+    "name": "unknownTelephonyError",
+    "value": 2001
+   },
+   {
+    "name": "switchSpecificError",
+    "value": 2002
+   },
+   {
+    "name": "agentInUse",
+    "value": 2003
+   },
+   {
+    "name": "campaignHasExtensions",
+    "value": 2004
+   },
+   {
+    "name": "campaignUnknown",
+    "value": 2005
+   },
+   {
+    "name": "extensionInUse",
+    "value": 2007
+   },
+   {
+    "name": "extensionNotSignedOn",
+    "value": 2009
+   },
+   {
+    "name": "invalidDestination",
+    "value": 2011
+   },
+   {
+    "name": "invalidCallId",
+    "value": 2012
+   },
+   {
+    "name": "invalidExtension",
+    "value": 2013
+   },
+   {
+    "name": "invalidExtensionFeature",
+    "value": 2014
+   },
+   {
+    "name": "invalidGatewayFeature",
+    "value": 2015
+   },
+   {
+    "name": "invalidProfile",
+    "value": 2016
+   },
+   {
+    "name": "noAgentInExtension",
+    "value": 2018
+   },
+   {
+    "name": "notAlerting",
+    "value": 2019
+   },
+   {
+    "name": "notConnected",
+    "value": 2020
+   },
+   {
+    "name": "notDisconnectable",
+    "value": 2022
+   },
+   {
+    "name": "notExtended",
+    "value": 2023
+   },
+   {
+    "name": "notOnHold",
+    "value": 2025
+   },
+   {
+    "name": "pilotUnknown",
+    "value": 2026
+   },
+   {
+    "name": "timeoutInOperation",
+    "value": 2028
+   },
+   {
+    "name": "profileInUse",
+    "value": 2029
+   },
+   {
+    "name": "systemError",
+    "value": 2030
+   },
+   {
+    "name": "extensionInvalid",
+    "value": 2031
+   },
+   {
+    "name": "pbxExtensionNotSet",
+    "value": 2032
+   },
+   {
+    "name": "extensionUnknownError",
+    "value": 2033
+   },
+   {
+    "name": "invalidGroup",
+    "value": 2034
+   },
+   {
+    "name": "invalidSwitch",
+    "value": 2035
+   },
+   {
+    "name": "invalidCampaignId",
+    "value": 2036
+   },
+   {
+    "name": "invalidCall",
+    "value": 2037
+   },
+   {
+    "name": "numberUnknown",
+    "value": 2038
+   },
+   {
+    "name": "reserve",
+    "value": 2039
+   },
+   {
+    "name": "extensionNotExported",
+    "value": 2040
+   },
+   {
+    "name": "pbxInvalidAgent",
+    "value": 2041
+   },
+   {
+    "name": "noExtension",
+    "value": 2042
+   },
+   {
+    "name": "pbxNotConnected",
+    "value": 2043
+   },
+   {
+    "name": "contextNotFound",
+    "value": 2044
+   },
+   {
+    "name": "switchIdMismatch",
+    "value": 2045
+   },
+   {
+    "name": "notRouting",
+    "value": 2046
+   },
+   {
+    "name": "routing",
+    "value": 2047
+   },
+   {
+    "name": "campaignNotOpen",
+    "value": 2048
+   },
+   {
+    "name": "lineOverflow",
+    "value": 2049
+   },
+   {
+    "name": "recordingInProgress",
+    "value": 2050
+   },
+   {
+    "name": "noRecordingInProgress",
+    "value": 2051
+   },
+   {
+    "name": "noAvailableRecordingChannel",
+    "value": 2052
+   },
+   {
+    "name": "errorInRecordingProcess",
+    "value": 2053
+   },
+   {
+    "name": "errorNotEnqueued",
+    "value": 2054
+   },
+   {
+    "name": "errorAlreadyEnqueued",
+    "value": 2055
+   },
+   {
+    "name": "agentDeliverInProgress",
+    "value": 2056
+   },
+   {
+    "name": "incompatibleData",
+    "value": 2057
+   },
+   {
+    "name": "invalidPhoneRequest",
+    "value": 2058
+   },
+   {
+    "name": "campaignHasCalls",
+    "value": 2059
+   },
+   {
+    "name": "invalidMedia",
+    "value": 2060
+   },
+   {
+    "name": "laaAgentNeeded",
+    "value": 2061
+   },
+   {
+    "name": "invalidWork",
+    "value": 2062
+   },
+   {
+    "name": "allowAgentLoginDisabled",
+    "value": 2063
+   },
+   {
+    "name": "noFreeExtensions",
+    "value": 2064
+   },
+   {
+    "name": "callAgentUnavailable",
+    "value": 2100
+   },
+   {
+    "name": "callCampaignIsSuspended",
+    "value": 2101
+   },
+   {
+    "name": "callDeliverInProgress",
+    "value": 2102
+   },
+   {
+    "name": "callExtensionNotSignedOn",
+    "value": 2103
+   },
+   {
+    "name": "callInvalidExtension",
+    "value": 2104
+   },
+   {
+    "name": "callInvalidNativePredictiveDevice",
+    "value": 2105
+   },
+   {
+    "name": "callInvalidThreadId",
+    "value": 2106
+   },
+   {
+    "name": "callNoAgentInExtension",
+    "value": 2107
+   },
+   {
+    "name": "callRequestIsNotAllowed",
+    "value": 2108
+   },
+   {
+    "name": "callNoAgentWithProfile",
+    "value": 2109
+   },
+   {
+    "name": "callUnexportedNumber",
+    "value": 2110
+   },
+   {
+    "name": "agentIsNotLocal",
+    "value": 2111
+   },
+   {
+    "name": "pbxAlreadyMonitored",
+    "value": 2112
+   },
+   {
+    "name": "pbxNotInSupervision",
+    "value": 2113
+   },
+   {
+    "name": "pbxAlreadyInSupervision",
+    "value": 2114
+   },
+   {
+    "name": "callInvalidListAgIds",
+    "value": 2115
+   },
+   {
+    "name": "callOperationDeniedDueToPerformanceProblems",
+    "value": 2116
+   },
+   {
+    "name": "callInvalidMaxEwt",
+    "value": 2117
+   },
+   {
+    "name": "callCalculatedEwtIsAboveMaxEwt",
+    "value": 2118
+   },
+   {
+    "name": "callNotPlaying",
+    "value": 2119
+   },
+   {
+    "name": "callInvalidPromptToPlay",
+    "value": 2120
+   },
+   {
+    "name": "callPlayListMaxExceeded",
+    "value": 2121
+   },
+   {
+    "name": "callCannotPlayInLoopWithCollect",
+    "value": 2122
+   },
+   {
+    "name": "operationDeniedDueToDistributionEngineLimitations",
+    "value": 2123
+   },
+   {
+    "name": "campaignDeviceIsInUse",
+    "value": 2200
+   },
+   {
+    "name": "campaignIncompatibleProfile",
+    "value": 2201
+   },
+   {
+    "name": "campaignInvalidDnis",
+    "value": 2202
+   },
+   {
+    "name": "campaignInvalidLoginGroup",
+    "value": 2203
+   },
+   {
+    "name": "campaignInvalidMappingGroup",
+    "value": 2204
+   },
+   {
+    "name": "campaignInvalidMonitoredDevices",
+    "value": 2205
+   },
+   {
+    "name": "campaignInvalidAccessLineRuleProfileName",
+    "value": 2206
+   },
+   {
+    "name": "ctiGatewaySpecificError",
+    "value": 2300
+   },
+   {
+    "name": "ctiNotConfigured",
+    "value": 2301
+   },
+   {
+    "name": "extensionInvalidCampaignId",
+    "value": 2400
+   },
+   {
+    "name": "extensionIsLocked",
+    "value": 2401
+   },
+   {
+    "name": "extensionUnknownGroupAssociation",
+    "value": 2402
+   },
+   {
+    "name": "extensionAgentAlreadyRecovered",
+    "value": 2403
+   },
+   {
+    "name": "extensionNotRegistered",
+    "value": 2404
+   },
+   {
+    "name": "supervisionInvalidSupervisor",
+    "value": 2450
+   },
+   {
+    "name": "supervisionInvalidAgent",
+    "value": 2451
+   },
+   {
+    "name": "supervisionInvalidType",
+    "value": 2452
+   },
+   {
+    "name": "supervisionNoCallFound",
+    "value": 2453
+   },
+   {
+    "name": "supervisionInvalidRequest",
+    "value": 2454
+   },
+   {
+    "name": "simulatorInvalidCheckSum",
+    "value": 2500
+   },
+   {
+    "name": "simulatorInvalidDnis",
+    "value": 2501
+   },
+   {
+    "name": "simulatorInvalidGeneratorDistribution",
+    "value": 2502
+   },
+   {
+    "name": "simulatorInvalidRoutingDeviceType",
+    "value": 2503
+   },
+   {
+    "name": "simulatorDuplicatedRoutingDevice",
+    "value": 2504
+   },
+   {
+    "name": "switchDebugFileError",
+    "value": 2601
+   },
+   {
+    "name": "switchDeviceIsInUse",
+    "value": 2603
+   },
+   {
+    "name": "switchDeviceKindIsNotSupported",
+    "value": 2604
+   },
+   {
+    "name": "switchDuplicatedDeviceNumber",
+    "value": 2605
+   },
+   {
+    "name": "switchExtensionListIsEmpty",
+    "value": 2606
+   },
+   {
+    "name": "switchGatewayTypeNotSupported",
+    "value": 2607
+   },
+   {
+    "name": "switchLineIdInAccessMappingWasNotFound",
+    "value": 2608
+   },
+   {
+    "name": "switchMonitorOnDeviceFailed",
+    "value": 2609
+   },
+   {
+    "name": "switchRequestIsNotAllowed",
+    "value": 2610
+   },
+   {
+    "name": "switchUnableToModifyChannelList",
+    "value": 2611
+   },
+   {
+    "name": "switchUnableToModifyConnectionType",
+    "value": 2612
+   },
+   {
+    "name": "switchUnableToModifyDebugCtiApi",
+    "value": 2613
+   },
+   {
+    "name": "switchUnableToModifyDeviceDefinition",
+    "value": 2614
+   },
+   {
+    "name": "switchUnableToModifyDialerList",
+    "value": 2615
+   },
+   {
+    "name": "switchUnableToModifyExtensionList",
+    "value": 2616
+   },
+   {
+    "name": "switchUnableToModifyMonitorMode",
+    "value": 2617
+   },
+   {
+    "name": "switchUnableToModifySwitchGatewayType",
+    "value": 2618
+   },
+   {
+    "name": "switchUnableToModifySwitchId",
+    "value": 2619
+   },
+   {
+    "name": "switchUnableToModifySwitchServerName",
+    "value": 2620
+   },
+   {
+    "name": "switchUnableToModifyUserLogin",
+    "value": 2621
+   },
+   {
+    "name": "switchUnableToModifyUserPassword",
+    "value": 2622
+   },
+   {
+    "name": "switchUnableToModifyCtiLink",
+    "value": 2623
+   },
+   {
+    "name": "switchGroupAssociationMustBeUnique",
+    "value": 2624
+   },
+   {
+    "name": "switchIncompatibleGroupAssociation",
+    "value": 2625
+   },
+   {
+    "name": "switchInvalidGroupAssociation",
+    "value": 2626
+   },
+   {
+    "name": "switchUnableToModifyCstaLogFile",
+    "value": 2627
+   },
+   {
+    "name": "switchDuplicatedAccessLineRuleProfileName",
+    "value": 2628
+   },
+   {
+    "name": "switchAccessLineRuleProfileNameIsInUse",
+    "value": 2629
+   },
+   {
+    "name": "switchInRecovery",
+    "value": 2630
+   },
+   {
+    "name": "pbxNoLicense",
+    "value": 2700
+   },
+   {
+    "name": "switchRemoteCtiGatewayAccessEntryForThisGatewayCanNotBeSet",
+    "value": 2800
+   },
+   {
+    "name": "switchRemoteCtiGatewayAccessDuplicatedDialingPrefixPrefix",
+    "value": 2801
+   },
+   {
+    "name": "switchRemoteCtiGatewayAccessDuplicatedGateway",
+    "value": 2802
+   },
+   {
+    "name": "switchSynchronisedVoiceDataEntryGroupPointDeviceKindIsInvalid",
+    "value": 2803
+   }
+  ]
+ },
+ {
+  "name": "ServerSSErrorCode",
+  "url": "ref/expr/error-supervisor.html",
+  "members": [
+   {
+    "name": "systemErrorOnRemoteMachine",
+    "value": 9001
+   },
+   {
+    "name": "transactionManagerDown",
+    "value": 9002
+   },
+   {
+    "name": "sSUnknownAgent",
+    "value": 9003
+   },
+   {
+    "name": "sSUnknownCampaign",
+    "value": 9004
+   },
+   {
+    "name": "sSCampaignAlreadyInState",
+    "value": 9005
+   },
+   {
+    "name": "transitionError",
+    "value": 9006
+   },
+   {
+    "name": "noSpaceForCampaign",
+    "value": 9007
+   },
+   {
+    "name": "noSpaceForAgent",
+    "value": 9008
+   },
+   {
+    "name": "noSpaceForScriptNodes",
+    "value": 9009
+   },
+   {
+    "name": "noSpaceForCallCache",
+    "value": 9010
+   },
+   {
+    "name": "campaignIsRunning",
+    "value": 9011
+   },
+   {
+    "name": "interactionsStillRunning",
+    "value": 9012
+   },
+   {
+    "name": "databaseAccessError",
+    "value": 9013
+   },
+   {
+    "name": "databaseCreationError",
+    "value": 9014
+   },
+   {
+    "name": "agentManagerDown",
+    "value": 9015
+   },
+   {
+    "name": "sSFailed",
+    "value": 9016
+   },
+   {
+    "name": "agentLoggedInCampaign",
+    "value": 9017
+   },
+   {
+    "name": "sSUnknownError",
+    "value": 9018
+   },
+   {
+    "name": "loadFieldsError",
+    "value": 9019
+   },
+   {
+    "name": "invalidCampaignTable",
+    "value": 9020
+   },
+   {
+    "name": "invalidContactTable",
+    "value": 9021
+   },
+   {
+    "name": "switchGroupNotExported",
+    "value": 9022
+   },
+   {
+    "name": "invalidPacingMode",
+    "value": 9023
+   },
+   {
+    "name": "agentIsLogged",
+    "value": 9024
+   },
+   {
+    "name": "campingNotInSharedMemory",
+    "value": 9025
+   },
+   {
+    "name": "unknownAssignmentAgent",
+    "value": 9026
+   },
+   {
+    "name": "campaignOpenedWithSamePbxGroup",
+    "value": 9027
+   },
+   {
+    "name": "invalidPbxGroup",
+    "value": 9028
+   },
+   {
+    "name": "pbxGroupNotCleared",
+    "value": 9029
+   },
+   {
+    "name": "sSPbxError",
+    "value": 9030
+   },
+   {
+    "name": "notSupervisor",
+    "value": 9031
+   },
+   {
+    "name": "sSInvalidPassword",
+    "value": 9032
+   },
+   {
+    "name": "unknownUsername",
+    "value": 9033
+   },
+   {
+    "name": "sSCommunicationsError",
+    "value": 9034
+   },
+   {
+    "name": "changeId",
+    "value": 9035
+   },
+   {
+    "name": "agentAssignError",
+    "value": 9036
+   },
+   {
+    "name": "sSAlreadyLogged",
+    "value": 9037
+   },
+   {
+    "name": "sSNoLicense",
+    "value": 9038
+   },
+   {
+    "name": "noSpaceForCallTypes",
+    "value": 9039
+   },
+   {
+    "name": "entityAlreadyLocked",
+    "value": 9040
+   },
+   {
+    "name": "entityNotLocked",
+    "value": 9041
+   },
+   {
+    "name": "unknownEntity",
+    "value": 9042
+   },
+   {
+    "name": "unknownField",
+    "value": 9043
+   },
+   {
+    "name": "invalidField",
+    "value": 9044
+   },
+   {
+    "name": "unknownWhere",
+    "value": 9045
+   },
+   {
+    "name": "unknownTeam",
+    "value": 9046
+   },
+   {
+    "name": "invalidDelete",
+    "value": 9047
+   },
+   {
+    "name": "sSCampaignOpen",
+    "value": 9048
+   },
+   {
+    "name": "cannotAssignTeamToCampaign",
+    "value": 9049
+   },
+   {
+    "name": "cannotAssignAgentToCampaignLoadAgentFailed",
+    "value": 9050
+   },
+   {
+    "name": "agentAlredyAssignedToCampaign",
+    "value": 9051
+   },
+   {
+    "name": "cannotAssignAgentToCampaign",
+    "value": 9052
+   },
+   {
+    "name": "cannotAssignAgentToTeam",
+    "value": 9053
+   },
+   {
+    "name": "cannotRemoveTeamFromCampaign",
+    "value": 9054
+   },
+   {
+    "name": "cannotRemoveTeamAgentsWorking",
+    "value": 9055
+   },
+   {
+    "name": "cannotRemoveOpenedCampaign",
+    "value": 9056
+   },
+   {
+    "name": "cannotRemoveAgentFromTeam",
+    "value": 9057
+   },
+   {
+    "name": "virtualKeyError",
+    "value": 9058
+   },
+   {
+    "name": "noSharedMemorySpace",
+    "value": 9059
+   },
+   {
+    "name": "unknownDayDefinition",
+    "value": 9060
+   },
+   {
+    "name": "unknownTimeInterval",
+    "value": 9061
+   },
+   {
+    "name": "unknownDayType",
+    "value": 9062
+   },
+   {
+    "name": "unknownTimePoint",
+    "value": 9063
+   },
+   {
+    "name": "unknownSchedule",
+    "value": 9064
+   },
+   {
+    "name": "unknownTriggerSchedule",
+    "value": 9065
+   },
+   {
+    "name": "unknownOperationProfile",
+    "value": 9066
+   },
+   {
+    "name": "unknownCommandSchedule",
+    "value": 9067
+   },
+   {
+    "name": "unknownReportSchedule",
+    "value": 9068
+   },
+   {
+    "name": "unknownPhone",
+    "value": 9069
+   },
+   {
+    "name": "unknownPhoneRules",
+    "value": 9070
+   },
+   {
+    "name": "unknownOutboundRuleSchedule",
+    "value": 9071
+   },
+   {
+    "name": "sSUnknownOutboundRule",
+    "value": 9072
+   },
+   {
+    "name": "databaseNotFound",
+    "value": 9073
+   },
+   {
+    "name": "duplicateKey",
+    "value": 9074
+   },
+   {
+    "name": "cannotDeleteForeignKey",
+    "value": 9075
+   },
+   {
+    "name": "unknownForeignKey",
+    "value": 9076
+   },
+   {
+    "name": "agentNotLogged",
+    "value": 9078
+   },
+   {
+    "name": "sSAlreadyInState",
+    "value": 9079
+   },
+   {
+    "name": "sSRequestPending",
+    "value": 9080
+   },
+   {
+    "name": "noCallToRecord",
+    "value": 9081
+   },
+   {
+    "name": "invalidRunningMode",
+    "value": 9082
+   },
+   {
+    "name": "alreadyExists",
+    "value": 9083
+   },
+   {
+    "name": "missingField",
+    "value": 9084
+   },
+   {
+    "name": "invalidActivityState",
+    "value": 9085
+   },
+   {
+    "name": "entityCanBeDeactivated",
+    "value": 9086
+   },
+   {
+    "name": "invalidTransaction",
+    "value": 9087
+   },
+   {
+    "name": "teamHasLoggedAgents",
+    "value": 9088
+   },
+   {
+    "name": "teamHasAgents",
+    "value": 9091
+   },
+   {
+    "name": "teamHasCampaigns",
+    "value": 9092
+   },
+   {
+    "name": "campaignHasOpenWorks",
+    "value": 9093
+   },
+   {
+    "name": "workIsOpenCannotDeassign",
+    "value": 9094
+   },
+   {
+    "name": "campaignTableAlreadyExists",
+    "value": 9095
+   },
+   {
+    "name": "contactTableAlreadyExists",
+    "value": 9096
+   },
+   {
+    "name": "agentHasExtension",
+    "value": 9097
+   },
+   {
+    "name": "campaignIsOpenCannotUpdate",
+    "value": 9098
+   },
+   {
+    "name": "campaignIsOpenCannotDelete",
+    "value": 9099
+   },
+   {
+    "name": "gatewayIsStartedCannotUpdate",
+    "value": 9100
+   },
+   {
+    "name": "gatewayIsStartedCannotDelete",
+    "value": 9101
+   },
+   {
+    "name": "loadingAgentsFailed",
+    "value": 9102
+   },
+   {
+    "name": "loadingCallTypesFailed",
+    "value": 9103
+   },
+   {
+    "name": "loadingSkillDemandsFailed",
+    "value": 9104
+   },
+   {
+    "name": "gatewayAlreadyStarted",
+    "value": 9105
+   },
+   {
+    "name": "skillHasAgents",
+    "value": 9110
+   },
+   {
+    "name": "skillHasCallSkills",
+    "value": 9111
+   },
+   {
+    "name": "campaignTableDamaged",
+    "value": 9112
+   },
+   {
+    "name": "contactTableDamaged",
+    "value": 9113
+   },
+   {
+    "name": "tableSchemaDamaged",
+    "value": 9114
+   },
+   {
+    "name": "campaignInsertFailedWithGarbage",
+    "value": 9115
+   },
+   {
+    "name": "gatewayIsDown",
+    "value": 9116
+   },
+   {
+    "name": "databaseDeadlock",
+    "value": 9117
+   },
+   {
+    "name": "messageSizeExceeded",
+    "value": 9118
+   },
+   {
+    "name": "siteHasReports",
+    "value": 9119
+   },
+   {
+    "name": "siteHasGateways",
+    "value": 9120
+   },
+   {
+    "name": "predictiveModeNotAllowedInMultisiteCampaigns",
+    "value": 9121
+   },
+   {
+    "name": "telephonyGatewayInCampaignRunning",
+    "value": 9122
+   },
+   {
+    "name": "invalidEntityAndSecondaryFilterCombination",
+    "value": 9123
+   },
+   {
+    "name": "cannotDeleteCampaignReferencedByEmailFilter",
+    "value": 9124
+   },
+   {
+    "name": "lastGatewayInPredictiveCampaign",
+    "value": 9125
+   },
+   {
+    "name": "agentIsTeamSupervisor",
+    "value": 9126
+   },
+   {
+    "name": "transactionTooLong",
+    "value": 9127
+   },
+   {
+    "name": "transactionTooLongCampaignRunning",
+    "value": 9128
+   },
+   {
+    "name": "transactionTooLongTeamsAssigned",
+    "value": 9129
+   },
+   {
+    "name": "noCloseActiveSchedule",
+    "value": 9130
+   },
+   {
+    "name": "invalidPersistentFilter",
+    "value": 9131
+   },
+   {
+    "name": "documentRevisionISActive",
+    "value": 9132
+   },
+   {
+    "name": "serviceHasCampaigns",
+    "value": 9133
+   },
+   {
+    "name": "serviceHasCubes",
+    "value": 9134
+   },
+   {
+    "name": "transactionFlushInProgress",
+    "value": 9135
+   },
+   {
+    "name": "delBuiltinError",
+    "value": 9136
+   },
+   {
+    "name": "uPDTBuiltinFieldError",
+    "value": 9137
+   },
+   {
+    "name": "uPDTBuiltinEntNameError",
+    "value": 9138
+   },
+   {
+    "name": "categoryHasChilds",
+    "value": 9139
+   },
+   {
+    "name": "noMoreGlobalKpisAllowed",
+    "value": 9140
+   },
+   {
+    "name": "noMoreServiceKpisAllowed",
+    "value": 9141
+   },
+   {
+    "name": "dbErrorOnKpiAllocation",
+    "value": 9142
+   },
+   {
+    "name": "cpRefDInOverflowCampaignCantDel",
+    "value": 9143
+   },
+   {
+    "name": "cpHasRealocPrioResubmitTask",
+    "value": 9144
+   },
+   {
+    "name": "badXmlFile",
+    "value": 9145
+   },
+   {
+    "name": "badPriorityLevel",
+    "value": 9146
+   },
+   {
+    "name": "campaignNotInService",
+    "value": 9147
+   },
+   {
+    "name": "invalidDocmRepositoryPath",
+    "value": 9148
+   },
+   {
+    "name": "isWfCurrentVersion",
+    "value": 9149
+   },
+   {
+    "name": "wfHasProcesses",
+    "value": 9150
+   },
+   {
+    "name": "wfIsRunning",
+    "value": 9151
+   },
+   {
+    "name": "serviceNotClosed",
+    "value": 9152
+   },
+   {
+    "name": "zeroMaxLinesForTraceProcess",
+    "value": 9153
+   },
+   {
+    "name": "serviceIsInMaintenance",
+    "value": 9154
+   },
+   {
+    "name": "wfNoStartTask",
+    "value": 9155
+   },
+   {
+    "name": "wfTooManyStartTasks",
+    "value": 9156
+   },
+   {
+    "name": "wfNoEndTasks",
+    "value": 9157
+   },
+   {
+    "name": "wfNotFoundInDb",
+    "value": 9158
+   },
+   {
+    "name": "wfTaskNotFound",
+    "value": 9159
+   },
+   {
+    "name": "wfScriptNotFound",
+    "value": 9160
+   },
+   {
+    "name": "criticalPendingTaskControlError",
+    "value": 9161
+   },
+   {
+    "name": "invalidCubeConfiguration",
+    "value": 9162
+   },
+   {
+    "name": "workflowTaskNameRepeated",
+    "value": 9163
+   },
+   {
+    "name": "tableFieldDeclaredAsBusinessCounter",
+    "value": 9164
+   },
+   {
+    "name": "maxCustomBusinessCountersReached",
+    "value": 9165
+   },
+   {
+    "name": "maxBusinessMonitorsReached",
+    "value": 9166
+   },
+   {
+    "name": "campaignReferencedByWorkflow",
+    "value": 9167
+   },
+   {
+    "name": "contactListWithActivitiesWithInvalidStatus",
+    "value": 9168
+   },
+   {
+    "name": "dNCLCannotBeGlobal",
+    "value": 9169
+   },
+   {
+    "name": "invalidOperationOverClosedCampaign",
+    "value": 9170
+   },
+   {
+    "name": "backgroundTaskInvalidOperation",
+    "value": 9171
+   },
+   {
+    "name": "backgroundTaskCriticalControlError",
+    "value": 9172
+   },
+   {
+    "name": "backgroundTaskFailed",
+    "value": 9173
+   },
+   {
+    "name": "maxNumberNonBusinessCubesReached",
+    "value": 9174
+   },
+   {
+    "name": "tableSchemaEnumEmpty",
+    "value": 9175
+   },
+   {
+    "name": "campaignNotFoundInWorkflowScript",
+    "value": 9176
+   },
+   {
+    "name": "xmlFileWithError",
+    "value": 9177
+   },
+   {
+    "name": "duplicateVersionedDocument",
+    "value": 9178
+   },
+   {
+    "name": "systemOperationConflict",
+    "value": 9179
+   },
+   {
+    "name": "directoryWithContacts",
+    "value": 9180
+   },
+   {
+    "name": "directoryWithServices",
+    "value": 9181
+   },
+   {
+    "name": "directoryWithWorkflows",
+    "value": 9182
+   },
+   {
+    "name": "unableToConnectLmc",
+    "value": 9183
+   },
+   {
+    "name": "counterUsedInExpression",
+    "value": 9184
+   },
+   {
+    "name": "mediaTypeIsLastInEmailGw",
+    "value": 9185
+   },
+   {
+    "name": "directoryWithNotClosedServices",
+    "value": 9186
+   },
+   {
+    "name": "directoryWithNotClosedCampaigns",
+    "value": 9187
+   },
+   {
+    "name": "tableFieldDeclaredAsBusinessDimension",
+    "value": 9188
+   },
+   {
+    "name": "accessLineInAccessRuleProfiles",
+    "value": 9189
+   },
+   {
+    "name": "cannotDeleteActivityListOfCampaignReferencingWorkflow",
+    "value": 9190
+   },
+   {
+    "name": "cannotDeleteContactReferencingWorkflow",
+    "value": 9191
+   },
+   {
+    "name": "workflowInvalidTaskPriority",
+    "value": 9192
+   },
+   {
+    "name": "mediaTypeHasInteractionInEmailGateway",
+    "value": 9193
+   },
+   {
+    "name": "emptyTableSchemaEnumNotAllowed",
+    "value": 9194
+   },
+   {
+    "name": "workflowIsCurrentTask",
+    "value": 9195
+   },
+   {
+    "name": "activityListIsDefault",
+    "value": 9196
+   },
+   {
+    "name": "workflowChangesNotAllowed",
+    "value": 9198
+   },
+   {
+    "name": "tableFieldAlreadyExists",
+    "value": 9199
+   },
+   {
+    "name": "workflowWaitTaskNotFound",
+    "value": 9200
+   },
+   {
+    "name": "agentNotInCampaign",
+    "value": 9201
+   },
+   {
+    "name": "workflowContactProfileNeedsDirectory",
+    "value": 9202
+   },
+   {
+    "name": "workflowNegativeInputDelay",
+    "value": 9203
+   },
+   {
+    "name": "cubeHasBusinessObjectives",
+    "value": 9204
+   },
+   {
+    "name": "cubeHasBusinessPanels",
+    "value": 9205
+   },
+   {
+    "name": "cubeHasReportTemplates",
+    "value": 9206
+   },
+   {
+    "name": "duplicateTableSchemaEnum",
+    "value": 9207
+   },
+   {
+    "name": "businessCounterIsMonitored",
+    "value": 9208
+   },
+   {
+    "name": "businessCounterIsReportTemplate",
+    "value": 9209
+   },
+   {
+    "name": "parameterUsedInExpression",
+    "value": 9210
+   },
+   {
+    "name": "invalidWorkflowTaskType",
+    "value": 9211
+   },
+   {
+    "name": "instanceInRecoveryMode",
+    "value": 9212
+   },
+   {
+    "name": "failedRPCTimeout",
+    "value": 9213
+   },
+   {
+    "name": "stateMachineOperationFailed",
+    "value": 9214
+   },
+   {
+    "name": "reservedCtUniqueIdFormat",
+    "value": 9215
+   },
+   {
+    "name": "insertSkillInSkillProfileFailed",
+    "value": 9216
+   },
+   {
+    "name": "insertAgentSkillFailed",
+    "value": 9217
+   },
+   {
+    "name": "updateAgentSkillFailed",
+    "value": 9218
+   },
+   {
+    "name": "insertSkillProfileInCampaignFailed",
+    "value": 9219
+   },
+   {
+    "name": "insertSkillProfileInCampaignMaxFailed",
+    "value": 9220
+   },
+   {
+    "name": "deleteSkillProfileInCampaignFailed",
+    "value": 9221
+   },
+   {
+    "name": "kpiIsBeingUsed",
+    "value": 9222
+   },
+   {
+    "name": "noMoreGlobalLightKpisAllowed",
+    "value": 9223
+   },
+   {
+    "name": "noMoreServiceLightKpisAllowed",
+    "value": 9224
+   },
+   {
+    "name": "businessSegmentMaxNumberReached",
+    "value": 9225
+   },
+   {
+    "name": "noMoreMaxCTEndedKpisAllowed",
+    "value": 9226
+   },
+   {
+    "name": "deleteAgentSkillFailed",
+    "value": 9227
+   },
+   {
+    "name": "campaignContactListMaxNumberReached",
+    "value": 9228
+   },
+   {
+    "name": "couldNotLockEntity",
+    "value": 9229
+   },
+   {
+    "name": "problemInSegmentEvaluation",
+    "value": 9230
+   },
+   {
+    "name": "tableFieldUsedInBusinessSegmentFilter",
+    "value": 9231
+   },
+   {
+    "name": "deleteFailedPossiblePendingFlush",
+    "value": 9232
+   },
+   {
+    "name": "emailTemplateHasReferencesInCampaign",
+    "value": 9233
+   },
+   {
+    "name": "reportTemplateHasScheduledRequests",
+    "value": 9234
+   },
+   {
+    "name": "cubeNotFound",
+    "value": 9235
+   },
+   {
+    "name": "segmentRecoveryInProgress",
+    "value": 9236
+   },
+   {
+    "name": "cubeNotReady",
+    "value": 9237
+   },
+   {
+    "name": "invlState",
+    "value": 9238
+   },
+   {
+    "name": "moreGatewaysNotAllowedInStrategyModeCampaign",
+    "value": 9239
+   },
+   {
+    "name": "deleteSkillProfileInUse",
+    "value": 9240
+   },
+   {
+    "name": "excelModelNotFound",
+    "value": 9241
+   },
+   {
+    "name": "reportGatewayNotConnected",
+    "value": 9242
+   },
+   {
+    "name": "reportSkeletonNotUpdated",
+    "value": 9243
+   },
+   {
+    "name": "reportSkeletonNotCreated",
+    "value": 9244
+   },
+   {
+    "name": "additionalPhoneCannotDisableOutboundRuleSchedule",
+    "value": 9245
+   },
+   {
+    "name": "invalidStateContact",
+    "value": 9246
+   },
+   {
+    "name": "invalidWorkflowTaskState",
+    "value": 9247
+   },
+   {
+    "name": "invalidEmailState",
+    "value": 9248
+   },
+   {
+    "name": "additionalPhoneCannotDisableSearchableContactProfileColumn",
+    "value": 9249
+   },
+   {
+    "name": "additionalPhoneCannotDisableBusinessSegmentFilter",
+    "value": 9250
+   },
+   {
+    "name": "categoryDeassignedCampaignDefaultEmailTemplate",
+    "value": 9251
+   },
+   {
+    "name": "categoryDeassignedCampaignDefaultQuickTextArticle",
+    "value": 9252
+   },
+   {
+    "name": "invalidDate",
+    "value": 9253
+   },
+   {
+    "name": "invalidGmtDate",
+    "value": 9254
+   },
+   {
+    "name": "readOnlyField",
+    "value": 9255
+   },
+   {
+    "name": "campaignCannotOpenWithoutScript",
+    "value": 9256
+   },
+   {
+    "name": "campaignOpenMustHaveScript",
+    "value": 9257
+   },
+   {
+    "name": "reportTemplateCustomQueryJoinUsed",
+    "value": 9259
+   },
+   {
+    "name": "activityOutcomeTransactionInProgress",
+    "value": 9260
+   },
+   {
+    "name": "invalidFailureRuleActivationConditions",
+    "value": 9261
+   },
+   {
+    "name": "duplicateContactWithSameContactProfile",
+    "value": 9262
+   },
+   {
+    "name": "directoryNeedsContactProfile",
+    "value": 9263
+   },
+   {
+    "name": "notReadyReasonsMaxEntriesReached",
+    "value": 9264
+   },
+   {
+    "name": "fieldDataBiggerThanMaxAllowed",
+    "value": 9265
+   },
+   {
+    "name": "invalidTaskName",
+    "value": 9266
+   },
+   {
+    "name": "invalidWorkflowProcessDefinitionName",
+    "value": 9267
+   },
+   {
+    "name": "problemInAutomaticPriorityCalculation",
+    "value": 9268
+   },
+   {
+    "name": "maxMonitorableSkillProfilesReached",
+    "value": 9269
+   },
+   {
+    "name": "invalidSkillProfile",
+    "value": 9270
+   },
+   {
+    "name": "skillProfileHasActivities",
+    "value": 9271
+   },
+   {
+    "name": "instanceRunningInPreviewOnlyMode",
+    "value": 9272
+   },
+   {
+    "name": "predModeWithManyTelgwAllowAgentLogin",
+    "value": 9273
+   },
+   {
+    "name": "workflowNextCampaignInvalidService",
+    "value": 9274
+   },
+   {
+    "name": "businessCounterAndBusinessDimensionInSameTransaction",
+    "value": 9275
+   },
+   {
+    "name": "internalDatabaseConnectionError",
+    "value": 9276
+   },
+   {
+    "name": "tableFieldUsedInBusinessSegmentAutomaticPriority",
+    "value": 9283
+   },
+   {
+    "name": "workflowNextCampaignRequired",
+    "value": 9284
+   },
+   {
+    "name": "campaignCannotOpenInvalidDefaultContactList",
+    "value": 9285
+   },
+   {
+    "name": "aslNameIsInvalid",
+    "value": 9286
+   },
+   {
+    "name": "campaignContactListSameTransaction",
+    "value": 9287
+   },
+   {
+    "name": "cannotDeleteStillReferenced",
+    "value": 9288
+   },
+   {
+    "name": "favoriteFilterInUse",
+    "value": 9295
+   },
+   {
+    "name": "incompleteBusinessCounterMap",
+    "value": 9296
+   },
+   {
+    "name": "incompleteBusinessDimensionMap",
+    "value": 9297
+   },
+   {
+    "name": "tableFieldUsedInFavoriteFilter",
+    "value": 9301
+   },
+   {
+    "name": "campaignCannotStop",
+    "value": 9304
+   },
+   {
+    "name": "campaignCannotStart",
+    "value": 9305
+   },
+   {
+    "name": "campaignCannotSuspend",
+    "value": 9306
+   },
+   {
+    "name": "timeZoneDtsMissingValues",
+    "value": 9307
+   },
+   {
+    "name": "automaticSettingsChain",
+    "value": 9327
+   },
+   {
+    "name": "categoryMaxNestedLevels",
+    "value": 9329
+   },
+   {
+    "name": "dialRuleDetailUsesNonConnectedAddressType",
+    "value": 9330
+   },
+   {
+    "name": "dbFieldReservedActivityRef",
+    "value": 9331
+   },
+   {
+    "name": "campaignHasEmails",
+    "value": 9332
+   },
+   {
+    "name": "emailGatewayHasPendingInteractions",
+    "value": 9333
+   },
+   {
+    "name": "contactListDeleteCampaignNotClosed",
+    "value": 9334
+   },
+   {
+    "name": "cannotUpdateTeamInCampaign",
+    "value": 9336
+   },
+   {
+    "name": "textFieldOutOfRange",
+    "value": 9337
+   },
+   {
+    "name": "onlineGatewayCanNotAddToCampaign",
+    "value": 9338
+   },
+   {
+    "name": "onlineGatewayCanNotAddDeleteFromCampaign",
+    "value": 9339
+   },
+   {
+    "name": "additionalPhoneNameCannotBeEmpty",
+    "value": 9340
+   },
+   {
+    "name": "agentInsertSkillFailed",
+    "value": 9341
+   },
+   {
+    "name": "serverInUse",
+    "value": 9342
+   },
+   {
+    "name": "invalidValue",
+    "value": 9343
+   },
+   {
+    "name": "autoContactListFailed",
+    "value": 9345
+   },
+   {
+    "name": "favoriteFilterUsedInContactListDistributionFilter",
+    "value": 9346
+   },
+   {
+    "name": "tableFieldUsedInContactListDistributionFilter",
+    "value": 9347
+   },
+   {
+    "name": "contactListDistributionFilterUsedInRule",
+    "value": 9348
+   },
+   {
+    "name": "invalidContactPriority",
+    "value": 9349
+   },
+   {
+    "name": "cannotRemoveAssignmentNotRestrictedState",
+    "value": 9351
+   },
+   {
+    "name": "cannotDeleteAssignmentDueToActivityReferences",
+    "value": 9352
+   },
+   {
+    "name": "agentNameMustBeUnique",
+    "value": 9353
+   },
+   {
+    "name": "sSInvalidAuthenticationMode",
+    "value": 9355
+   },
+   {
+    "name": "cannotDeletePhoneRescheduleRuleDueToRef",
+    "value": 9356
+   },
+   {
+    "name": "defaultDirectoryCannotChangeInSsmService",
+    "value": 9358
+   },
+   {
+    "name": "contactProfileExistsInSsmService",
+    "value": 9359
+   },
+   {
+    "name": "invalidDirectoryForSsmContact",
+    "value": 9360
+   },
+   {
+    "name": "cannotDeleteSsmRepositoryCampaign",
+    "value": 9361
+   },
+   {
+    "name": "cannotDeleteSsmCampaignWithSsmContats",
+    "value": 9362
+   },
+   {
+    "name": "cannotDeleteContactListWithSsmContats",
+    "value": 9363
+   },
+   {
+    "name": "ssmSegmentCannotExistInNonSsmService",
+    "value": 9364
+   },
+   {
+    "name": "ssmSegmentOrderNotUnique",
+    "value": 9365
+   },
+   {
+    "name": "cannotOpenRepositoryCampaign",
+    "value": 9366
+   },
+   {
+    "name": "ssmSegmentInvalidTargetCampaign",
+    "value": 9367
+   },
+   {
+    "name": "favoriteFilterInUseSsmSegment",
+    "value": 9368
+   },
+   {
+    "name": "maxNumberOfTableFieldsReached",
+    "value": 9369
+   },
+   {
+    "name": "maxNumberOfEntitiesReached",
+    "value": 9370
+   },
+   {
+    "name": "cannotDeleteMediaTypeWithReferences",
+    "value": 9371
+   },
+   {
+    "name": "agentSkillOperationFailedOnlyOnePredictiveSkillAllowed",
+    "value": 9372
+   },
+   {
+    "name": "agentSkillOperationFailedAgentInCampaignAssignment",
+    "value": 9373
+   },
+   {
+    "name": "invalidFieldValue",
+    "value": 9374
+   },
+   {
+    "name": "cannotDeleteBuiltInPrivacyCategory",
+    "value": 9375
+   },
+   {
+    "name": "cannotDeleteOrUpdateContactProfileGdprRequest",
+    "value": 9376
+   },
+   {
+    "name": "cannotDeleteOrUpdateConsentAudit",
+    "value": 9377
+   },
+   {
+    "name": "gdprCannotBeDisabled",
+    "value": 9378
+   },
+   {
+    "name": "privacyCategoryInUse",
+    "value": 9379
+   },
+   {
+    "name": "duplicateContactProfileFieldPrivacy",
+    "value": 9380
+   },
+   {
+    "name": "cannotInsertConsentForPublicPrivacyCategory",
+    "value": 9381
+   },
+   {
+    "name": "invalidGdprRequestOperation",
+    "value": 9382
+   },
+   {
+    "name": "forbiddenGdprRequestOperation",
+    "value": 9383
+   },
+   {
+    "name": "cannotUpdateFieldDueToGdprRestrictions",
+    "value": 9384
+   },
+   {
+    "name": "cannotCreateContactProfileFieldPrivacyForField",
+    "value": 9385
+   },
+   {
+    "name": "cannotDeleteBuiltInPurpose",
+    "value": 9386
+   },
+   {
+    "name": "purposeInUseByRole",
+    "value": 9387
+   },
+   {
+    "name": "purposeInUseByCampaign",
+    "value": 9388
+   },
+   {
+    "name": "purposeInUseByReportTemplate",
+    "value": 9389
+   },
+   {
+    "name": "sSAgentSkillProfileNotMatchGateway",
+    "value": 9390
+   },
+   {
+    "name": "multiSkillProfileMultiGatewayRequiresGatewayAssociation",
+    "value": 9391
+   },
+   {
+    "name": "cannotUpdateFieldDueToMultiGatewayRestrictions",
+    "value": 9392
+   },
+   {
+    "name": "gatewayMustHaveTypeTelephony",
+    "value": 9393
+   },
+   {
+    "name": "campaignNotClosed",
+    "value": 9394
+   },
+   {
+    "name": "multiSkillProfileMultiGatewayNotEnabled",
+    "value": 9395
+   },
+   {
+    "name": "cannotDeleteCampaignTelephonyGatewayStrategyDefaultSkillProfile",
+    "value": 9396
+   },
+   {
+    "name": "externalValidatorInvalidConfiguration",
+    "value": 9397
+   },
+   {
+    "name": "invalidForcedAni",
+    "value": 9398
+   },
+   {
+    "name": "invalidContactListQuotaPercentage",
+    "value": 9399
+   },
+   {
+    "name": "contactListAlreadyHasQuota",
+    "value": 9400
+   },
+   {
+    "name": "maxContactListQuotaExceeded",
+    "value": 9401
+   },
+   {
+    "name": "invalidMappingGroupNumber",
+    "value": 9402
+   },
+   {
+    "name": "siteHasActivities",
+    "value": 9403
+   },
+   {
+    "name": "linkAndOrSubLinkDifferentFromThoseOfParent",
+    "value": 9404
+   },
+   {
+    "name": "accessRuleProfileHasAccessRule",
+    "value": 9405
+   },
+   {
+    "name": "accessRuleProfileHasGatewayInCampaign",
+    "value": 9406
+   },
+   {
+    "name": "accessRuleProfileHasDNCL",
+    "value": 9407
+   },
+   {
+    "name": "invalidServiceLevelMediaType",
+    "value": 9408
+   },
+   {
+    "name": "mediaTypeIsNotBuiltIn",
+    "value": 9409
+   },
+   {
+    "name": "powerUserAlreadyExists",
+    "value": 9410
+   },
+   {
+    "name": "powerUsersAreOffLimits",
+    "value": 9411
+   },
+   {
+    "name": "tableSchemaNotFound",
+    "value": 9412
+   },
+   {
+    "name": "serviceNotFound",
+    "value": 9413
+   },
+   {
+    "name": "databaseConnectionTimeout",
+    "value": 9414
+   },
+   {
+    "name": "invalidInstantMessagingNumber",
+    "value": 9415
+   },
+   {
+    "name": "customCallStatusNameCannotBeEmpty",
+    "value": 9416
+   },
+   {
+    "name": "userIsOwnerOfReportRequests",
+    "value": 9417
+   },
+   {
+    "name": "sSInvalidAccessToken",
+    "value": 9502
+   },
+   {
+    "name": "authenticationFailed",
+    "value": 9900
+   },
+   {
+    "name": "avrOk",
+    "value": 10000
+   },
+   {
+    "name": "avrLogicProblem",
+    "value": 10100
+   },
+   {
+    "name": "avrInternalError",
+    "value": 10101
+   },
+   {
+    "name": "avrNotImplemented",
+    "value": 10102
+   },
+   {
+    "name": "avrNotFound",
+    "value": 10103
+   },
+   {
+    "name": "avrBasicResourcesProblem",
+    "value": 10200
+   },
+   {
+    "name": "avrOutOfMem",
+    "value": 10201
+   },
+   {
+    "name": "avrOutOfDiskSpace",
+    "value": 10202
+   },
+   {
+    "name": "avrDiskAccessError",
+    "value": 10203
+   },
+   {
+    "name": "avrDataRecallFailure",
+    "value": 10210
+   },
+   {
+    "name": "avrSegmentProblem",
+    "value": 10300
+   },
+   {
+    "name": "avrInvalidSegmentId",
+    "value": 10301
+   },
+   {
+    "name": "avrSegmentNotHere",
+    "value": 10302
+   },
+   {
+    "name": "avrSegmentNotFound",
+    "value": 10303
+   },
+   {
+    "name": "avrRecordingNotfound",
+    "value": 10304
+   },
+   {
+    "name": "avrUnableToAccessSegment",
+    "value": 10310
+   },
+   {
+    "name": "avrUnableToLoadRemoteSegment",
+    "value": 10311
+   },
+   {
+    "name": "avrIncoherentMetadata",
+    "value": 10320
+   },
+   {
+    "name": "avrDataOnExternalMassStorage",
+    "value": 10330
+   },
+   {
+    "name": "avrUnableToLoadFromExtMassStorage",
+    "value": 10331
+   },
+   {
+    "name": "avrDatabaseProblem",
+    "value": 10400
+   },
+   {
+    "name": "avrUnableToAccessDatabase",
+    "value": 10401
+   },
+   {
+    "name": "avrDatabaseError",
+    "value": 10402
+   },
+   {
+    "name": "avrDatabaseQueryFailure",
+    "value": 10403
+   },
+   {
+    "name": "avrAudioRelatedProblem",
+    "value": 10500
+   },
+   {
+    "name": "avrCodecNotFound",
+    "value": 10501
+   },
+   {
+    "name": "avrErrorLoadingCodec",
+    "value": 10502
+   },
+   {
+    "name": "avrDecodeFailure",
+    "value": 10503
+   },
+   {
+    "name": "avrUnknownRawFormat",
+    "value": 10504
+   },
+   {
+    "name": "avrUnknownEncoding",
+    "value": 10505
+   },
+   {
+    "name": "avrConfigurationProblem",
+    "value": 10600
+   },
+   {
+    "name": "avrStorageAddrNotConfigured",
+    "value": 10601
+   }
+  ]
+ },
+ {
+  "name": "SqlContainsOperator",
+  "url": "ref/expr/function-misc.html",
+  "members": [
+   {
+    "name": "allWords",
+    "value": 1
+   },
+   {
+    "name": "anyWord",
+    "value": 2
+   },
+   {
+    "name": "exactMatch",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "SupervisionMode",
+  "url": "ref/expr/phone-info.html",
+  "members": [
+   {
+    "name": "none",
+    "value": 1
+   },
+   {
+    "name": "bargeIn",
+    "value": 2
+   },
+   {
+    "name": "whisperIn",
+    "value": 3
+   },
+   {
+    "name": "listenIn",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "SystemCursor",
+  "url": "ref/expr/system-cursor-type.html",
+  "members": [
+   {
+    "name": "contacts",
+    "value": 1
+   },
+   {
+    "name": "contactProfiles",
+    "value": 2
+   },
+   {
+    "name": "contactProfileInteractionsHistory",
+    "value": 3
+   },
+   {
+    "name": "contactProfileInteractionsWithOutcomesHistory",
+    "value": 4
+   },
+   {
+    "name": "contactProfileQueuedEmails",
+    "value": 5
+   },
+   {
+    "name": "contactProfileInProgressWorkflowProcessTasks",
+    "value": 6
+   },
+   {
+    "name": "queuedEmails",
+    "value": 7
+   },
+   {
+    "name": "queuedAgentPickUpTasks",
+    "value": 8
+   },
+   {
+    "name": "contactProfileScheduledContacts",
+    "value": 9
+   },
+   {
+    "name": "sentEmails",
+    "value": 10
+   },
+   {
+    "name": "pendingWork",
+    "value": 11
+   },
+   {
+    "name": "contactProfileInteractionThreadsHistory",
+    "value": 12
+   },
+   {
+    "name": "contactInteractionThreadsHistory",
+    "value": 13
+   }
+  ]
+ },
+ {
+  "name": "SystemFolder",
+  "url": "ref/expr/function-file.html",
+  "members": [
+   {
+    "name": "applicationData",
+    "value": 1
+   },
+   {
+    "name": "commonApplicationData",
+    "value": 2
+   },
+   {
+    "name": "desktop",
+    "value": 3
+   },
+   {
+    "name": "localApplicationData",
+    "value": 4
+   },
+   {
+    "name": "myDocuments",
+    "value": 5
+   },
+   {
+    "name": "programFiles",
+    "value": 6
+   },
+   {
+    "name": "programFilesX86",
+    "value": 7
+   },
+   {
+    "name": "temporary",
+    "value": 8
+   },
+   {
+    "name": "windows",
+    "value": 9
+   }
+  ]
+ },
+ {
+  "name": "TargetType",
+  "url": "ref/expr/login-info.html",
+  "members": [
+   {
+    "name": "windows",
+    "value": 1
+   },
+   {
+    "name": "web",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "TextEncoding",
+  "url": "ref/expr/function-text.html",
+  "members": [
+   {
+    "name": "utf16",
+    "value": 1
+   },
+   {
+    "name": "utf8",
+    "value": 2
+   },
+   {
+    "name": "defaultCodepage",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "TrimPosition",
+  "url": "ref/expr/function-text.html",
+  "members": [
+   {
+    "name": "trimLeading",
+    "value": 1
+   },
+   {
+    "name": "trimTrailing",
+    "value": 2
+   },
+   {
+    "name": "trimAll",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkflowPriorityClass",
+  "url": "ref/expr/contact-profile-in-progress-workflow-process-tasks-cursor-row.html",
+  "members": [
+   {
+    "name": "low",
+    "value": 1
+   },
+   {
+    "name": "medium",
+    "value": 2
+   },
+   {
+    "name": "high",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkflowProcessState",
+  "url": "ref/expr/contact-profile-in-progress-workflow-process-tasks-cursor-row.html",
+  "members": [
+   {
+    "name": "executing",
+    "value": 1
+   },
+   {
+    "name": "done",
+    "value": 2
+   },
+   {
+    "name": "canceled",
+    "value": 3
+   },
+   {
+    "name": "suspended",
+    "value": 4
+   },
+   {
+    "name": "beingSuspended",
+    "value": 5
+   },
+   {
+    "name": "beingCanceled",
+    "value": 6
+   },
+   {
+    "name": "doneWithExecs",
+    "value": 7
+   },
+   {
+    "name": "beingActivated",
+    "value": 8
+   }
+  ]
+ },
+ {
+  "name": "WorkflowState",
+  "url": "ref/expr/workflow-info.html",
+  "members": [
+   {
+    "name": "alerting",
+    "value": 1
+   },
+   {
+    "name": "handling",
+    "value": 2
+   },
+   {
+    "name": "cleared",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkflowTaskType",
+  "url": "ref/expr/contact-profile-in-progress-workflow-process-tasks-cursor-row.html",
+  "members": [
+   {
+    "name": "initial",
+    "value": 1
+   },
+   {
+    "name": "final",
+    "value": 2
+   },
+   {
+    "name": "agentPush",
+    "value": 3
+   },
+   {
+    "name": "automated",
+    "value": 4
+   },
+   {
+    "name": "subProcess",
+    "value": 5
+   },
+   {
+    "name": "outboundContact",
+    "value": 6
+   },
+   {
+    "name": "agentPick",
+    "value": 7
+   },
+   {
+    "name": "external",
+    "value": 8
+   },
+   {
+    "name": "waitEvent",
+    "value": 9
+   },
+   {
+    "name": "triggerEvent",
+    "value": 10
+   }
+  ]
+ }
+]

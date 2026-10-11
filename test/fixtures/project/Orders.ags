@@ -1,0 +1,138 @@
+version "8.7"
+file version 1, 0
+comment {Example agent script used by the tests.}
+size 945, 670
+
+modules {
+	import <"Popups.agm">
+		into namespace Popups
+	import <"Utils.gem">
+}
+
+dependencies {
+	image "Logo" in file <"img\logo.png">
+}
+
+constants {
+	MAX_RETRIES := 3
+		comment {How many times the agent may retry a call.}
+}
+
+types {
+	OrderLine: record {
+		code: text(10)
+		quantity: number
+		price: number(8,2)
+	}
+	OrderState: enumeration {
+		draft { value 1 }
+		confirmed { value 2 }
+		cancelled { value 3 }
+	}
+}
+
+variables {
+	vAnswer: number
+	vCustomer: text(80)
+	vOrder: OrderLine
+	vState: OrderState
+	vLines: array of OrderLine
+}
+
+contact record {
+	customer_name: text(80)
+	order_total: number(10,2)
+}
+
+cursors {
+	curProducts: sql for 'SELECT code, name, price FROM products '
+		'WHERE active = 1 ORDER BY name'
+}
+
+subroutine SaveOrder(ref line: OrderLine)
+{
+	sql execute 'INSERT INTO orders (code, quantity) VALUES (\'$(line.code)\', $(line.quantity))'
+	if @error_info.sqlError <> 0 then {
+		call Popups::ShowError('Could not save the order: $(@error_info.sqlError)')
+	}
+}
+
+function LineTotal(line: OrderLine): number
+{
+	LineTotal := line.quantity * line.price
+}
+
+on start {
+	vState := OrderState::draft
+	goto node 'MAIN'
+}
+
+on end {}
+
+node "MAIN" {
+	id 1
+	variables {
+		vTotal: number
+	}
+	push button "btnConfirm" {
+		size 120,30 at 20,20
+		label "Confirm" {
+			font {
+				name "Arial"
+				size 10
+				bold
+			}
+		}
+		on click commit {
+			vOrder.code := text_to_upper(vOrder.code)
+			vTotal := LineTotal(vOrder)
+			open window 'Popups::QUESTION' size 390, 200 caption 'Confirm' overlay on close trigger event OnConfirmClosed arguments 'Save the order?', vAnswer
+		}
+	}
+	input for vCustomer {
+		size 200,24 at 20,60
+		on lose focus commit {}
+	}
+	table for curProducts {
+		size 400,200 at 20,100
+		columns {
+			column 'Code' {
+				size 80
+			}
+		}
+		on double click commit {}
+	}
+	on event OnConfirmClosed()
+	{
+		if vAnswer = 1 then {
+			call SaveOrder(vOrder)
+			add vOrder to vLines
+			contact.order_total := vTotal
+			goto node 'DONE'
+		}
+	}
+	on first enter {
+		open cursor curProducts
+	}
+	on enter {
+		set timer to 1 trigger event Welcome
+	}
+	on event Welcome()
+	{
+		call Popups::ShowInfo('Welcome $(@login_info.name)')
+	}
+	on exit {
+		close cursor curProducts
+	}
+}
+
+node "DONE" {
+	id 2
+	static text {
+		size 300,24 at 20,20
+		label 'Order saved for $(vCustomer)' {}
+	}
+	on first enter {}
+	on enter {}
+	on exit {}
+}

@@ -1,0 +1,11 @@
+version "8.7"
+file version 1, 0
+
+constants {
+	SEPARATOR := " - "
+}
+
+function JoinNames(first: text, last: text): text
+{
+	JoinNames := text_trim('$(first)$(SEPARATOR)$(last)')
+}
