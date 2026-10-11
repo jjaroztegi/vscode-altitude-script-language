@@ -1,5 +1,8 @@
 name: Publish VS Code Extension
 
+# Publishes one VSIX to the Visual Studio Marketplace (Azure OIDC) and
+# Open VSX (trusted publishing). Neither uses a long-lived token.
+
 on:
   workflow_dispatch:
 
@@ -9,7 +12,7 @@ permissions:
 
 jobs:
   publish:
-    name: Publish to Visual Studio Marketplace
+    name: Publish to Visual Studio Marketplace and Open VSX
     runs-on: ubuntu-latest
     environment: marketplace
     steps:
@@ -31,6 +34,9 @@ jobs:
       - name: Unit tests
         run: npm test
 
+      - name: Package VSIX
+        run: npx vsce package --out extension.vsix
+
       - name: Azure login
         uses: azure/login@v3
         with:
@@ -38,8 +44,11 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Publish
+      - name: Publish to Visual Studio Marketplace
         env:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        run: npx vsce publish --azure-credential --skip-duplicate
+        run: npx vsce publish --packagePath extension.vsix --azure-credential --skip-duplicate
+
+      - name: Publish to Open VSX
+        run: npx ovsx publish extension.vsix --trusted-publishing --skip-duplicate
