@@ -1,4 +1,4 @@
-version "8.7"
+﻿version "8.7"
 file version 1, 0
 comment {Example agent script used by the tests.}
 size 945, 670

@@ -1,4 +1,4 @@
-version "8.7"
+﻿version "8.7"
 file version 1, 0
 comment {Reusable popups. Popups are overlays: the caller handles the answer in an event.}
 

@@ -26,11 +26,13 @@ suite("Altitude ASL extension", () => {
     });
 
     test("reports diagnostics from the language server", async () => {
+        const code = (d: vscode.Diagnostic): unknown => (typeof d.code === "object" ? d.code.value : d.code);
         const diagnostics = await waitFor(() => {
             const list = vscode.languages.getDiagnostics(document.uri).filter((d) => d.source === "asl");
-            return list.length ? list : undefined;
+            return list.some((d) => code(d) === "popup-then-goto") ? list : undefined;
         });
-        assert.ok(diagnostics.some((d) => (typeof d.code === "object" ? d.code.value : d.code) === "popup-then-goto"), JSON.stringify(diagnostics.map((d) => d.message)));
+        // The fixtures are saved as Script Developer does, so the encoding check stays quiet.
+        assert.ok(!diagnostics.some((d) => code(d) === "encoding"), JSON.stringify(diagnostics.map((d) => d.message)));
     });
 
     test("resolves definitions across modules", async () => {

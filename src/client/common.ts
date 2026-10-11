@@ -60,7 +60,7 @@ function registerEncodingCheck(context: vscode.ExtensionContext): void {
     const check = (document: vscode.TextDocument): void => {
         if (document.languageId !== LANGUAGE_ID || document.uri.scheme === "git" || document.isUntitled) return;
         const problems: string[] = [];
-        if (document.encoding && document.encoding !== "utf8bom") problems.push(`encoded as ${document.encoding}, not UTF-8 with BOM`);
+        if (document.encoding && document.encoding !== "utf8bom") problems.push(`is encoded as ${document.encoding}, not UTF-8 with BOM`);
         if (document.eol === vscode.EndOfLine.LF && document.lineCount > 1) problems.push("uses LF line endings, not CRLF");
         if (problems.length === 0) {
             collection.delete(document.uri);

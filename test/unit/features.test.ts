@@ -84,7 +84,7 @@ describe("completion", () => {
     it("offers element clauses inside a graphical element and handlers inside a node", async () => {
         const files = fixtureProject();
         expect(await labels(files, "Orders.ags", "\t\ton lose focus commit {}", 2)).toEqual(expect.arrayContaining(["hidden if", "password", "on lose focus"]));
-        expect(await labels(files, "Orders.ags", "\ton first enter {\n\t\topen", 1)).toEqual(expect.arrayContaining(["on event phone connected", "push button", "variables"]));
+        expect(await labels(files, "Orders.ags", "\ton first enter {", 1)).toEqual(expect.arrayContaining(["on event phone connected", "push button", "variables"]));
     });
 });
 
