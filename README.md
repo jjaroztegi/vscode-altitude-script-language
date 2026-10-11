@@ -1,6 +1,6 @@
 # Altitude ASL for Visual Studio Code
 
-Language support for the Altitude Scripting Language (ASL) of Altitude 8.7, for people who write and maintain scripts by hand: agent scripts (`.ags`), IVR and routing scripts (`.irs`), agent modules (`.agm`), IVR modules (`.irm`) and generic modules (`.gem`).
+Language support for the Altitude Scripting Language (ASL) of Altitude 8.7: agent scripts (`.ags`), IVR and routing scripts (`.irs`), agent modules (`.agm`), IVR modules (`.irm`) and generic modules (`.gem`).
 
 It is built as a language server, so it works on the desktop and in the browser (vscode.dev, github.dev) with the same features. Compiler validation needs a local Script Developer install on Windows.
 
