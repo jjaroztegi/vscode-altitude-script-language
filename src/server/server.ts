@@ -1,11 +1,17 @@
 /**
  * Language server shared by the desktop (Node) and web (worker) entry points.
  * File access goes through `host.readFile`, so the same code runs in vscode.dev.
+ *
+ * The VS Code extension sends the workspace's ASL files (`altitude-asl/files`), answers `workspace/configuration`
+ * and pulls diagnostics. Other editors may do none of that: the server then scans the workspace folders itself
+ * (`host.listFiles`), takes settings from `initializationOptions` / `workspace/didChangeConfiguration` and
+ * pushes diagnostics for open documents.
  */
 import {
     CodeActionKind,
     DiagnosticSeverity,
     DiagnosticTag,
+    DidChangeWatchedFilesNotification,
     DocumentDiagnosticReportKind,
     FileChangeType,
     TextDocumentSyncKind,
@@ -27,12 +33,24 @@ import { isAslUri, Workspace, type Settings } from "../language/workspace";
 
 export interface ServerHost {
     readFile(uri: string): Promise<string | undefined>;
+    /** ASL files under a workspace folder, used when the client does not send them (Node only). */
+    listFiles?(folderUri: string): string[];
 }
 
 interface ClientSettings {
     webEdition?: boolean;
     lint?: { rules?: Settings["rules"] };
     inlayHints?: { parameterNames?: boolean };
+}
+
+const SECTION = "altitudeScriptLanguage";
+const ASL_GLOB = "**/*.{ags,agm,gem,irs,irm,AGS,AGM,GEM,IRS,IRM}";
+
+/** Settings sent by the client, either bare (`{ webEdition, lint: { rules } }`) or under the extension's section. */
+function settingsFrom(value: unknown): ClientSettings | undefined {
+    if (!value || typeof value !== "object") return undefined;
+    const section = (value as Record<string, unknown>)[SECTION];
+    return (section && typeof section === "object" ? section : value) as ClientSettings;
 }
 
 const SEVERITY: Record<AslDiagnostic["severity"], DiagnosticSeverity> = {
@@ -46,6 +64,10 @@ export function startServer(connection: Connection, host: ServerHost): void {
     const documents = new TextDocuments(TextDocument);
     let settings: ClientSettings = {};
     let supportsConfiguration = false;
+    let pullDiagnostics = false;
+    let refreshSupport = { diagnostics: false, semanticTokens: false, inlayHints: false };
+    let watchFiles = false;
+    let scanFolders: string[] = [];
     const workspace = new Workspace({
         readFile: (uri) => host.readFile(uri),
         settings: () => ({ webEdition: settings.webEdition ?? true, rules: settings.lint?.rules })
@@ -56,15 +78,17 @@ export function startServer(connection: Connection, host: ServerHost): void {
         if (refreshTimer) clearTimeout(refreshTimer);
         refreshTimer = setTimeout(() => {
             refreshTimer = undefined;
-            void connection.languages.diagnostics.refresh();
-            void connection.languages.semanticTokens.refresh();
-            void connection.languages.inlayHint.refresh();
+            const ignore = (): void => undefined;
+            if (!pullDiagnostics) void publishDiagnostics();
+            else if (refreshSupport.diagnostics) connection.languages.diagnostics.refresh().catch(ignore);
+            if (refreshSupport.semanticTokens) connection.languages.semanticTokens.refresh().catch(ignore);
+            if (refreshSupport.inlayHints) connection.languages.inlayHint.refresh().catch(ignore);
         }, 300);
     };
 
     const loadSettings = async (): Promise<void> => {
         if (!supportsConfiguration) return;
-        settings = ((await connection.workspace.getConfiguration("altitudeScriptLanguage")) as ClientSettings | null) ?? {};
+        settings = settingsFrom(await connection.workspace.getConfiguration(SECTION)) ?? settings;
     };
 
     /** Loads the document's module graph and returns the analysis entry points. */
@@ -81,11 +105,24 @@ export function startServer(connection: Connection, host: ServerHost): void {
     };
 
     connection.onInitialize((params: InitializeParams): InitializeResult => {
-        supportsConfiguration = params.capabilities.workspace?.configuration === true;
+        const { workspace: client, textDocument } = params.capabilities;
+        supportsConfiguration = client?.configuration === true;
+        pullDiagnostics = textDocument?.diagnostic !== undefined;
+        refreshSupport = {
+            diagnostics: client?.diagnostics?.refreshSupport === true,
+            semanticTokens: client?.semanticTokens?.refreshSupport === true,
+            inlayHints: client?.inlayHint?.refreshSupport === true
+        };
+        const options = params.initializationOptions as { clientProvidesFiles?: boolean } | undefined;
+        settings = settingsFrom(options) ?? {};
+        if (host.listFiles && !options?.clientProvidesFiles) {
+            scanFolders = params.workspaceFolders?.map((f) => f.uri) ?? (params.rootUri ? [params.rootUri] : []);
+            watchFiles = client?.didChangeWatchedFiles?.dynamicRegistration === true;
+        }
         return {
             capabilities: {
                 textDocumentSync: TextDocumentSyncKind.Incremental,
-                diagnosticProvider: { interFileDependencies: true, workspaceDiagnostics: false },
+                diagnosticProvider: pullDiagnostics ? { interFileDependencies: true, workspaceDiagnostics: false } : undefined,
                 completionProvider: { triggerCharacters: [".", ":", "@", "'", '"', "<"] },
                 hoverProvider: true,
                 signatureHelpProvider: { triggerCharacters: ["(", ","], retriggerCharacters: [","] },
@@ -112,11 +149,19 @@ export function startServer(connection: Connection, host: ServerHost): void {
     });
 
     connection.onInitialized(async () => {
+        for (const folder of scanFolders) for (const uri of host.listFiles!(folder)) workspace.setDiskFile(uri);
+        if (watchFiles) await connection.client.register(DidChangeWatchedFilesNotification.type, { watchers: [{ globPattern: ASL_GLOB }] }).catch(() => undefined);
         await loadSettings();
+        if (scanFolders.length > 0) {
+            await workspace.prepareAll();
+            scheduleRefresh();
+        }
     });
 
-    connection.onDidChangeConfiguration(async () => {
-        await loadSettings();
+    connection.onDidChangeConfiguration(async (params) => {
+        const pushed = settingsFrom(params.settings);
+        if (pushed) settings = pushed;
+        else await loadSettings();
         scheduleRefresh();
     });
 
@@ -138,6 +183,7 @@ export function startServer(connection: Connection, host: ServerHost): void {
 
     documents.onDidOpen((event) => {
         workspace.setDocument(event.document.uri, event.document.getText(), event.document.version);
+        if (!pullDiagnostics) scheduleRefresh();
     });
     documents.onDidChangeContent((event) => {
         workspace.setDocument(event.document.uri, event.document.getText(), event.document.version);
@@ -146,15 +192,15 @@ export function startServer(connection: Connection, host: ServerHost): void {
     documents.onDidClose((event) => {
         workspace.closeDocument(event.document.uri);
         workspace.setDiskFile(event.document.uri);
+        if (!pullDiagnostics) void connection.sendDiagnostics({ uri: event.document.uri, diagnostics: [] });
     });
 
     // ------------------------------------------------------------ diagnostics
 
-    connection.languages.diagnostics.on(async (params) => {
-        const uri = params.textDocument.uri;
+    const diagnosticsFor = async (uri: string): Promise<Diagnostic[]> => {
         const analysis = await ready(uri);
-        if (!analysis) return { kind: DocumentDiagnosticReportKind.Full, items: [] };
-        const items: Diagnostic[] = workspace.diagnose(uri).map((d) => ({
+        if (!analysis) return [];
+        return workspace.diagnose(uri).map((d) => ({
             range: toRange(analysis.file, d),
             severity: SEVERITY[d.severity],
             code: d.code,
@@ -164,8 +210,17 @@ export function startServer(connection: Connection, host: ServerHost): void {
             tags: d.tags?.map((t) => (t === "unnecessary" ? DiagnosticTag.Unnecessary : DiagnosticTag.Deprecated)),
             data: d.data
         }));
-        return { kind: DocumentDiagnosticReportKind.Full, items };
-    });
+    };
+
+    connection.languages.diagnostics.on(async (params) => ({ kind: DocumentDiagnosticReportKind.Full, items: await diagnosticsFor(params.textDocument.uri) }));
+
+    /** Clients without pull diagnostics get every open document's diagnostics pushed after each change. */
+    const publishDiagnostics = async (): Promise<void> => {
+        for (const document of documents.all()) {
+            const diagnostics = await diagnosticsFor(document.uri);
+            if (documents.get(document.uri)) await connection.sendDiagnostics({ uri: document.uri, version: document.version, diagnostics });
+        }
+    };
 
     // ------------------------------------------------------------ language features
 

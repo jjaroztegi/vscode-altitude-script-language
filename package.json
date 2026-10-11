@@ -8,6 +8,9 @@
     "icon": "images/logo_128.png",
     "main": "./dist/client/node.js",
     "browser": "./dist/client/browser.js",
+    "bin": {
+        "asl-check": "./dist/cli/asl-check.js"
+    },
     "galleryBanner": {
         "color": "#1b1f23",
         "theme": "dark"
