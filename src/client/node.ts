@@ -15,6 +15,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const clientOptions: LanguageClientOptions = {
         documentSelector: [{ language: LANGUAGE_ID }],
         outputChannel: output,
+        // activateClient sends the workspace's ASL files, so the server does not scan the disk itself.
+        initializationOptions: { clientProvidesFiles: true },
         synchronize: { fileEvents: vscode.workspace.createFileSystemWatcher("**/*.{ags,agm,gem,irs,irm}") }
     };
     client = new LanguageClient("altitudeAsl", "Altitude ASL", serverOptions, clientOptions);

@@ -146,4 +146,4 @@ In the Agent Portal, `open window ... overlay` and `open message box` do not wai
 **Hint.** No script or module in the workspace imports this module.
 
 ### encoding
-**Warning.** Reported by the client. The file is not UTF-8 with BOM, or uses LF line endings. Script Developer saves ASL files as UTF-8 with BOM and CRLF.
+**Warning.** Reported by the VS Code extension and the command-line checker, not the language server. The file is not UTF-8 with BOM, or uses LF line endings. Script Developer saves ASL files as UTF-8 with BOM and CRLF.
