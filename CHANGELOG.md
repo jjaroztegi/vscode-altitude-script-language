@@ -2,6 +2,15 @@
 
 All notable changes to this extension are documented here.
 
+## [Unreleased]
+
+### Command line
+- `dist/cli/asl-check.js`: a dependency-free command-line checker for CI and AI agents. Text, JSON and SARIF output, per-rule severities from `--rule` or a committed `.asl-check.json`, `--fail-on`, line-independent baselines (`--baseline`, `--write-baseline`), and the `encoding` check with `--fix-encoding`. Not included in the VSIX.
+
+### Language server
+- `dist/server/node.js --stdio` works with editors other than VS Code: it scans the workspace folders itself, pushes diagnostics when the client does not pull them, takes settings from `initializationOptions` and `workspace/didChangeConfiguration`, watches ASL files when the client allows it, and only sends refresh requests the client supports.
+- Files read from disk no longer keep the UTF-8 BOM, so positions in unopened files match the editor's.
+
 ## [2.0.0] - 2026-10-11
 
 Rewrite as a language server, with a real ASL parser. Not backwards compatible with 1.x settings or language ID.

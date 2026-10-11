@@ -20,7 +20,9 @@ const builds = [
     { ...shared, entryPoints: ["src/server/node.ts"], outfile: "dist/server/node.js", platform: "node", format: "cjs" },
     // vscode.dev / github.dev: client in the extension host worker, server in a web worker.
     { ...shared, entryPoints: ["src/client/browser.ts"], outfile: "dist/client/browser.js", platform: "browser", format: "cjs" },
-    { ...shared, entryPoints: ["src/server/browser.ts"], outfile: "dist/server/browser.js", platform: "browser", format: "iife" }
+    { ...shared, entryPoints: ["src/server/browser.ts"], outfile: "dist/server/browser.js", platform: "browser", format: "iife" },
+    // Command-line checker for CI and agents: one dependency-free file, not shipped in the VSIX.
+    { ...shared, entryPoints: ["src/cli/check.ts"], outfile: "dist/cli/asl-check.js", platform: "node", format: "cjs" }
 ];
 
 if (process.argv.includes("--tests")) {

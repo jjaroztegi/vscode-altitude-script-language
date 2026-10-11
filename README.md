@@ -47,6 +47,27 @@ Every rule can be tuned or turned off. See [docs/rules.md](docs/rules.md).
 | `altitudeScriptLanguage.compiler.installRoot` | `""` | Script Developer folder that contains `bin\ec.exe`. |
 | `altitudeScriptLanguage.compiler.timeoutMs` | `60000` | Timeout of one compiler run. |
 
+## Command line and other editors
+
+`npm run build` (or `npm run package`) also produces two standalone Node files with no dependencies, which run outside VS Code.
+
+**`dist/cli/asl-check.js`** checks files and folders, for CI and AI agents:
+
+```bash
+node dist/cli/asl-check.js [paths...] [--format text|json|sarif] [--rule id=severity ...] [--config file]
+    [--no-web-edition] [--fail-on error|warning|info|hint] [--baseline file] [--write-baseline file]
+    [--no-encoding] [--fix-encoding] [--quiet]
+```
+
+- Paths default to the current folder. Diagnostics are reported for the ASL files under the given paths only, but every module under the project root (the folder of `.asl-check.json`, or the current folder) is loaded, so imports resolve.
+- Text output is `path:line:col severity rule message`, then a summary. `--format json` prints an array of `{ file, line, column, endLine, endColumn, severity, rule, message }` (paths relative to the current folder, 1-based positions), plus `new` when a baseline is used. `--format sarif` prints SARIF 2.1.0.
+- `.asl-check.json`, found from the current folder up, holds the project's choices: `{ "webEdition": true, "rules": { "unused-declaration": "off" } }`. `--rule` overrides it.
+- `--write-baseline file` records the current findings and `--baseline file` reports only new ones (text output lists only new ones; JSON and SARIF flag them). Entries are keyed by file, rule and message, not line, so edits elsewhere do not invalidate them.
+- The `encoding` rule (warning) reports files that are not UTF-8 with BOM or that use LF or CR line endings. `--fix-encoding` rewrites them as UTF-8 with BOM and CRLF first.
+- Exit code 0 when nothing reaches `--fail-on` (default `error`), 1 when something does, 2 on usage errors.
+
+**`dist/server/node.js`** is the language server. Start it with `node dist/server/node.js --stdio` from any LSP client and register it for `.ags`, `.agm`, `.gem`, `.irs` and `.irm` files. It scans the workspace folders for ASL files itself, pushes diagnostics to clients without pull diagnostics, and accepts settings shaped like the extension's (`{ "webEdition": false, "lint": { "rules": { ... } } }`, bare or under `altitudeScriptLanguage`) in `initializationOptions` and `workspace/didChangeConfiguration`.
+
 ## Notes
 
 - The language data (actions, built-in functions, graphical elements, events, attributes and enumerations) comes from the public [Altitude documentation](https://docs.enghouseinteractive.com/altitude/), version 8.7.
@@ -57,7 +78,7 @@ Every rule can be tuned or turned off. See [docs/rules.md](docs/rules.md).
 
 ```bash
 npm install
-npm run build              # bundles client and server (desktop and web) into dist/
+npm run build              # bundles client, server (desktop and web) and CLI into dist/
 npm run watch
 npm test                   # unit tests (vitest)
 npm run test:integration   # starts VS Code with the extension and the fixture project
