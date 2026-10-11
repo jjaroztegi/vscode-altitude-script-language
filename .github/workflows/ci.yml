@@ -38,7 +38,7 @@ jobs:
         run: npx vsce package --out altitude-asl.vsix
 
       - name: Upload VSIX
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: vsix
           path: altitude-asl.vsix
