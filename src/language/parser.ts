@@ -639,7 +639,8 @@ class Parser {
 
     // ------------------------------------------------------------ types
 
-    parseType(): TypeRef {
+    /** `inNew`: in `new T(...)` the parentheses hold constructor arguments, not a type size. */
+    parseType(inNew = false): TypeRef {
         const token = this.peek();
         const start = token.start;
         if (this.eatWord("array")) {
@@ -719,7 +720,7 @@ class Parser {
             name = this.nameToken(this.next());
         }
         const typeRef: Extract<TypeRef, { kind: "named" }> = { kind: "named", qualifier, name, start, end: name.end };
-        if (this.isPunct("(") && !this.peek().lineBreakBefore) {
+        if (!inNew && this.isPunct("(") && !this.peek().lineBreakBefore) {
             this.next();
             const args: number[] = [];
             while (!this.atEnd() && !this.isPunct(")")) {
@@ -1544,7 +1545,7 @@ class Parser {
                 }
                 if (token.lower === "new" && this.isIdentifier(1)) {
                     this.next();
-                    const type = this.parseType();
+                    const type = this.parseType(true);
                     const args = this.isPunct("(") ? this.parseArguments() : [];
                     return { kind: "new", type, args, start: token.start, end: this.previous().end };
                 }
