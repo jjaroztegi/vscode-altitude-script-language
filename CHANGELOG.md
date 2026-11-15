@@ -4,6 +4,9 @@ All notable changes to this extension are documented here.
 
 ## [Unreleased]
 
+### Rules
+- `overlay-size` (warning) replaces `overlay-position`. The Agent Portal does not centre an overlay without `at`: it opens it top-left, and the caption bar takes about 30 px inside the declared size. The rule reports an overlay without `at` or smaller than its node content + 10 x + 40, and its quick fix writes a centred `at` and a large enough `size`. The old quick fix, which removed `at`, is gone.
+
 ### Command line
 - `dist/cli/asl-check.js`: a dependency-free command-line checker for CI and AI agents. Text, JSON and SARIF output, per-rule severities from `--rule` or a committed `.asl-check.json`, `--fail-on`, line-independent baselines (`--baseline`, `--write-baseline`), and the `encoding` check with `--fix-encoding`. Not included in the VSIX.
 

@@ -53,7 +53,7 @@ export const RULES: RuleInfo[] = [
     { id: "web-unsupported", severity: "warning", description: "Constructs that ASL Web Edition (Agent Portal) dropped or does not support." },
     { id: "deprecated", severity: "hint", description: "Deprecated or renamed constructs." },
     { id: "native-dll", severity: "info", description: "Native DLL dependencies and external routines; prefer managed DLLs or web services in 8.7." },
-    { id: "overlay-position", severity: "info", description: "An overlay window with a fixed `at` position instead of the centred default." },
+    { id: "overlay-size", severity: "warning", description: "An overlay window without `at`, or smaller than its node content plus the caption bar." },
     { id: "overlay-in-enter", severity: "warning", description: "An overlay window opened directly in on enter / on first enter." },
     { id: "popup-then-goto", severity: "warning", description: "Node navigation after opening an overlay on the same path." },
     { id: "popup-then-popup", severity: "warning", description: "A second overlay opened while the first is still open." },
@@ -65,6 +65,11 @@ export const RULES: RuleInfo[] = [
 ];
 
 export const RULE_SEVERITY = new Map(RULES.map((r) => [r.id, r.severity]));
+
+/** Space an overlay needs around its node content: the caption bar is drawn inside the window. */
+const OVERLAY_MARGIN = { width: 10, height: 40 };
+/** Visible part of a 1900x860 script at 1920 px with the sessions panel open. */
+const OVERLAY_VIEW = { width: 1600, height: 860 };
 
 const TERMINATING = new Set(["back node", "return node", "end script", "abort script", "discard script", "restart script", "return", "break loop"]);
 
@@ -472,16 +477,67 @@ class Checker {
         visit(block);
     }
 
+    /**
+     * Overlay geometry, as measured in the Agent Portal 8.7: an overlay without `at` opens at the
+     * top-left corner of the script frame (it is not centred), and the caption bar (about 30 px) is
+     * drawn inside the declared size, so a window exactly as big as its node cuts the bottom row.
+     */
     private checkOpenWindow(stmt: ActionStmt): void {
-        const overlay = stmt.keywords.some((k) => this.text.slice(k.start, k.end).toLowerCase() === "overlay");
-        const at = stmt.keywords.find((k) => this.text.slice(k.start, k.end).toLowerCase() === "at");
-        if (overlay && at) {
-            const slots = stmt.slots.filter((s) => s.after === "at" || (s.after === undefined && s.expr.start > at.start && s.expr.start < at.start + 30));
-            const atSlots = stmt.slots.filter((s) => s.expr.start > at.start).slice(0, 2);
-            const end = atSlots.length ? atSlots[atSlots.length - 1].expr.end : at.end;
-            void slots;
-            this.report({ start: at.start, end }, "overlay-position", "Overlay windows are centred by the Agent Portal when 'at' is omitted; a fixed position can place them off-screen on small viewports.", { data: { fix: "remove-range", start: at.start, end } });
+        const word = (k: Span) => this.text.slice(k.start, k.end).toLowerCase();
+        if (!stmt.keywords.some((k) => word(k) === "overlay")) return;
+        const pair = (keyword: string): { span: Span; values: (number | undefined)[] } | undefined => {
+            const k = stmt.keywords.find((x) => word(x) === keyword);
+            if (!k) return undefined;
+            const slots = stmt.slots.filter((s) => s.expr.start > k.start).slice(0, 2);
+            const literal = (e: Expr | undefined) => (e?.kind === "number" && /^\d+$/.test(e.text) ? Number(e.text) : undefined);
+            return { span: { start: k.start, end: slots.length ? slots[slots.length - 1].expr.end : k.end }, values: [literal(slots[0]?.expr), literal(slots[1]?.expr)] };
+        };
+        const nameSlot = stmt.slots[0]?.expr;
+        const windowName = nameSlot?.kind === "string" && nameSlot.interpolations.length === 0 ? nameSlot.value : undefined;
+        const at = pair("at");
+        const size = pair("size");
+        const content = windowName ? this.nodeContentSize(windowName) : undefined;
+        const minimum = content && { width: content.width + OVERLAY_MARGIN.width, height: content.height + OVERLAY_MARGIN.height };
+        const [w, h] = size?.values ?? [];
+        const problems: string[] = [];
+        if (!size && minimum) problems.push("no 'size'");
+        else if (minimum && w !== undefined && h !== undefined && (w < minimum.width || h < minimum.height)) {
+            problems.push(`${w}x${h} for a node content of ${content!.width}x${content!.height}: the caption bar takes about 30 px inside the window, so the bottom row is cut`);
         }
+        if (!at) problems.push("no 'at': the Agent Portal opens it at the top-left corner of the script frame, not centred");
+        if (!problems.length) return;
+
+        const width = Math.max(w ?? 0, minimum?.width ?? 0) || undefined;
+        const height = Math.max(h ?? 0, minimum?.height ?? 0) || undefined;
+        const position = at && at.values.every((v) => v !== undefined) ? at.values.join(", ")
+            : width && height ? `${Math.max(0, Math.floor((OVERLAY_VIEW.width - width) / 2))}, ${Math.max(0, Math.floor((OVERLAY_VIEW.height - height) / 2))}` : undefined;
+        const geometry = width && height && position ? `at ${position} size ${width}, ${height}` : undefined;
+        const label = windowName ? `'${windowName}'` : "window";
+        const advice = geometry ? ` Use '${geometry}' (${minimum ? `node content + ${OVERLAY_MARGIN.width} wide and + ${OVERLAY_MARGIN.height} high, ` : ""}centred on the visible ${OVERLAY_VIEW.width}x${OVERLAY_VIEW.height} of the script).`
+            : ` Give it 'size' = node content + ${OVERLAY_MARGIN.width} wide and + ${OVERLAY_MARGIN.height} high, and an integer 'at' centring it on the visible part of the script.`;
+        const clauses = [at?.span, size?.span].filter((x): x is Span => x !== undefined);
+        // The quick fix rewrites the at/size clauses when they are adjacent, or adds them after the window name.
+        const span = clauses.length ? { start: Math.min(...clauses.map((c) => c.start)), end: Math.max(...clauses.map((c) => c.end)) } : nameSlot ? { start: nameSlot.start, end: nameSlot.end } : stmt;
+        const between = clauses.length === 2 ? this.text.slice(span.start, span.end).replace(this.text.slice(clauses[0].start, clauses[0].end), "").replace(this.text.slice(clauses[1].start, clauses[1].end), "").trim() : "";
+        const replacement = !geometry || between ? undefined : clauses.length ? geometry : `${this.text.slice(span.start, span.end)} ${geometry}`;
+        this.report(span, "overlay-size", `Overlay ${label}: ${problems.join("; ")}.${advice}`, replacement ? { data: { fix: "replace", replacement } } : undefined);
+    }
+
+    /** Width and height covered by the graphical elements of a node and its masters. */
+    private nodeContentSize(name: string): { width: number; height: number } | undefined {
+        const node = this.program.findNodes(name, this.file)[0];
+        if (!node) return undefined;
+        let width = 0;
+        let height = 0;
+        for (const n of [node, ...this.program.masters(node)]) {
+            for (const member of (n.decl as NodeDecl | undefined)?.members ?? []) {
+                const g = member.kind === "control" ? member.size : undefined;
+                if (!g || g.x === undefined || g.y === undefined) continue;
+                width = Math.max(width, g.x + g.width);
+                height = Math.max(height, g.y + g.height);
+            }
+        }
+        return width && height ? { width, height } : undefined;
     }
 
     // ------------------------------------------------------------ asynchronous overlays

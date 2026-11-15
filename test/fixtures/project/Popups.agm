@@ -8,12 +8,12 @@ variables {
 
 subroutine ShowError(message: text)
 {
-	open window 'Popups::INFO' size 390, 160 caption 'Error' overlay arguments message
+	open window 'Popups::INFO' at 605, 340 size 390, 180 caption 'Error' overlay arguments message
 }
 
 subroutine ShowInfo(message: text)
 {
-	open window 'Popups::INFO' size 390, 160 caption 'Information' overlay arguments message
+	open window 'Popups::INFO' at 605, 340 size 390, 180 caption 'Information' overlay arguments message
 }
 
 node "QUESTION" {

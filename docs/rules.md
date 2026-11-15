@@ -112,8 +112,8 @@ Rules about the Agent Portal can be turned off together with `altitudeScriptLang
 ### native-dll
 **Info.** A native DLL dependency, or a module that wraps one. In ASL Web Edition native DLLs run on the web server and must be 32-bit. Prefer a managed DLL (`dll managed`) or a web service dependency.
 
-### overlay-position
-**Info.** An overlay window with a fixed `at x,y`. Without `at` the Agent Portal centres the overlay; positions copied from old modal windows can place it off-screen on small viewports. The quick fix removes the clause.
+### overlay-size
+**Warning.** An overlay window without `at`, or with a `size` smaller than its node content + 10 wide and + 40 high. Measured in the Agent Portal 8.7: without `at` an overlay opens at the top-left corner of the script frame (it is not centred), and the caption bar (about 30 px) is drawn inside the declared size, so a window exactly as big as its node cuts the bottom row (usually the buttons) and the agent has to scroll. The content size is the extent of the graphical elements of the window node and its masters, resolved across modules. The quick fix writes `at x, y size w, h`, centred on the visible 1600x860 of a 1900x860 script (1920 px screen, sessions panel open); it keeps an existing literal `at`. Replaces `overlay-position`, whose quick fix removed `at`.
 
 ## Asynchronous popups
 
