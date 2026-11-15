@@ -230,11 +230,6 @@ export function codeActions(file: FileModel, uri: string, diagnostics: Diagnosti
         if (data?.fix === "replace" && data.replacement) {
             actions.push({ title: `Replace with '${data.replacement}'`, kind: "quickfix", isPreferred: true, diagnostics: [diagnostic], edit: { changes: { [uri]: [{ range: diagnostic.range, newText: data.replacement }] } } });
         }
-        if (data?.fix === "remove-range" && data.start !== undefined && data.end !== undefined) {
-            let start = data.start;
-            while (start > 0 && /[ \t]/.test(file.source.text[start - 1])) start -= 1;
-            actions.push({ title: "Remove the fixed position", kind: "quickfix", isPreferred: true, diagnostics: [diagnostic], edit: { changes: { [uri]: [{ range: toRange(file, { start, end: data.end }), newText: "" }] } } });
-        }
         if (data?.fix === "modal-to-overlay") {
             const stmt = actionAt(file, offsetOf(diagnostic.range).start);
             if (stmt) {
