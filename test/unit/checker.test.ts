@@ -117,7 +117,7 @@ describe("checker: Agent Portal (ASL Web Edition)", () => {
 });
 
 describe("checker: asynchronous popups", () => {
-    const quiet = { rules: { "unused-declaration": "off" as const } };
+    const quiet = { rules: { "unused-declaration": "off" as const, "overlay-size": "off" as const } };
     const files = (body: string, extra = "") => ({ "Main.ags": script(body, `modules {\n\timport <"Popups.agm">\n}\nvariables {\n\tvAnswer: number\n}\n${extra}`), "Popups.agm": POPUP_MODULE });
 
     it("reports navigation and a second popup after an overlay", async () => {
@@ -144,9 +144,51 @@ describe("checker: asynchronous popups", () => {
         expect(await codes(files("\ton event E() {\n\t\tvAnswer := AskNow('x')\n\t}"), "Main.ags", quiet)).toEqual(["async-function-result"]);
     });
 
-    it("reports overlay positions and offers to remove them", async () => {
-        const diagnostics = await diagnose(files("\ton event E() {\n\t\topen window 'QUESTION' at 700, 300 size 390, 200 overlay\n\t}"), "Main.ags", quiet);
-        expect(diagnostics[0]).toMatchObject({ code: "overlay-position", data: { fix: "remove-range" } });
+    describe("overlay-size", () => {
+        const sized = { rules: { "unused-declaration": "off" as const } };
+        // QUESTION's content is 385x195 (a label and a button), like MsgPopup1's nodes.
+        const popup = (open: string) => ({
+            "Main.ags": script(`\ton event E() {\n\t\t${open}\n\t}`, `modules {\n\timport <"Popups.agm">\n}\n`),
+            "Popups.agm": `version "8.7"\nnode "QUESTION" {\n\tlabel {\n\t\tsize 385,150 at 0,0\n\t\ttext 'Q'\n\t}\n\tpush button {\n\t\tsize 80,25 at 305,170\n\t\ton click commit {}\n\t}\n}\n`
+        });
+        const overlaySize = async (open: string) => (await diagnose(popup(open), "Main.ags", sized)).filter((d) => d.code === "overlay-size");
+
+        it("reports an overlay without 'at' and proposes a centred, large enough window", async () => {
+            // The 2026-08-20 sweep removed 'at' from 727 overlays: the runner opened them top-left.
+            const [d] = await overlaySize("open window 'QUESTION' size 390, 200 caption ' ' overlay");
+            expect(d.message).toContain("390x200 for a node content of 385x195");
+            expect(d.message).toContain("no 'at'");
+            expect(d.data).toEqual({ fix: "replace", replacement: "at 602, 312 size 395, 235" });
+        });
+
+        it("reports a window exactly as big as its node content", async () => {
+            // VASA 2026-10-26: the discard popup opened top-left with its buttons cut.
+            const [d] = await overlaySize("open window 'QUESTION' at 600, 300 size 385, 195 overlay");
+            expect(d.message).toContain("caption bar");
+            expect(d.message).not.toContain("no 'at'");
+            expect(d.data).toEqual({ fix: "replace", replacement: "at 600, 300 size 395, 235" });
+        });
+
+        it("reports an overlay with no geometry and adds it after the window name", async () => {
+            const [d] = await overlaySize("open window 'QUESTION' overlay");
+            expect(d.message).toContain("no 'size'; no 'at'");
+            expect(d.data).toEqual({ fix: "replace", replacement: "'QUESTION' at 602, 312 size 395, 235" });
+        });
+
+        it("accepts a positioned overlay of at least content + 10 x + 40", async () => {
+            expect(await overlaySize("open window 'QUESTION' at 602, 312 size 395, 235 caption ' ' overlay")).toEqual([]);
+            expect(await overlaySize("open window 'QUESTION' at (1600 - 395) / 2, 312 size 400, 240 overlay")).toEqual([]);
+        });
+
+        it("still requires 'at' when the node is unknown, and centres the declared size", async () => {
+            const [d] = await overlaySize("open window vName size 300, 200 overlay");
+            expect(d.message).toContain("no 'at'");
+            expect(d.data).toEqual({ fix: "replace", replacement: "at 650, 330 size 300, 200" });
+        });
+
+        it("ignores windows that are not overlays", async () => {
+            expect(await overlaySize("open window 'QUESTION' size 100, 100")).toEqual([]);
+        });
     });
 
     it("reports email editor fields set twice in one block", async () => {

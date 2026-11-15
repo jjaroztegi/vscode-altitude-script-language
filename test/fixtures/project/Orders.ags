@@ -86,7 +86,7 @@ node "MAIN" {
 		on click commit {
 			vOrder.code := text_to_upper(vOrder.code)
 			vTotal := LineTotal(vOrder)
-			open window 'Popups::QUESTION' size 390, 200 caption 'Confirm' overlay on close trigger event OnConfirmClosed arguments 'Save the order?', vAnswer
+			open window 'Popups::QUESTION' at 605, 330 size 390, 200 caption 'Confirm' overlay on close trigger event OnConfirmClosed arguments 'Save the order?', vAnswer
 		}
 	}
 	input for vCustomer {
