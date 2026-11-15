@@ -109,6 +109,9 @@ Rules about the Agent Portal can be turned off together with `altitudeScriptLang
 ### deprecated
 **Hint.** Deprecated or renamed constructs: `rgbcolor` (now `rgb_color`), script `parameters`, the chat control and its actions (replaced by the media panel), deprecated instant messaging events and actions, and IVR audio resources.
 
+### net-interpolation
+**Error.** Interpolated text (`'$(...)'`) or an attribute (`@login_info.name`, `@script_session_info.campaignId`) passed straight to a .NET method or constructor, or interpolated text assigned to a `System::String`. The C++ that ec 8.7.01050.8 generates for it does not compile (`error C2065: 'tvar_1'`, then `ERTOpAttrText`, `ERTOpAttrNumber`, `ERTOpFib` or `ERTOpText2Managed` with the wrong number of arguments). The default `/generateOnly` analysis passes, so only a full build shows it. Assign the value to a `text` (or `number`) variable first and pass the variable.
+
 ### native-dll
 **Info.** A native DLL dependency, or a module that wraps one. In ASL Web Edition native DLLs run on the web server and must be 32-bit. Prefer a managed DLL (`dll managed`) or a web service dependency.
 

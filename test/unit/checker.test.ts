@@ -217,3 +217,36 @@ describe("checker: configuration", () => {
         expect(await codes({ "A.ags": fileWide }, "A.ags")).toEqual([]);
     });
 });
+
+describe("checker: net-interpolation", () => {
+    const decls = "variables {\n\tsvc: System::Object\n\tvs: System::String\n\tvt: text\n\tok: boolean\n}\n";
+    const run = async (body: string) => (await diagnose({ "Main.ags": script(`\ton event E() {\n${body}\n\t}`, decls) }, "Main.ags", { rules: { "unused-declaration": "off" } })).filter((d) => d.code === "net-interpolation");
+
+    it("reports interpolated text passed to a .NET method (2026-11-02)", async () => {
+        const [d, ...rest] = await run("\t\tok := svc.CloseCall(1, true, 'x', '$(@phone_info.callKey)')");
+        expect(rest).toEqual([]);
+        expect(d).toMatchObject({ severity: "error" });
+        expect(d.message).toContain("'CloseCall'");
+        expect(d.message).toContain("Assign it to a 'text' variable first");
+    });
+
+    it("reports it in a call statement, a constructor and an assignment to System::String", async () => {
+        expect(await run("\t\tcall svc.Send('$(vt)')")).toHaveLength(1);
+        expect(await run("\t\tsvc := new System::Uri('$(vt)/x')")).toHaveLength(1);
+        expect(await run("\t\tvs := 'id $(vt)'")).toHaveLength(1);
+    });
+
+    it("reports an attribute passed straight to a .NET method (2026-11-13)", async () => {
+        const found = await run("\t\tok := svc.SetCaseState(1, 2, @script_session_info.campaignId, '$(@login_info.name)', 'm')");
+        expect(found.map((d) => d.message.slice(0, 40))).toEqual(["Attribute '@script_session_info.campaign", "Interpolated text passed to .NET 'SetCas"]);
+    });
+
+    it("accepts a variable, plain literals and interpolation into text", async () => {
+        expect(await run("\t\tvt := '$(@phone_info.callKey)'\n\t\tok := svc.CloseCall(1, true, 'x', vt)\n\t\tcall svc.Send('plain')\n\t\tsvc := new System::TimeSpan(0, 0, 2)")).toEqual([]);
+    });
+
+    it("parses constructor arguments of 'new', not a type size", async () => {
+        const d = await diagnose({ "Main.ags": script("\ton event E() {\n\t\tsvc := new System::Uri('http://x')\n\t}", decls) }, "Main.ags", { rules: { "unused-declaration": "off" } });
+        expect(d.filter((x) => x.code === "syntax")).toEqual([]);
+    });
+});
