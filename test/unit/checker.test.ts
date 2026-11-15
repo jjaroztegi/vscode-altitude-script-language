@@ -186,8 +186,9 @@ describe("checker: asynchronous popups", () => {
             expect(d.data).toEqual({ fix: "replace", replacement: "at 650, 330 size 300, 200" });
         });
 
-        it("ignores windows that are not overlays", async () => {
+        it("ignores windows that are not overlays, and tiny invisible overlays", async () => {
             expect(await overlaySize("open window 'CONFIRM' size 100, 100")).toEqual([]);
+            expect(await overlaySize("open window 'CONFIRM' size 1, 1 overlay")).toEqual([]);
         });
     });
 

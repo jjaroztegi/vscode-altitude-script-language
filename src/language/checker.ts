@@ -499,6 +499,8 @@ class Checker {
         const content = windowName ? this.nodeContentSize(windowName) : undefined;
         const minimum = content && { width: content.width + OVERLAY_MARGIN.width, height: content.height + OVERLAY_MARGIN.height };
         const [w, h] = size?.values ?? [];
+        // A tiny overlay (a 1x1 window used to make the runner repaint) is meant not to be seen.
+        if (w !== undefined && h !== undefined && w <= OVERLAY_MARGIN.width && h <= OVERLAY_MARGIN.width) return;
         const problems: string[] = [];
         if (!size && minimum) problems.push("no 'size'");
         else if (minimum && w !== undefined && h !== undefined && (w < minimum.width || h < minimum.height)) {
