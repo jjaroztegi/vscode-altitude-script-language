@@ -118,6 +118,9 @@ Rules about the Agent Portal can be turned off together with `altitudeScriptLang
 ### overlay-size
 **Warning.** An overlay window without `at`, or with a `size` smaller than its node content + 10 wide and + 40 high. Measured in the Agent Portal 8.7: without `at` an overlay opens at the top-left corner of the script frame (it is not centred), and the caption bar (about 30 px) is drawn inside the declared size, so a window exactly as big as its node cuts the bottom row (usually the buttons) and the agent has to scroll. The content size is the extent of the graphical elements of the window node and its masters, resolved across modules. The quick fix writes `at x, y size w, h`, centred on the visible 1600x860 of a 1900x860 script (1920 px screen, sessions panel open); it keeps an existing literal `at`. Overlays of at most 10x10 (the 1x1 `INVISIBLE` repaint window) are not reported. Replaces `overlay-position`, whose quick fix removed `at`.
 
+### canvas-size
+**Warning.** A script `size` larger than 1520x800, or a node or block whose graphical elements end past it. Measured in the Agent Portal 8.7 (LAGUNARO, 2026-11-16): on a 1920x1080 screen at 100 % browser zoom with the sessions panel open, the script frame shows 1534x806 script pixels; the rest needs scrolling, so a 1900x860 script hides its right-hand column. At 90 % zoom it shows about 1748x893. Each node and block is measured on its own elements (masters are reported once, on their own declaration). The quick fix on the script `size` writes `size 1520, 800`; it does not move the elements.
+
 ## Asynchronous popups
 
 In the Agent Portal, `open window ... overlay` and `open message box` do not wait for the agent: the actions after them run immediately, and the window behind the popup is disabled until it closes. Handle the answer in the event named by `on close trigger event`.
