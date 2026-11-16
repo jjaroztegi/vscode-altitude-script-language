@@ -201,6 +201,27 @@ describe("checker: asynchronous popups", () => {
         const text = 'version "8.7"\non start { goto node \'CHILD\' }\nnode "BASE" {\n\tpush button {\n\t\tsize 80,25 at 10,10\n\t\ton click commit { goto node \'OTHER\' }\n\t}\n}\nnode "OTHER" { master "BASE" }\nnode "CHILD" {\n\tmaster "BASE"\n\tpush button {\n\t\tsize 80,25 at 10,10\n\t\ton click commit {}\n\t}\n}\n';
         expect(await codes({ "A.ags": text }, "A.ags")).toEqual(["button-shadows-master"]);
     });
+
+    describe("canvas-size", () => {
+        // 2026-11-16: a 1900x860 script with a 1860-wide panel; at 1920x1080 the right column needs scrolling.
+        const canvas = async (text: string) => (await diagnose({ "A.ags": text }, "A.ags", { rules: { "unused-declaration": "off" } })).filter((d) => d.code === "canvas-size");
+        const node = (geometry: string) => `\tstatic box {\n\t\tsize ${geometry}\n\t}`;
+
+        it("reports a script size beyond the visible canvas and proposes one that fits", async () => {
+            const [d] = await canvas(script(node("100,100 at 0,0")).replace('version "8.7"\n', 'version "8.7"\nsize 1900, 860\n'));
+            expect(d.message).toContain("Script size 1900x860");
+            expect(d.data).toEqual({ fix: "replace", replacement: "size 1520, 800" });
+        });
+
+        it("reports a node whose elements end past the visible canvas", async () => {
+            const [d] = await canvas(script(node("1860,590 at 20,140")));
+            expect(d.message).toContain("'MAIN' has elements up to 1880x730");
+        });
+
+        it("accepts a script and nodes inside 1520x800", async () => {
+            expect(await canvas(script(node("1500,660 at 20,140")).replace('version "8.7"\n', 'version "8.7"\nsize 1520, 800\n'))).toEqual([]);
+        });
+    });
 });
 
 describe("checker: configuration", () => {

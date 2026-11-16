@@ -62,6 +62,7 @@ export const RULES: RuleInfo[] = [
     { id: "async-function-result", severity: "warning", description: "Using the value of a function that opens an overlay window." },
     { id: "email-async", severity: "warning", description: "Asynchronous email editor actions combined in one block of actions." },
     { id: "button-shadows-master", severity: "warning", description: "A push button without actions placed over an inherited master button." },
+    { id: "canvas-size", severity: "warning", description: "A script size, or node elements, beyond the part of the script the Agent Portal shows without scrolling." },
     { id: "unreachable-module", severity: "hint", description: "A module that no file in the workspace imports." }
 ];
 
@@ -71,6 +72,12 @@ export const RULE_SEVERITY = new Map(RULES.map((r) => [r.id, r.severity]));
 const OVERLAY_MARGIN = { width: 10, height: 40 };
 /** Visible part of a 1900x860 script at 1920 px with the sessions panel open. */
 const OVERLAY_VIEW = { width: 1600, height: 860 };
+
+/**
+ * Part of a script the Agent Portal 8.7 shows without scrolling, in script pixels: 1920x1080 screen, browser at 100 % zoom,
+ * sessions panel open (measured 1534x806 on 2026-11-16). At 90 % zoom it is about 1748x893.
+ */
+const CANVAS = { width: 1520, height: 800 };
 
 const TERMINATING = new Set(["back node", "return node", "end script", "abort script", "discard script", "restart script", "return", "break loop"]);
 
@@ -759,6 +766,32 @@ class Checker {
                 if (member.kind === "control") this.checkControl(member);
             }
             if (decl.kind === "node") this.checkButtonShadows(decl);
+        }
+        this.checkCanvas();
+    }
+
+    /** The script frame and each node's elements must fit in the visible canvas, or the agent scrolls to reach them. */
+    private checkCanvas(): void {
+        const visible = `${CANVAS.width}x${CANVAS.height}`;
+        const where = `the ${visible} the Agent Portal shows at 1920x1080 (100 % zoom, sessions panel open)`;
+        for (const decl of this.file.source.decls) {
+            if (decl.kind === "clause" && decl.words === "size") {
+                const [w, h] = decl.args.map((e) => (e?.kind === "number" ? Number(e.text) : NaN));
+                if (!(w > CANVAS.width || h > CANVAS.height)) continue;
+                const replacement = `size ${Math.min(w, CANVAS.width)}, ${Math.min(h, CANVAS.height)}`;
+                this.report(decl, "canvas-size", `Script size ${w}x${h} is larger than ${where}: the agent scrolls to reach the rest. Use '${replacement}' and lay every node out inside it.`, { data: { fix: "replace", replacement } });
+            }
+            if (decl.kind !== "node" && decl.kind !== "block") continue;
+            let width = 0;
+            let height = 0;
+            for (const member of decl.members) {
+                const g = member.kind === "control" ? member.size : undefined;
+                if (!g || g.x === undefined || g.y === undefined) continue;
+                width = Math.max(width, g.x + g.width);
+                height = Math.max(height, g.y + g.height);
+            }
+            if (width <= CANVAS.width && height <= CANVAS.height) continue;
+            this.report(decl.name, "canvas-size", `'${decl.name.value}' has elements up to ${width}x${height}, past ${where}: the agent scrolls to reach them. Move or resize them to fit inside ${visible}.`);
         }
     }
 

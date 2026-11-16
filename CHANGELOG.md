@@ -8,6 +8,7 @@ All notable changes to this extension are documented here.
 - `new T(...)`: the parentheses are constructor arguments, not a type size. `new System::Uri('x')` was a syntax error, and the arguments of `new System::TimeSpan(0, 0, 2)` were dropped.
 
 ### Rules
+- `canvas-size` (warning): a script `size` larger than 1520x800, or node elements past it. At 1920x1080, 100 % zoom and with the sessions panel open, the Agent Portal shows only 1534x806 of the script; a 1900x860 script needs scrolling.
 - `net-interpolation` (error): interpolated text or an attribute passed straight to a .NET method or constructor, or interpolated text assigned to a `System::String`. ec 8.7.01050.8 generates C++ for it that does not compile.
 - `overlay-size` (warning) replaces `overlay-position`. The Agent Portal does not centre an overlay without `at`: it opens it top-left, and the caption bar takes about 30 px inside the declared size. The rule reports an overlay without `at` or smaller than its node content + 10 x + 40, and its quick fix writes a centred `at` and a large enough `size`. The old quick fix, which removed `at`, is gone.
 
